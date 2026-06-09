@@ -9,6 +9,88 @@ Jumpseller store, built 100% in the theme (Liquid + JS), so the engineering team
 
 ---
 
+## End-to-end flow — mockups (admin → purchase)
+
+Wireframes of the **target native experience** (what we want engineering to build). They show the
+4 stages from creating a pack in the admin to the inventory decrementing on purchase.
+
+**① Admin — create the pack** *(today: a `bundle_components` custom field; target: a native `pack`
+product type with a component picker, wish #3)*
+```
+┌─ Admin · New product ───────────────────────────────────┐
+│ Type:  ( ) Physical   ( ) Digital   (•) Pack   ← NEW     │
+│ Name:  [ Pack Queque Casero                          ]   │
+│ ┌─ Components ─────────────────────────────────────┐     │
+│ │  + Add component                                 │     │
+│ │   • Harina (1Kg)         qty [2]   variant [ – ] │     │
+│ │   • Huevo deshidratado   qty [1]   variant [ – ] │     │
+│ │   • Mantequilla (250g)   qty [1]   variant [ – ] │     │
+│ └──────────────────────────────────────────────────┘     │
+│ Bundle discount:  [ 20 ] %        ← combo saving         │
+│ Price:  auto = Σ(components) − discount  →  $7,600       │
+│                                          [  Save pack  ]  │
+└──────────────────────────────────────────────────────────┘
+```
+
+**② Storefront — product page** *(pack price = sum of components, with the bundle discount)*
+```
+┌─ /pack-queque-casero ───────────────────────────────────┐
+│  ┌──────┐   Pack Queque Casero                          │
+│  │ img  │   $7,600   ̶$̶9̶,̶5̶0̶0̶    (−20% pack)              │
+│  └──────┘   Includes:                                   │
+│               ↳ Harina (1Kg) ×2                         │
+│               ↳ Huevo deshidratado ×1                   │
+│               ↳ Mantequilla (250g) ×1                   │
+│             [        Add pack to cart        ]          │
+└──────────────────────────────────────────────────────────┘
+```
+
+**③ Cart — grouped pack with the discount applied per line**
+```
+┌─ Cart ──────────────────────────────────────────────────┐
+│ ╔═ PACK ══════════════════════════════════════════════╗  │
+│ ║ [img] Pack Queque Casero                  $7,600    ║  │
+│ ║                                       [Remove pack] ║  │
+│ ║   ↳ Harina (1Kg)        ×2   $1,600  ( ̶$̶2̶,̶0̶0̶0̶ )      ║  │
+│ ║   ↳ Huevo deshidratado  ×1   $1,600  ( ̶$̶2̶,̶0̶0̶0̶ )      ║  │
+│ ║   ↳ Mantequilla (250g)  ×1   $2,800  ( ̶$̶3̶,̶5̶0̶0̶ )      ║  │
+│ ╚══════════════════════════════════════════════════════╝  │
+│ Other loose product ×1                       $4,000     │
+│ ─────────────────────────────────────────────────────── │
+│ Subtotal                                     $11,600    │
+│                                   [ Proceed to checkout ]│
+└──────────────────────────────────────────────────────────┘
+```
+
+**④ Checkout → purchase → inventory** *(components are real line items; the $0 anchor only carries
+the grouping)*
+```
+┌─ Order placed ──────────────────────────────────────────┐
+│ Charged as real products (real stock decrements):       │
+│    Harina ×2     Huevo ×1     Mantequilla ×1            │
+│ Inventory:  Harina 10→8   Huevo 5→4   Mantequilla 8→7   │
+│ Pack anchor ($0) → no stock impact, grouping only.      │
+└──────────────────────────────────────────────────────────┘
+```
+
+> **For higher-fidelity visual mockups**, hand this prompt to a design tool (e.g. Claude with
+> image/design generation):
+>
+> > *"Create 4 clean, modern e-commerce UI mockups for a 'product bundle / pack' feature on a
+> > Jumpseller store (light theme, rounded cards, a baking shop). (1) Admin 'new product' form with
+> > a product-type selector that includes a new 'Pack' option, a component picker listing Harina ×2,
+> > Huevo deshidratado ×1, Mantequilla ×1, a '20% bundle discount' field, and an auto-calculated
+> > price of $7,600 (struck-through $9,500). (2) Storefront product page for 'Pack Queque Casero'
+> > showing $7,600 with a struck-through $9,500 and a '−20% pack' badge, an 'Includes:' list of the
+> > 3 components with quantities, and an 'Add pack to cart' button. (3) Cart page showing the pack
+> > as a bordered card with a 'PACK' badge, the 3 components indented underneath with per-line
+> > discounted prices (struck-through originals), a 'Remove pack' link, and one unrelated loose
+> > product below it. (4) Order-confirmation showing the 3 real components charged and an inventory
+> > panel decrementing each component's stock. Consistent visual style across all 4, Spanish UI
+> > labels, CLP prices."*
+
+---
+
 ## What the demo does today (and its limits)
 
 **A pack = a virtual product** (price 0, unlimited stock) with ONE custom field
