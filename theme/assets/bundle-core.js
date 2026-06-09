@@ -21,5 +21,13 @@
       .filter((c) => c.permalink.length > 0);
   }
 
-  return { parseBundleComponents };
+  function normalizePermalink(input) {
+    if (!input || typeof input !== "string") return "";
+    let s = input.split("#")[0].split("?")[0]; // drop hash + query
+    s = s.replace(/\/+$/, ""); // drop trailing slashes
+    const parts = s.split("/").filter(Boolean);
+    return parts.length ? parts[parts.length - 1] : "";
+  }
+
+  return { parseBundleComponents, normalizePermalink };
 });

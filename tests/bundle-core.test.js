@@ -18,3 +18,18 @@ test("parseBundleComponents: empty / blank input → []", () => {
   assert.deepEqual(BundleCore.parseBundleComponents(null), []);
   assert.deepEqual(BundleCore.parseBundleComponents("  , ,"), []);
 });
+
+test("normalizePermalink: strips host, leading slash, query and hash", () => {
+  assert.equal(
+    BundleCore.normalizePermalink("https://alejandrotest.jumpseller.com/remera-basica"),
+    "remera-basica"
+  );
+  assert.equal(BundleCore.normalizePermalink("/gorro-lana"), "gorro-lana");
+  assert.equal(BundleCore.normalizePermalink("medias-pack3?x=1#frag"), "medias-pack3");
+  assert.equal(BundleCore.normalizePermalink("/path/to/pack-invierno/"), "pack-invierno");
+});
+
+test("normalizePermalink: empty / null → ''", () => {
+  assert.equal(BundleCore.normalizePermalink(""), "");
+  assert.equal(BundleCore.normalizePermalink(null), "");
+});
