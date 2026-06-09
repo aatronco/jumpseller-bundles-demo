@@ -1,0 +1,23 @@
+{
+  "packPermalink": "pack-queque-casero",
+  "packId": 35681868,
+  "packUrl": "https://alejandrotest.jumpseller.com/pack-queque-casero",
+  "components": [
+    {
+      "permalink": "harina-1kg",
+      "id": 34745971,
+      "price": 2000
+    },
+    {
+      "permalink": "huevo-deshidratado-equivalente-a-5-huevos",
+      "id": 34745977,
+      "price": 2000
+    },
+    {
+      "permalink": "mantequilla-250-g",
+      "id": 34745980,
+      "price": 3500
+    }
+  ],
+  "priceSum": 7500
+}
