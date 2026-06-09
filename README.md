@@ -15,7 +15,7 @@ Un producto virtual (precio 0) con un custom field `bundle_components` que lista
 ```
 docs/
   superpowers/specs/2026-06-09-bundles-demo-design.md   ← diseño completo (leer primero)
-  wishlist-para-ingenieros.md                           ← deseos para la versión nativa (pendiente)
+  engineering-wishlist.md                               ← deseos para la versión nativa
 theme/                                                  ← tema de alejandrotest (se sincroniza a la tienda)
 scripts/                                                ← setup de datos demo vía API/MCP (pendiente)
 ```
@@ -27,4 +27,4 @@ scripts/                                                ← setup de datos demo 
 ## Documentos clave
 
 - **Diseño:** [`docs/superpowers/specs/2026-06-09-bundles-demo-design.md`](docs/superpowers/specs/2026-06-09-bundles-demo-design.md)
-- **Lista de deseos para ingenieros:** `docs/wishlist-para-ingenieros.md` (se genera en la implementación)
+- **Lista de deseos para ingenieros (en inglés):** `docs/engineering-wishlist.md`

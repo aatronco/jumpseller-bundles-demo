@@ -1,0 +1,22 @@
+{%- comment -%}
+  Bundle/pack marker for the product page. Renders a <product-bundle> element carrying the
+  pack's id/url/name plus the RAW `bundle_components` value (comma-separated permalinks,
+  optional `?variant_id:`). The single source of truth is the `bundle_components` custom
+  field — nothing is precomputed/cached. assets/bundles.js resolves the component product
+  ids at runtime and reads live prices from the cart, so price/stock changes never go stale.
+{%- endcomment -%}
+{%- assign bundle_raw = '' -%}
+{%- for field in prod.product_fields -%}
+  {%- if field.label == 'bundle_components' -%}
+    {%- for cfv in field.custom_field_values -%}
+      {%- assign bundle_raw = cfv.value -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if bundle_raw != blank -%}
+  <product-bundle class="product-bundle" data-pack-url="{{ prod.url }}">
+    <script type="application/json" class="product-bundle-json">
+      {"pack":{"id":{{ prod.id | json }},"url":{{ prod.url | json }},"name":{{ prod.name | json }}},"components_raw":{{ bundle_raw | json }}}
+    </script>
+  </product-bundle>
+{%- endif -%}

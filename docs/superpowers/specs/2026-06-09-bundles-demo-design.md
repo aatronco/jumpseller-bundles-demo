@@ -164,7 +164,7 @@ Frontera deliberada: lo determinista se testea con unit tests; la integración c
 
 ## 9. Lista de deseos para ingenieros (handoff)
 
-Se entrega como `docs/wishlist-para-ingenieros.md`. Deseos de la versión "de verdad" (B, nativa), más allá de la demo:
+Se entrega como `docs/engineering-wishlist.md` (en inglés). Deseos de la versión "de verdad" (B, nativa), más allá de la demo:
 
 1. **Versión nativa Liquid + backend**: que la plataforma guarde la membresía del pack server-side y exponga objetos Liquid (componentes resueltos, grupos en `order.products`) + un custom element `<product-bundle>` nativo. Independiente de dispositivo (hoy `localStorage` es per-browser).
 2. **Función nativa de batch add-to-cart**: agregar varios productos en una sola llamada, en vez de N POST secuenciales.
@@ -198,4 +198,4 @@ Se entrega como `docs/wishlist-para-ingenieros.md`. Deseos de la versión "de ve
 | `theme/components/product-template.liquid` | ✏️ incluir `<product-bundle>` |
 | `theme/templates/layout.liquid` | ✏️ cargar `bundles.js` |
 | `scripts/setup-demo-bundles.*` | 🆕 setup de datos vía API/MCP |
-| `docs/wishlist-para-ingenieros.md` | 🆕 lista de deseos para el equipo |
+| `docs/engineering-wishlist.md` | 🆕 lista de deseos para el equipo (en inglés) |

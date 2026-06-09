@@ -15,6 +15,7 @@
 
     <div class="product-details product-details--{{ product-fields.options.display }}">
       {% for field in prod.product_fields %}
+        {% if field.label == 'bundle_components' or field.label == 'bundle_components_json' %}{% continue %}{% endif %}
         {% for cfv in field.custom_field_values %}
           <div class="product-details__row{% if cfv.only_some_variants %} product-details__row--variant-only{% endif %}">
             <div class="product-details__title">{{ field.label }}:</div>

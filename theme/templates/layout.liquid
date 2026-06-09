@@ -819,6 +819,7 @@
     {% endstyle %}
 
     <link rel="stylesheet" href="{{ 'app.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'bundles-cart.css' | asset }}">
     {% if options.pb_quickview %}
       <link rel="stylesheet" href="{{ 'component-product.css' | asset }}">
     {% endif %}
@@ -851,6 +852,8 @@
       })();
     </script>
     <script src="{{ 'theme.js' | asset }}" defer></script>
+    <script src="{{ 'bundle-core.js' | asset }}" defer></script>
+    <script src="{{ 'bundles.js' | asset }}" defer></script>
     <script src="{{ 'custom.js' | asset }}" defer></script>
     {% if is_category_page %}<script src="{{ 'category.js' | asset }}" defer></script>{% endif %}
 
