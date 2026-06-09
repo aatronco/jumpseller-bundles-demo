@@ -40,7 +40,7 @@
   // ---------- runtime permalink -> product id resolution ----------
   var idCache = {};
   function resolveComponentId(permalink) {
-    if (idCache[permalink]) return Promise.resolve(idCache[permalink]);
+    if (permalink in idCache) return Promise.resolve(idCache[permalink]);
     return fetch("/" + permalink, { credentials: "same-origin" })
       .then(function (r) { return r.text(); })
       .then(function (html) {
@@ -87,6 +87,10 @@
 
         Promise.all(parsed.map(function (c) { return resolveComponentId(c.permalink); }))
           .then(function (ids) {
+            // NOTE: v1 demo uses simple (no-variant) components, so we add by product id only.
+            // parseBundleComponents DOES extract `?variant_id:` (see parsed[i].variantId) but it
+            // is NOT wired into the add here — customer/admin variant selection is a documented
+            // wish for the native version (see docs/wishlist-para-ingenieros.md, #4).
             var products = [[cfg.pack.id, 1]].concat(ids.map(function (id) { return [id, 1]; }));
             Jumpseller.addMultipleProductsToCart(products, {
               callback: function (data) {
@@ -142,6 +146,9 @@
     });
   }
   // Remove cart line items one after another, then refresh the cart once.
+  // Demo scope: no error/timeout path — if a Jumpseller.updateCart call never calls back
+  // (e.g. network blip) the chain stalls; the user reloads. A production version should
+  // add a per-call timeout/error handler so refreshCartDisplay always runs.
   function removeLines(lineIds) {
     var remaining = lineIds.slice();
     function next() {
@@ -192,6 +199,11 @@
 
       entry.components.forEach(function (c) {
         (byPermalink[c.permalink] || []).forEach(function (cr) {
+          // Skip rows already claimed by another pack's wrapper, so two packs sharing a
+          // component permalink don't steal each other's rows (appendChild moves nodes).
+          // Known demo limitation: the shared component then shows under whichever pack
+          // groups first — see docs/wishlist-para-ingenieros.md #5.
+          if (cr.closest(".jb-pack")) return;
           cr.classList.add("jb-pack__component");
           lockRowQuantity(cr);
           wrapper.appendChild(cr);
