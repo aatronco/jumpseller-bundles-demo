@@ -73,21 +73,22 @@ the grouping)*
 └──────────────────────────────────────────────────────────┘
 ```
 
-> **For higher-fidelity visual mockups**, hand this prompt to a design tool (e.g. Claude with
-> image/design generation):
->
-> > *"Create 4 clean, modern e-commerce UI mockups for a 'product bundle / pack' feature on a
-> > Jumpseller store (light theme, rounded cards, a baking shop). (1) Admin 'new product' form with
-> > a product-type selector that includes a new 'Pack' option, a component picker listing Harina ×2,
-> > Huevo deshidratado ×1, Mantequilla ×1, a '20% bundle discount' field, and an auto-calculated
-> > price of $7,600 (struck-through $9,500). (2) Storefront product page for 'Pack Queque Casero'
-> > showing $7,600 with a struck-through $9,500 and a '−20% pack' badge, an 'Includes:' list of the
-> > 3 components with quantities, and an 'Add pack to cart' button. (3) Cart page showing the pack
-> > as a bordered card with a 'PACK' badge, the 3 components indented underneath with per-line
-> > discounted prices (struck-through originals), a 'Remove pack' link, and one unrelated loose
-> > product below it. (4) Order-confirmation showing the 3 real components charged and an inventory
-> > panel decrementing each component's stock. Consistent visual style across all 4, Spanish UI
-> > labels, CLP prices."*
+**⚠️ Surface NOT handled by the demo yet — product block (listings / cross-sell)** *(see wish #9)*
+A pack shown as a product card in a category page, search, or the "You might also like" cross-sell
+should look and behave like the target below, but **today it's broken**: the card shows the anchor's
+**$0** and its "Add to cart" adds only the $0 anchor (no components), because the demo only
+intercepts the product page's `#add-to-cart`.
+```
+┌─ Category / "You might also like" ──────────────────────┐
+│   ┌────────┐    ┌────────┐    ┌──────────┐ PACK ← badge │
+│   │  img   │    │  img   │    │   img    │              │
+│   └────────┘    └────────┘    └──────────┘              │
+│   Harina        Mantequilla   Pack Queque Casero        │
+│   $2,000        $3,500        $7,600   ̶$̶9̶,̶5̶0̶0̶            │
+│   [  Add  ]     [  Add  ]     [ Add pack ] ← batch-adds  │
+│                                  TARGET (not today)      │
+└──────────────────────────────────────────────────────────┘
+```
 
 ---
 
