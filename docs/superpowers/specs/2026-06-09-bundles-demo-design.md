@@ -135,6 +135,8 @@ La implementación primero **sondea** la opción server-side; si no existe, usa 
 
 ## 7. Setup de datos (script API/MCP)
 
+> **Prioridad baja / desechable.** El setup solo siembra datos de prueba; los usuarios finales no lo usan. El esfuerzo del proyecto va al **diseño/experiencia** (página de producto + carro). Puede incluso hacerse directo por MCP sin un script pulido; si se escribe, basta algo simple.
+
 `scripts/setup-demo-bundles.*` — **idempotente y re-ejecutable**:
 
 0. **Valida credenciales** (Login key + Auth Token) contra `GET /store/info.json`. Bloquea si falla (ver Riesgos).
