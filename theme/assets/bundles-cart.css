@@ -22,8 +22,8 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   border-radius: 999px;
-  background: var(--color-main, #c0392b);
-  color: #fff;
+  background: #9fcc2e;
+  color: #20221b;
   line-height: 1.4;
 }
 
@@ -51,4 +51,21 @@
   border-bottom: 1px dashed var(--color-border, #e5e5e5);
   padding-bottom: 0.25rem;
   margin-bottom: 0.25rem;
+}
+
+/* "PACK" badge on a product card in listings / cross-sell (added by bundles.js) */
+.product-block__gallery { position: relative; }
+.jb-pack-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  background: #9fcc2e;
+  color: #20221b;
+  padding: 2px 8px;
+  border-radius: 999px;
 }

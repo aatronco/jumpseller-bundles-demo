@@ -161,9 +161,16 @@
   {% assign data_spacing = false %}
 {% endif %}
 
+{%- assign pb_bundle_raw = '' -%}
+{%- for field in prod.product_fields -%}
+  {%- if field.label == 'bundle_components' -%}
+    {%- for cfv in field.custom_field_values -%}{%- assign pb_bundle_raw = cfv.value -%}{%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
 <article
   class="theme-block product-block product-block-{{ component.id }}{% if display_option == 'carousel' %} swiper-slide{% endif %}"
   data-product-id="{{ prod.id }}"
+  {% if pb_bundle_raw != blank %}data-bundle-components="{{ pb_bundle_raw | escape }}"{% endif %}
   data-columns-mobile="{{ columns_mobile }}"
   data-columns-desktop="{{ columns_desktop }}"
   data-spacing="{{ data_spacing }}"
@@ -185,15 +192,6 @@
 >
   <div class="theme-block__wrapper product-block__wrapper">
     <div class="product-block__gallery">
-      {% if prod.variant_with_min_price.price %}
-        {% assign ribbon_price = prod.variant_with_min_price.price | minus: prod.variant_with_min_price.discount %}
-      {% else %}
-        {% assign ribbon_price = prod.price | minus: prod.discount %}
-      {% endif %}
-      {% if ribbon_price < 8000 %}
-        <div class="product-block__ribbon">OFERTA</div>
-      {% endif %}
-
       <div class="product-block__extras check-empty">
         {%- if options.pb_wishlist and store.customers_enabled -%}
           {% render 'product_wishlist_compact', prod: prod, attributes: component.attributes -%}

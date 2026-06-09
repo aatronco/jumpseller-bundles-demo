@@ -318,9 +318,82 @@
     cartObserver.observe(cartArea, { childList: true, subtree: true });
   }
 
+  // ---------- Product listings / cross-sell: pack product blocks ----------
+  // A pack shown as a product card (category, search, "you might also like") would otherwise
+  // show the $0 anchor price and its "Add" would add only the anchor. Here we add a PACK badge,
+  // show the summed live price, and make "Add" batch-add the components.
+  function initProductBlocks() {
+    var blocks = document.querySelectorAll("article.product-block[data-bundle-components]");
+    Array.prototype.forEach.call(blocks, function (block) {
+      if (block.dataset.jbBlockDone === "1") return;
+      var parsed = BundleCore.parseBundleComponents(block.getAttribute("data-bundle-components"));
+      if (!parsed.length) return;
+      block.dataset.jbBlockDone = "1";
+      var packId = parseInt(block.getAttribute("data-product-id"), 10);
+
+      // PACK badge
+      if (!block.querySelector(".jb-pack-badge")) {
+        var gallery = block.querySelector(".product-block__gallery") || block;
+        var badge = document.createElement("span");
+        badge.className = "jb-pack-badge";
+        badge.textContent = "PACK";
+        gallery.appendChild(badge);
+      }
+
+      // summed live price on the card
+      Promise.all(parsed.map(function (c) { return resolveComponent(c.permalink); }))
+        .then(function (infos) {
+          var total = BundleCore.sumPrices(infos.map(function (info, i) { return info.price * parsed[i].qty; }));
+          var priceEl =
+            block.querySelector(".product-block__price--new") ||
+            block.querySelector(".product-block__price:not(.product-block__price--old):not(.product-block__price--text):not(.product-block__price--tax-label)");
+          if (priceEl) priceEl.textContent = BundleCore.formatPrice(total, {});
+        })
+        .catch(function () {});
+
+      // intercept the block's add-to-cart (inline onclick) → batch-add components
+      var addBtn = block.querySelector(".product-block__button--add-to-cart");
+      if (addBtn) {
+        addBtn.removeAttribute("onclick");
+        addBtn.addEventListener(
+          "click",
+          function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Promise.all(parsed.map(function (c) { return resolveComponent(c.permalink); }))
+              .then(function (infos) {
+                var products = [[packId, 1]].concat(
+                  infos.map(function (info, i) { return [info.id, parsed[i].qty]; })
+                );
+                Jumpseller.addMultipleProductsToCart(products, {
+                  callback: function (data) {
+                    if (data && data.status && data.status !== 200) {
+                      toastError((data.responseJSON && data.responseJSON.message) || "");
+                      return;
+                    }
+                    var anchor = block.querySelector(".product-block__anchor");
+                    var nameEl = block.querySelector(".product-block__name");
+                    saveMembership(
+                      { id: packId, url: anchor ? anchor.getAttribute("href") : "", name: nameEl ? nameEl.textContent.trim() : "Pack" },
+                      parsed
+                    );
+                    if (typeof refreshCartDisplay === "function") refreshCartDisplay();
+                    try { addToCartNotification(nameEl ? nameEl.textContent.trim() : "Pack", 1); } catch (_) {}
+                  },
+                });
+              })
+              .catch(function (err) { toastError(String(err && err.message ? err.message : err)); });
+          },
+          true
+        );
+      }
+    });
+  }
+
   // ---------- bootstrap ----------
   function init() {
     initProductBundle();
+    initProductBlocks();
     groupCart();
     observeCart();
   }
