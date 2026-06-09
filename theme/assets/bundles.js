@@ -301,6 +301,25 @@
 
       anchorRow.dataset.jbGrouped = "1";
     });
+
+    // The $0 pack anchor is a phantom line — exclude it from the displayed item count so the
+    // cart counts the real component units, not anchor + components. Recomputed from the DOM
+    // (idempotent), only when a pack is present.
+    if (cartArea.querySelector(".jb-pack__anchor")) {
+      var realCount = 0;
+      Array.prototype.forEach.call(cartArea.querySelectorAll(".store-product"), function (row) {
+        if (!row.classList.contains("jb-pack__anchor")) realCount += rowQty(row);
+      });
+      var hdr = document.querySelector(".theme-cart-counter");
+      if (hdr) {
+        hdr.textContent = realCount;
+        hdr.setAttribute("data-products-count", String(realCount));
+      }
+      Array.prototype.forEach.call(document.querySelectorAll(".store-totals__price--count"), function (el) {
+        el.textContent = realCount;
+      });
+    }
+
     if (mutated) writeStore(store);
   }
 
