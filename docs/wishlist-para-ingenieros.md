@@ -70,9 +70,33 @@ Hoy Jumpseller fusiona líneas idénticas por variante. **Deseo:** que la membre
 distinga "esta unidad pertenece a un pack" de "esta unidad es suelta", para agrupar y borrar sin
 ambigüedad.
 
-### 6. Promociones / precio a nivel de pack
-Hoy el precio del pack = suma de componentes. **Deseo:** poder aplicar un descuento sobre el combo
-completo (precio de pack < suma), y que se refleje en carro y checkout.
+### 6. Descuento del pack → SE NECESITA UNA PROMOCIÓN DE PACK NATIVA
+El ahorro del bundle (ej. **20% off a los componentes cuando el pack está en el carro**) debe ser
+un descuento **de la plataforma**, NO lógica del tema (el tema/JS no puede cambiar lo que se cobra,
+solo mostrar). **Conclusión del usuario tras probar el motor actual: las promociones existentes NO
+alcanzan — se necesita una promoción/concepto de "pack" nativo.**
+
+**Evidencia (probado en vivo en `alejandrotest`, 2026-06-09):** se intentó modelarlo con promos
+`buy_x_get_y` (X = el producto-pack, Y = un componente):
+- Una promo con Y = los 3 componentes → descuenta **solo 1** (el más barato), no los tres.
+- Tres promos separadas (X=pack, Y=harina / Y=huevo / Y=mantequilla), todas `cumulative:true` →
+  **solo se dispara una** (la de harina). Causa: `buy_x_get_y` **consume 1 unidad de X (el pack)**
+  por aplicación; con un solo pack en el carro, las otras dos promos se quedan sin disparador.
+- (La promo "2x Harina" sí logró descontar las 2 unidades de harina, pero el problema de "todos los
+  componentes" persiste.)
+
+**Por qué importa:** no hay forma limpia de expresar "1 pack ⇒ TODOS sus componentes con N% off"
+con el motor actual sin trucos (poner los componentes en una categoría dedicada y una promo
+`target=categories` condicionada al pack, lo cual es frágil y mezcla conceptos). Un **tipo de
+producto `pack` nativo** (ver deseo #3) con su propio descuento de combo lo resolvería de raíz.
+
+**Nota API:** crear promos `buy_x_get_y` por API falla (`Condition_qty must be >= 1`) — parece
+solo-admin. El `discount_target` para productos específicos es `buy_x_get_y` (no `products`).
+
+**Lo bueno (lado tema):** el carro ya lee el precio real de cada línea, así que **cualquier**
+descuento que la plataforma aplique se refleja en el total del pack **automáticamente, sin tocar el
+tema**. Lo único a decidir aparte: si la **página de producto** debe previsualizar el precio con
+descuento (el front necesitaría conocer el %).
 
 ### 7. Stock del pack en función de sus componentes
 **Pendiente que dejó el usuario:** ¿qué pasa si un componente no tiene stock? Hoy confiamos en que el
