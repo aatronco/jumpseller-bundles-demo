@@ -1,0 +1,9 @@
+{
+  "name": "jumpseller-bundles-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bundles/Packs demo for Jumpseller (alejandrotest store)",
+  "scripts": {
+    "test": "node --test tests/"
+  }
+}
