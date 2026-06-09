@@ -2,16 +2,17 @@
    Depends on: window.BundleCore (bundle-core.js), the global Jumpseller SDK, and the theme
    globals refreshCartDisplay() / ToastNotification / I18N / ORDER (from theme.js).
 
-   SINGLE SOURCE OF TRUTH: the `bundle_components` custom field (permalinks). Nothing is
-   precomputed — component product ids are resolved at runtime, and the pack's displayed
-   price is summed from the LIVE cart line prices (so price/promotion changes never go stale).
+   SINGLE SOURCE OF TRUTH: the `bundle_components` custom field (permalinks + optional
+   ?qty:/?variant_id:). Nothing is precomputed — component product ids/prices are resolved at
+   runtime, and the pack's displayed price is the sum of LIVE component prices × qty (so
+   price/promotion changes never go stale).
 
-   Product page: <product-bundle> intercepts add-to-cart, resolves each component permalink
-   to its product id, and batch-adds the $0 pack anchor + components via the SDK, recording
-   membership (permalinks only) in localStorage.
-   Cart page: groups the pack's rows under the anchor, sums the live component prices onto the
-   anchor, locks component quantities, and wires removal (whole pack atomically; removing a
-   single component breaks the pack — anchor out, the rest stay as loose lines). */
+   Product page: <product-bundle> shows the summed pack price (replacing the $0 anchor price)
+   and intercepts add-to-cart, batch-adding the $0 anchor + components via the SDK.
+   Cart page: groups the pack's rows under the anchor, sums the live line prices × qty onto the
+   anchor, locks component quantities, supports atomic removal (remove pack → all gone; remove a
+   component → break pack, anchor out + rest loose), and re-groups automatically when the cart
+   re-renders (e.g. after adding another product). */
 (function () {
   "use strict";
 
@@ -25,31 +26,47 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
   }
 
-  // membership stores ONLY stable refs (permalinks); price is always read live.
+  // membership stores stable refs (permalink + qty + variant); price is always read live.
   function saveMembership(pack, components) {
     var store = readStore();
     store[BundleCore.normalizePermalink(pack.url)] = {
       name: pack.name,
       components: components.map(function (c) {
-        return { permalink: BundleCore.normalizePermalink(c.permalink), variantId: c.variantId || null };
+        return {
+          permalink: BundleCore.normalizePermalink(c.permalink),
+          variantId: c.variantId || null,
+          qty: c.qty && c.qty > 0 ? c.qty : 1,
+        };
       }),
     };
     writeStore(store);
   }
 
-  // ---------- runtime permalink -> product id resolution ----------
-  var idCache = {};
-  function resolveComponentId(permalink) {
-    if (permalink in idCache) return Promise.resolve(idCache[permalink]);
+  // ---------- runtime permalink -> {id, price} resolution ----------
+  var resolveCache = {};
+  function resolveComponent(permalink) {
+    if (permalink in resolveCache) return Promise.resolve(resolveCache[permalink]);
     return fetch("/" + permalink, { credentials: "same-origin" })
       .then(function (r) { return r.text(); })
       .then(function (html) {
         var doc = new DOMParser().parseFromString(html, "text/html");
-        var el = doc.querySelector(".product-json");
-        var id = el && el.dataset && el.dataset.productid ? parseInt(el.dataset.productid, 10) : null;
+        // product id: data-productid on .product-json (its content is the variants array,
+        // empty for simple products, so we only read the attribute here).
+        var idEl = doc.querySelector(".product-json");
+        var id = idEl && idEl.dataset && idEl.dataset.productid ? parseInt(idEl.dataset.productid, 10) : null;
         if (!id) throw new Error("No pude resolver el producto: " + permalink);
-        idCache[permalink] = id;
-        return id;
+        // effective unit price: .product-price-json → info.product.{price,discount}
+        var price = 0;
+        var priceEl = doc.querySelector(".product-price-json");
+        if (priceEl) {
+          try {
+            var info0 = JSON.parse(priceEl.textContent).info.product;
+            price = (typeof info0.price === "number" ? info0.price : 0) - (typeof info0.discount === "number" ? info0.discount : 0);
+          } catch (_) { /* leave price 0 */ }
+        }
+        var info = { id: id, price: price };
+        resolveCache[permalink] = info;
+        return info;
       });
   }
 
@@ -63,18 +80,32 @@
     } catch (_) { /* theme toast unavailable */ }
   }
 
-  // ---------- Product page: intercept add-to-cart ----------
+  // ---------- Product page: show summed price + intercept add-to-cart ----------
   function initProductBundle() {
     var node = document.querySelector("product-bundle .product-bundle-json");
     if (!node) return;
     var cfg;
     try { cfg = JSON.parse(node.textContent); } catch (e) { return; }
-    var addBtn = document.querySelector("button#add-to-cart");
-    if (!addBtn || !cfg || !cfg.pack) return;
+    if (!cfg || !cfg.pack) return;
 
     var parsed = BundleCore.parseBundleComponents(cfg.components_raw);
     if (!parsed.length) return;
 
+    // Resolve all components once (ids + live prices), then both display the sum and wire add.
+    var resolvedPromise = Promise.all(parsed.map(function (c) { return resolveComponent(c.permalink); }));
+
+    // Show the summed pack price on the product page (replace the $0 anchor price).
+    resolvedPromise
+      .then(function (infos) {
+        var total = BundleCore.sumPrices(infos.map(function (info, i) { return info.price * parsed[i].qty; }));
+        document.querySelectorAll(".product-page__price").forEach(function (el) {
+          el.textContent = BundleCore.formatPrice(total, {});
+        });
+      })
+      .catch(function () { /* leave the original price if resolution fails */ });
+
+    var addBtn = document.querySelector("button#add-to-cart");
+    if (!addBtn) return;
     addBtn.addEventListener(
       "click",
       function (e) {
@@ -85,13 +116,14 @@
         var cartArea = document.querySelector("cart-area");
         if (cartArea && cartArea.setIsLoading) cartArea.setIsLoading(true);
 
-        Promise.all(parsed.map(function (c) { return resolveComponentId(c.permalink); }))
-          .then(function (ids) {
-            // NOTE: v1 demo uses simple (no-variant) components, so we add by product id only.
-            // parseBundleComponents DOES extract `?variant_id:` (see parsed[i].variantId) but it
-            // is NOT wired into the add here — customer/admin variant selection is a documented
-            // wish for the native version (see docs/wishlist-para-ingenieros.md, #4).
-            var products = [[cfg.pack.id, 1]].concat(ids.map(function (id) { return [id, 1]; }));
+        resolvedPromise
+          .then(function (infos) {
+            // NOTE: parsed[i].variantId is parsed but NOT wired into the add (v1 components are
+            // simple/no-variant). Customer/admin variant selection is a documented wish for the
+            // native version (docs/wishlist-para-ingenieros.md #4).
+            var products = [[cfg.pack.id, 1]].concat(
+              infos.map(function (info, i) { return [info.id, parsed[i].qty]; })
+            );
             Jumpseller.addMultipleProductsToCart(products, {
               callback: function (data) {
                 if (cartArea && cartArea.setIsLoading) cartArea.setIsLoading(false);
@@ -121,7 +153,7 @@
   function rowLineId(row) {
     return row.getAttribute("data-id");
   }
-  // The effective (paid) price element of a cart row: the discounted price if on sale,
+  // The effective (paid) unit price element of a cart row: discounted price if on sale,
   // otherwise the plain price (NOT the quantity badge, NOT the struck-through old price).
   function rowPriceEl(row) {
     return (
@@ -129,9 +161,15 @@
       row.querySelector(".store-product__price:not(.store-product__price--qty):not(.store-product__price--old)")
     );
   }
-  function rowPriceValue(row) {
+  function rowQty(row) {
+    var input = row.querySelector(".store-product__input");
+    var q = input ? parseInt(input.value || input.getAttribute("data-current"), 10) : 1;
+    return q && q > 0 ? q : 1;
+  }
+  // A cart row's contribution to the pack total = effective unit price × quantity.
+  function rowLineTotal(row) {
     var el = rowPriceEl(row);
-    return el ? BundleCore.parsePrice(el.textContent) : 0;
+    return el ? BundleCore.parsePrice(el.textContent) * rowQty(row) : 0;
   }
   function lockRowQuantity(row) {
     var input = row.querySelector(".store-product__input");
@@ -207,7 +245,7 @@
           cr.classList.add("jb-pack__component");
           lockRowQuantity(cr);
           wrapper.appendChild(cr);
-          prices.push(rowPriceValue(cr)); // LIVE price from the cart line
+          prices.push(rowLineTotal(cr)); // LIVE price × qty from the cart line
           groupLineIds.push(rowLineId(cr));
 
           var cdel = cr.querySelector(".store-product__delete");
@@ -245,10 +283,25 @@
     if (mutated) writeStore(store);
   }
 
+  // Re-group after the theme re-renders <cart-area> (e.g. adding another product, qty change
+  // elsewhere). We disconnect the observer while grouping so our own DOM moves don't recurse.
+  var cartObserver = null;
+  function observeCart() {
+    var cartArea = document.querySelector("cart-area");
+    if (!cartArea || cartObserver) return;
+    cartObserver = new MutationObserver(function () {
+      cartObserver.disconnect();
+      groupCart();
+      cartObserver.observe(cartArea, { childList: true, subtree: true });
+    });
+    cartObserver.observe(cartArea, { childList: true, subtree: true });
+  }
+
   // ---------- bootstrap ----------
   function init() {
     initProductBundle();
     groupCart();
+    observeCart();
   }
 
   window.JBBundles = {
@@ -256,7 +309,7 @@
     writeStore: writeStore,
     saveMembership: saveMembership,
     groupCart: groupCart,
-    resolveComponentId: resolveComponentId,
+    resolveComponent: resolveComponent,
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

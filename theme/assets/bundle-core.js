@@ -5,6 +5,10 @@
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (typeof window !== "undefined") window.BundleCore = api;
 })(this, function () {
+  // Parse the `bundle_components` field: comma-separated entries, each a permalink with
+  // optional params after "?": `qty:N` and/or `variant_id:ID`. Params may be chained with
+  // "?" or "&", e.g. "remera?variant_id:999?qty:2" or "harina-1kg?qty:3".
+  // Returns [{ permalink, variantId|null, qty (>=1) }]. Blank/invalid → [].
   function parseBundleComponents(raw) {
     if (!raw || typeof raw !== "string") return [];
     return raw
@@ -12,10 +16,23 @@
       .map((s) => s.trim())
       .filter(Boolean)
       .map((segment) => {
-        const [permalinkPart, variantPart] = segment.split("?variant_id:");
+        const qIdx = segment.indexOf("?");
+        const permalink = (qIdx === -1 ? segment : segment.slice(0, qIdx)).trim();
+        const params = {};
+        if (qIdx !== -1) {
+          segment
+            .slice(qIdx + 1)
+            .split(/[?&]/)
+            .forEach((pair) => {
+              const ci = pair.indexOf(":");
+              if (ci !== -1) params[pair.slice(0, ci).trim()] = pair.slice(ci + 1).trim();
+            });
+        }
+        const qty = parseInt(params.qty, 10);
         return {
-          permalink: permalinkPart.trim(),
-          variantId: variantPart ? variantPart.trim() : null,
+          permalink,
+          variantId: params.variant_id ? params.variant_id : null,
+          qty: qty && qty > 0 ? qty : 1,
         };
       })
       .filter((c) => c.permalink.length > 0);
