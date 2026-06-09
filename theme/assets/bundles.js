@@ -55,13 +55,19 @@
         var idEl = doc.querySelector(".product-json");
         var id = idEl && idEl.dataset && idEl.dataset.productid ? parseInt(idEl.dataset.productid, 10) : null;
         if (!id) throw new Error("No pude resolver el producto: " + permalink);
-        // effective unit price: .product-price-json → info.product.{price,discount}
+        // effective unit price WITH product-level discount applied: read the storefront's own
+        // discounted price (price_with_discount_formatted), which already reflects any product
+        // sale/discount. Fallback to price - discount, then to price. (Cart-level promotions
+        // are NOT product prices and intentionally don't appear here.)
         var price = 0;
         var priceEl = doc.querySelector(".product-price-json");
         if (priceEl) {
           try {
             var info0 = JSON.parse(priceEl.textContent).info.product;
-            price = (typeof info0.price === "number" ? info0.price : 0) - (typeof info0.discount === "number" ? info0.discount : 0);
+            price = BundleCore.parsePrice(info0.price_with_discount_formatted);
+            if (!price && typeof info0.price === "number") {
+              price = info0.price - (typeof info0.discount === "number" ? info0.discount : 0);
+            }
           } catch (_) { /* leave price 0 */ }
         }
         var info = { id: id, price: price };
@@ -94,9 +100,24 @@
     // Resolve all components once (ids + live prices), then both display the sum and wire add.
     var resolvedPromise = Promise.all(parsed.map(function (c) { return resolveComponent(c.permalink); }));
 
-    // Show the summed pack price on the product page (replace the $0 anchor price).
+    // Show the summed pack price on the product page (replace the $0 anchor price),
+    // and expose the resolved contract JSON for inspection (window.JBBundles.bundle).
+    // This is the SAME shape the native backend will provide later (see
+    // docs/contrato-json-para-disenadores.md) — today we resolve it client-side.
     resolvedPromise
       .then(function (infos) {
+        window.JBBundles.bundle = {
+          pack: cfg.pack,
+          components: infos.map(function (info, i) {
+            return {
+              id: info.id,
+              permalink: parsed[i].permalink,
+              price: info.price,
+              qty: parsed[i].qty,
+              variant_id: parsed[i].variantId,
+            };
+          }),
+        };
         var total = BundleCore.sumPrices(infos.map(function (info, i) { return info.price * parsed[i].qty; }));
         document.querySelectorAll(".product-page__price").forEach(function (el) {
           el.textContent = BundleCore.formatPrice(total, {});
