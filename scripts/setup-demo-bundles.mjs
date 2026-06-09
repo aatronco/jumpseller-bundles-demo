@@ -145,6 +145,7 @@ async function main() {
       product: {
         name: PACK.name,
         price: 0,
+        type: "digital", // virtual $0 anchor — no shipping/weight
         stock_unlimited: true,
         status: "available",
         description: PACK.description,

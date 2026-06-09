@@ -86,6 +86,36 @@
     } catch (_) { /* theme toast unavailable */ }
   }
 
+  // Open the mini-cart drawer (native UX) after adding; fall back to navigating to the cart.
+  function openCartDrawer() {
+    var openDrawer = function () {
+      try {
+        if (typeof $ !== "undefined" && document.getElementById("sidebar-cart")) {
+          $("#sidebar-cart").offcanvas("show");
+          return;
+        }
+      } catch (e) {}
+      window.location.href = (window.ORDER && window.ORDER.url) || "/cart";
+    };
+    if (typeof refreshCartDisplay === "function") {
+      var p = refreshCartDisplay();
+      if (p && typeof p.then === "function") p.then(openDrawer);
+      else openDrawer();
+    } else {
+      openDrawer();
+    }
+  }
+
+  // The cart PAGE's own <cart-area> — never the mini-cart drawer inside #sidebar-cart.
+  // Grouping must not run on the drawer; it would break its order summary layout.
+  function mainCartArea() {
+    var areas = document.querySelectorAll("cart-area");
+    for (var i = 0; i < areas.length; i++) {
+      if (!areas[i].closest("#sidebar-cart")) return areas[i];
+    }
+    return null;
+  }
+
   // ---------- Product page: show summed price + intercept add-to-cart ----------
   function initProductBundle() {
     var node = document.querySelector("product-bundle .product-bundle-json");
@@ -153,7 +183,7 @@
                   return;
                 }
                 saveMembership(cfg.pack, parsed);
-                window.location.href = (window.ORDER && window.ORDER.url) || "/cart";
+                openCartDrawer();
               },
             });
           })
@@ -228,7 +258,7 @@
   }
 
   function groupCart() {
-    var cartArea = document.querySelector("cart-area");
+    var cartArea = mainCartArea();
     if (!cartArea) return;
     var store = readStore();
     var rows = Array.prototype.slice.call(cartArea.querySelectorAll(".store-product"));
@@ -327,7 +357,7 @@
   // elsewhere). We disconnect the observer while grouping so our own DOM moves don't recurse.
   var cartObserver = null;
   function observeCart() {
-    var cartArea = document.querySelector("cart-area");
+    var cartArea = mainCartArea();
     if (!cartArea || cartObserver) return;
     cartObserver = new MutationObserver(function () {
       cartObserver.disconnect();
@@ -396,8 +426,7 @@
                       { id: packId, url: anchor ? anchor.getAttribute("href") : "", name: nameEl ? nameEl.textContent.trim() : "Pack" },
                       parsed
                     );
-                    if (typeof refreshCartDisplay === "function") refreshCartDisplay();
-                    try { addToCartNotification(nameEl ? nameEl.textContent.trim() : "Pack", 1); } catch (_) {}
+                    openCartDrawer();
                   },
                 });
               })
