@@ -1,0 +1,238 @@
+{
+  "name": "Menu",
+  "icon": "bars",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/theme-customization/#desktop-menu).",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "default": "grid",
+      "options": [
+        {
+          "label": "Header width",
+          "value": "grid"
+        },
+        {
+          "label": "Full width",
+          "value": "full"
+        }
+      ]
+    },
+    "border": {
+      "name": "Top border",
+      "type": "checkbox",
+      "help": "Allows to display a border at the top to create a division with the content above.",
+      "default": true
+    },
+    "spacing": {
+      "name": "Left and right space",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.border }}"
+    },
+    "content_alignment_x": {
+      "name": "Alignment",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ 'v1 v2 v5' contains component.options.version }}"
+    },
+    "custom_bundle_color": {
+      "name": "Customize colors",
+      "type": "checkbox",
+      "help": "If enabled, the menu colors will be overwritten with this color pack.",
+      "default": false
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "system-2",
+      "pack": "color",
+      "visible_if": "{{ block.options.custom_bundle_color }}"
+    },
+    "event": {
+      "name": "Open event",
+      "type": "select",
+      "help": "Allows to define the mouse event that will open Submenus.",
+      "default": "hover",
+      "options": [
+        {
+          "label": "On click",
+          "value": "click"
+        },
+        {
+          "label": "On hover",
+          "value": "hover"
+        }
+      ]
+    },
+    "submenu": {
+      "name": "Style",
+      "type": "select",
+      "default": "flyout",
+      "options": [
+        {
+          "label": "Flyout",
+          "value": "flyout"
+        },
+        {
+          "label": "Mega menu",
+          "value": "megamenu"
+        }
+      ]
+    },
+    "submenu_view_all": {
+      "name": "'View all' link",
+      "type": "checkbox",
+      "help": "Allows to show a link that takes to the main level of each navigation item.",
+      "default": true
+    },
+    "submenu_columns": {
+      "name": "Custom columns",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.submenu == 'megamenu' }}"
+    },
+    "submenu_columns_width": {
+      "name": "Columns amount",
+      "type": "select",
+      "default": "6",
+      "options": [
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        },
+        {
+          "label": "5",
+          "value": "5"
+        },
+        {
+          "label": "6",
+          "value": "6"
+        }
+      ],
+      "visible_if": "{{ block.options.submenu == 'megamenu' and block.options.submenu_columns }}"
+    },
+    "submenu_image": {
+      "name": "Items images",
+      "type": "checkbox",
+      "help": "If enabled, submenus will display the image of the second level item, if they have one in the Admin panel.",
+      "default": false,
+      "visible_if": "{{ block.options.submenu == 'megamenu' }}"
+    },
+    "submenu_image_ratio": {
+      "name": "Ratio",
+      "type": "select",
+      "default": "square",
+      "options": [
+        {
+          "label": "Landscape",
+          "value": "landscape"
+        },
+        {
+          "label": "Portrait",
+          "value": "portrait"
+        },
+        {
+          "label": "Rectangular",
+          "value": "rectangular"
+        },
+        {
+          "label": "Square",
+          "value": "square"
+        }
+      ],
+      "visible_if": "{{ block.options.submenu == 'megamenu' and block.options.submenu_image }}"
+    },
+    "submenu_image_position": {
+      "name": "Position",
+      "type": "select",
+      "default": "left",
+      "options": [
+        {
+          "label": "Left of the list",
+          "value": "left"
+        },
+        {
+          "label": "Before the title",
+          "value": "before"
+        },
+        {
+          "label": "After the title",
+          "value": "after"
+        }
+      ],
+      "visible_if": "{{ block.options.submenu == 'megamenu' and block.options.submenu_image }}"
+    },
+    "submenu_image_width": {
+      "name": "Width size",
+      "type": "select",
+      "default": "large",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ],
+      "visible_if": "{{ block.options.submenu == 'megamenu' and block.options.submenu_image and 'before after' contains block.options.submenu_image_position }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Layout",
+      "type": "heading",
+      "before": "width"
+    },
+    {
+      "name": "Submenus",
+      "type": "heading",
+      "before": "event"
+    },
+    {
+      "name": "Mega menu options",
+      "type": "heading",
+      "before": "submenu_columns"
+    }
+  ],
+  "traits": [
+    {
+      "type": "menu_links",
+      "menus": [
+        "main"
+      ]
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

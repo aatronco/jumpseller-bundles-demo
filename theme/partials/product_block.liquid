@@ -1,0 +1,302 @@
+{% capture t_add_to_cart_default %}{% t "Add to Cart" %}{% endcapture %}
+{% assign t_add_to_cart = options.t_add_to_cart | default: t_add_to_cart_default %}
+{% capture t_add_default %}{% t "Add" %}{% endcapture %}
+{% assign t_add = options.t_add | default: t_add_default %}
+{% capture t_not_available_default %}{% t "Not available" %}{% endcapture %}
+{% assign t_not_available = options.t_not_available | default: t_not_available_default %}
+{% capture t_out_of_stock_default %}{% t "Out of Stock" %}{% endcapture %}
+{% assign t_out_of_stock = options.t_out_of_stock | default: t_out_of_stock_default %}
+{% capture t_new_default %}{% t "New" %}{% endcapture %}
+{% assign t_new = options.t_new | default: t_new_default %}
+{% capture t_quantity_default %}{% t "Quantity" %}{% endcapture %}
+{% assign t_quantity = options.t_quantity | default: t_quantity_default %}
+{% capture t_see_availability_default %}{% t "See availability" %}{% endcapture %}
+{% assign t_see_availability = options.t_see_availability | default: t_see_availability_default %}
+{% assign minimum_to_buy = prod.minimum_quantity | default: 1 | at_least: 1 %}
+
+{% assign columns_desktop = options.pb_columns_desktop %}
+{% assign columns_mobile = options.pb_columns_mobile %}
+
+{% assign prod_sku = prod.sku %}
+{% assign prod_brand = prod.brand %}
+
+{% capture prod_name %}
+  {% capture prod_name_anchor %}
+    <a href="{{ prod.url }}" class="product-block__name" title="{% t 'Go to' %} {{ prod.name }}">{{ prod.name }}</a>
+  {% endcapture %}
+  {% case template %}
+    {% when 'category', 'searchresults' %}
+      <h2 class="product-block__title">
+        {{- prod_name_anchor -}}
+      </h2>
+    {% else %}
+      {{ prod_name_anchor }}
+  {% endcase %}
+{% endcapture %}
+
+{% capture prod_buy_now %}
+  {% if options.pb_buy_now_link %}
+    <button
+      type="button"
+      class="button product-block__buy-now"
+      aria-label="{% t 'Buy now' %}"
+      onclick="productBlockBuyNow(this, '{{ prod.buy_now_url }}')"
+    >
+      {%- t "Buy now" -%}
+    </button>
+  {% endif %}
+{% endcapture %}
+
+{% capture prod_status_button %}
+  <a href="{{ prod.url }}" class="button button--style button--secondary button--bordered product-block__button" title="{% t 'See details' %}">
+    <span>{% t 'See details' %}</span>
+  </a>
+{% endcapture %}
+
+{% capture prod_actions %}
+  {% if options.pb_show_buttons and options.disable_shopping_cart != true %}
+    <div class="product-block__actions{% if options.pb_show_buttons_hover %} product-block__actions--on-hover trsn{% endif %}">
+      {% if prod.quotable and prod.status == 'not-available' %}
+        {{- prod_status_button -}}
+      {% elsif prod.status == 'not-available' and options.pb_show_buttons_status %}
+        {{- prod_status_button -}}
+      {% elsif prod.stock < minimum_to_buy and prod.stock_unlimited == false and options.pb_show_buttons_status %}
+        {{- prod_status_button -}}
+      {% elsif prod.options != blank %}
+        <a href="{{ prod.url }}" class="button button--style button--main product-block__button" title="{% t 'See options' %}">
+          <span>{% t 'See options' %}</span>
+        </a>
+      {% elsif prod.product_subscription_delivery_frequencies != blank %}
+        <a href="{{ prod.url }}" class="button button--style button--main product-block__button" title="{% t 'See frequencies' %}">
+          <span>{% t 'See frequencies' %}</span>
+        </a>
+      {% elsif prod.type == 'appointment' %}
+        <a href="{{ prod.url }}" class="button button--style button--main product-block__button" title="{{ t_see_availability }}">
+          <span>{{ t_see_availability }}</span>
+        </a>
+      {% else %}
+        <form action="{{ prod.add_to_cart_url }}" class="product-block__form" method="post" name="buy" data-product-id="{{ prod.id }}">
+          <div class="product-block__quantity {% if options.pb_show_quantity %}d-flex{% else %}d-none{% endif %}">
+            {% if prod.stock_unlimited != true and prod.maximum_quantity and prod.maximum_quantity > 0 %}
+              {% assign maximum_to_buy = prod.maximum_quantity | at_most: prod.stock %}
+            {% elsif prod.maximum_quantity and prod.maximum_quantity > 0 %}
+              {% assign maximum_to_buy = prod.maximum_quantity %}
+            {% elsif prod.stock_unlimited != true %}
+              {% assign maximum_to_buy = prod.stock %}
+            {% endif %}
+            <button
+              type="button"
+              class="button product-block__handler quantity-down"
+              aria-label="{% t 'Decrease quantity' %}"
+              onclick="changeQuantityProductBlock(this, -1);checkBuyNowProductBlock(this)"
+              disabled
+            >
+              <i class="ph ph-minus-circle"></i>
+            </button>
+            <label for="product-block__input-{{ prod.id }}" class="sr-only">{{ t_quantity }}</label>
+            <input
+              type="number"
+              min="{{ minimum_to_buy }}"
+              value="{{ minimum_to_buy }}"
+              {% if maximum_to_buy %}
+                max="{{ maximum_to_buy }}"
+              {% endif %}
+              data-price="{{ prod.price | minus: prod.discount }}"
+              name="qty"
+              id="product-block__input-{{ prod.id }}"
+              class="text text--qty product-block__input"
+            >
+            <button
+              type="button"
+              class="button product-block__handler quantity-up"
+              aria-label="{% t 'Increase quantity' %}"
+              onclick="changeQuantityProductBlock(this, 1);checkBuyNowProductBlock(this)"
+              {% if maximum_to_buy and minimum_to_buy == maximum_to_buy %}
+                disabled
+              {% endif %}
+            >
+              <i class="ph ph-plus-circle"></i>
+            </button>
+          </div>
+
+          <button
+            {% if options.display_cart_notification %}
+              type="button" onclick="addToCartProductBlock(this)"
+            {% else %}
+              type="submit"
+            {% endif %}
+            class="button button--style button--main product-block__button product-block__button--add-to-cart"
+            aria-label="{% t 'Add %{product_name} to cart', product_name: prod.name %}"
+            name="{{ t_add_to_cart }}"
+          >
+            <i class="theme-icon ph {{ options.theme_icon_cart }}"></i>
+            {% if options.pb_show_quantity == false %}
+              <span class="product-block__button-text product-block__button-text--large">{{ t_add_to_cart }}</span>
+              <span class="product-block__button-text product-block__button-text--small">{{ t_add }}</span>
+            {% endif %}
+          </button>
+        </form>
+
+        {{ prod_buy_now }}
+      {% endif %}
+    </div>
+  {% endif %}
+{% endcapture %}
+
+{% capture get_color_options -%}
+  {%- for option in prod.options -%}
+    {{- option.type -}}
+  {%- endfor -%}
+{%- endcapture %}
+{% assign color_options_position = options.pb_color_options_position %}
+
+{% if options.pb_show_color_options and prod.options.size > 0 and get_color_options contains 'color' %}
+  {% assign has_color_options = true %}
+{% else %}
+  {% assign has_color_options = false %}
+{% endif %}
+
+{% assign data_spacing = options.pb_spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+<article
+  class="theme-block product-block product-block-{{ component.id }}{% if display_option == 'carousel' %} swiper-slide{% endif %}"
+  data-product-id="{{ prod.id }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-spacing="{{ data_spacing }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {% if options.theme_button_hover %}
+    data-button-hover="{{ options.theme_button_hover_style }}"
+  {% endif %}
+  {% if options.pb_card %}
+    data-card="true"
+    data-card-border="{{ options.pb_card_border }}"
+    data-card-image-padding="{{ options.pb_card_image_padding }}"
+    data-card-shadow="{{ options.pb_card_shadow }}"
+    data-bundle-color="{{ options.pb_card_bundle_color }}"
+  {% endif %}
+>
+  <div class="theme-block__wrapper product-block__wrapper">
+    <div class="product-block__gallery">
+      {% if prod.variant_with_min_price.price %}
+        {% assign ribbon_price = prod.variant_with_min_price.price | minus: prod.variant_with_min_price.discount %}
+      {% else %}
+        {% assign ribbon_price = prod.price | minus: prod.discount %}
+      {% endif %}
+      {% if ribbon_price < 8000 %}
+        <div class="product-block__ribbon">OFERTA</div>
+      {% endif %}
+
+      <div class="product-block__extras check-empty">
+        {%- if options.pb_wishlist and store.customers_enabled -%}
+          {% render 'product_wishlist_compact', prod: prod, attributes: component.attributes -%}
+        {%- endif -%}
+
+        {%- if options.pb_quickview -%}
+          {% render 'product_quickview_button', prod: prod, qv_type: 'product-block', marker_animation: 'none' %}
+        {%- endif -%}
+      </div>
+
+      <a href="{{ prod.url }}" class="product-block__anchor" title="{% t 'Go to' %} {{ prod.name }}">
+        <div class="product-block__labels">
+          <div class="d-flex flex-column">
+            {% unless options.disable_prices %}
+              {% if prod.discount > 0 %}
+                {% capture prod_discount_text %}
+                  <span class="product-block__discount-text check-empty">{{ options.t_label_discount | escape }}</span>
+                {%- endcapture %}
+                {% capture prod_discount %}
+                  <span class="product-block__discount-percentage">{{ prod.discount | divided_by: prod.price | times: 100 | round: 0 | prepend: '-' | append: '%' -}}</span>
+                  {{- prod_discount_text -}}
+                {% endcapture %}
+
+                <div class="product-block__label product-block__label--discount check-empty">
+                  {%- case options.pb_price_display %}
+                    {% when 'from' %}
+                      {%- if prod.variant_with_min_price.discount > 0 %}
+                        <span class="product-block__discount-percentage">{{- prod.variant_with_min_price.discount | divided_by: prod.variant_with_min_price.price | times: 100 | round: 0 | prepend: '-' | append: '%' -}}</span>
+                        {{- prod_discount_text -}}
+                      {% else %}
+                        {{- prod_discount -}}
+                      {% endif -%}
+                    {% when 'until' %}
+                      {%- if prod.variant_with_max_price.discount > 0 %}
+                        <span class="product-block__discount-percentage">{{- prod.variant_with_max_price.discount | divided_by: prod.variant_with_max_price.price | times: 100 | round: 0 | prepend: '-' | append: '%' -}}</span>
+                        {{- prod_discount_text -}}
+                      {% else %}
+                        {{- prod_discount -}}
+                      {% endif -%}
+                    {% when 'range' %}
+                      {%- if prod.discount > 0 %}
+                        {{- prod_discount -}}
+                      {% endif -%}
+                  {% endcase -%}
+                </div>
+              {% endif %}
+            {% endunless %}
+
+            {%- if options.pb_label_new %}
+              {% assign label_age = options.pb_label_new_limit | times: 86400 %}
+              {% assign label_compare = 'now' | date: '%s' | minus: label_age %}
+              {% assign label_creation = prod.created_at | date: '%s' | plus: 0 %}
+              {% if label_compare < label_creation -%}
+                <div class="product-block__label product-block__label--new">
+                  {{ t_new }}
+                </div>
+              {%- endif %}
+            {% endif -%}
+          </div>
+
+          {% if prod.status == 'not-available' and prod.quotable == false %}
+            <div class="product-block__label product-block__label--status">{{- t_not_available -}}</div>
+          {% elsif prod.stock < minimum_to_buy and prod.stock_unlimited == false %}
+            <div class="product-block__label product-block__label--status">{{- t_out_of_stock -}}</div>
+          {% endif %}
+        </div>
+      </a>
+
+      {% render 'product_block_image', prod: prod, has_color_options: has_color_options, color_options_position: color_options_position, section_width: section_width, block_index: block_index %}
+    </div>
+    <!-- end .product-block__gallery -->
+
+    <div class="theme-block__content product-block__content">
+      {% for pb_content in options.pb_content_order %}
+        {% case pb_content %}
+          {% when 'attributes' %}
+            <div class="product-block__attributes check-empty">
+              <span class="product-block__sku check-empty">{{- prod_sku -}}</span>
+              <span>|</span>
+              <span class="product-block__brand check-empty">{{- prod_brand -}}</span>
+            </div>
+          {% when 'name' %}
+            {{- prod_name -}}
+          {% when 'price' %}
+            {% unless options.disable_prices %}
+              {% render 'product_block_price', prod: prod %}
+            {% endunless %}
+          {% when 'colors' %}
+            {% if has_color_options and color_options_position == 'bottom' %}
+              {% render 'product_block_colors', prod: prod %}
+            {% endif %}
+          {% when 'rating' %}
+            {% if options.pb_show_ratings and prod.reviews != blank %}
+              {% render 'product_rating', prod: prod %}
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+    <!-- end .product-block__content -->
+
+    {% if options.pb_show_buttons and options.disable_shopping_cart != true %}
+      {{ prod_actions }}
+    {% endif %}
+    <!-- end .product-block__content -->
+  </div>
+</article>

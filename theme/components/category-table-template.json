@@ -1,0 +1,135 @@
+{
+  "name": "Tabla de productos mayorista",
+  "icon": "table",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "category"
+  ],
+  "options": {
+    "limit": {
+      "name": "Products per page",
+      "type": "slider",
+      "default": 50,
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": ""
+    },
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "help": "When choosing **Default**, the option defined at [Theme settings > Design > Theme styles > Maximum container width](/general/design) will be applied.",
+      "default": "default",
+      "options": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Small",
+          "value": "1320px"
+        },
+        {
+          "label": "Medium",
+          "value": "1620px"
+        },
+        {
+          "label": "Large",
+          "value": "1920px"
+        },
+        {
+          "label": "Extra Large",
+          "value": "2220px"
+        },
+        {
+          "label": "Browser width",
+          "value": "100vw"
+        }
+      ]
+    },
+    "discount1_threshold": {
+      "name": "Discount 1 — min. units in cart",
+      "type": "slider",
+      "default": 10,
+      "min": 1,
+      "max": 200,
+      "step": 1,
+      "unit": ""
+    },
+    "discount1_percent": {
+      "name": "Discount 1 — percentage (0 = hidden)",
+      "type": "slider",
+      "default": 7,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "%"
+    },
+    "discount2_threshold": {
+      "name": "Discount 2 — min. units in cart",
+      "type": "slider",
+      "default": 20,
+      "min": 1,
+      "max": 200,
+      "step": 1,
+      "unit": ""
+    },
+    "discount2_percent": {
+      "name": "Discount 2 — percentage (0 = hidden)",
+      "type": "slider",
+      "default": 10,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "%"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 16,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 32,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Volume pricing",
+      "type": "heading",
+      "before": "discount1_threshold"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Tabla de productos mayorista",
+      "category": "Products"
+    }
+  ]
+}

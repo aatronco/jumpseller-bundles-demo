@@ -1,0 +1,142 @@
+{% capture t_create_account_default %}{% t "Create account" %}{% endcapture %}
+{% assign t_create_account = options.t_create_account | default: t_create_account_default %}
+{% capture t_edit_my_details_default %}{% t "Edit my details" %}{% endcapture %}
+{% assign t_edit_my_details = options.t_edit_my_details | default: t_edit_my_details_default %}
+{% capture t_go_to_my_account_default %}{% t "Go to my account" %}{% endcapture %}
+{% assign t_go_to_my_account = options.t_go_to_my_account | default: t_go_to_my_account_default %}
+{% capture t_log_in_default %}{% t "Log in" %}{% endcapture %}
+{% assign t_log_in = options.t_log_in | default: t_log_in_default %}
+{% capture t_login_default %}{% t "Login" %}{% endcapture %}
+{% assign t_login = options.t_login | default: t_login_default %}
+{% capture t_log_out_default %}{% t "Log out" %}{% endcapture %}
+{% assign t_log_out = options.t_log_out | default: t_log_out_default %}
+{% capture t_my_account_default %}{% t "My account" %}{% endcapture %}
+{% assign t_my_account = options.t_my_account | default: t_my_account_default %}
+{% capture t_see_my_wishlist_default %}{% t "See my Wishlist" %}{% endcapture %}
+{% assign t_see_my_wishlist = options.t_see_my_wishlist | default: t_see_my_wishlist_default %}
+
+{% if store.customers_enabled %}
+  {%- capture login_text -%}
+    {%- if customer %}{{ t_my_account }}{% else %}{{ t_login }}{% endif -%}
+  {%- endcapture %}
+
+  {%- capture login_link_title -%}
+    {%- if customer %}{{ t_go_to_my_account }}{% else %}{{ t_log_in }}{% endif -%}
+  {%- endcapture %}
+
+  {%- capture login_url -%}
+    {%- if customer %}{{ customer_account_url }}{% else %}{{ customer_login_url }}{% endif -%}
+  {%- endcapture %}
+
+  {% if login_position == 'header' %}
+    {% assign login_link_class = 'button dropdown-toggle header__link' %}
+
+    {% assign login_dropdown_target = 'header-dropdown-login' %}
+
+    {%- capture login_content -%}
+      {% if component.options.items_buttons %}
+        <span class="button button--style button--{{ component.options.items_buttons_type }} theme-section__button header__button"><i class="theme-icon ph ph-user-circle header__icon"></i></span>
+      {% else %}
+        <i class="theme-icon ph ph-user-circle header__icon"></i>
+      {% endif %}
+      {% unless header_version == 'v5' %}
+        {% if header_items_text %}
+          <div class="d-none {% if header_version == 'v6' %}d-sm-block{% else %}d-md-block{% endif %} header__text">{{ login_text }}</div>
+          {% unless login_behavior == 'link' %}
+            <i class="theme-icon ph ph-caret-down header__angle d-none{% unless header_version == 'v6' %} d-sm-block{% endunless %}"></i>
+          {% endunless %}
+        {% endif %}
+      {% endunless %}
+    {%- endcapture -%}
+  {% elsif login_position == 'mobile-nav' %}
+    {% assign login_link_class = 'button button--flex mobile-nav__link' %}
+
+    {% assign login_dropdown_target = 'mobile-nav-dropdown-login' %}
+
+    {%- capture login_content -%}
+      <i class="theme-icon ph ph-user-circle mobile-nav__icon"></i>
+      {% if header_items_text %}
+        <div class="mobile-nav__text">
+          {{- login_text -}}
+        </div>
+      {% endif %}
+    {%- endcapture -%}
+  {% endif %}
+
+  {% capture login_dropdown %}
+    <ul class="dropdown-menu dropdown-menu-end theme-dropdown" aria-labelledby="{{ login_dropdown_target }}">
+      {% if customer %}
+        <li class="theme-dropdown__item">
+          <a href="{{ customer_account_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_go_to_my_account }}">{{ t_go_to_my_account }}</a>
+        </li>
+
+        <li class="theme-dropdown__item">
+          <a href="{{ customer.edit_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_edit_my_details }}">{{ t_edit_my_details }}</a>
+        </li>
+
+        <li class="theme-dropdown__item theme-dropdown__item--wishlist">
+          <a href="{{ wishlist_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_see_my_wishlist }}">{{ t_see_my_wishlist }} ({{ customer.wishlisted_products.size }}) </a>
+        </li>
+
+        {% if customer.billing_address.size == 0 %}
+          <li class="theme-dropdown__item">
+            <a href="{{ customer.add_billing_address_url }}" class="dropdown-item theme-dropdown__link" title="{% t 'Add Billing Address' %}">{% t "Add Billing Address" %}</a>
+          </li>
+        {% endif %}
+
+        {% if customer.shipping_address.size == 0 %}
+          <li class="theme-dropdown__item">
+            <a href="{{ customer.add_shipping_address_url }}" class="dropdown-item theme-dropdown__link" title="{% t 'Add Shipping Address' %}">{% t "Add Shipping Address" %}</a>
+          </li>
+        {% endif %}
+
+        <li class="theme-dropdown__item">
+          <a href="{{ customer.logout_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_log_out }}">{{ t_log_out }}</a>
+        </li>
+      {% else %}
+        <li class="theme-dropdown__item">
+          <a href="{{ customer_login_url }}" class="dropdown-item theme-dropdown__link" title="{% t 'Login to your account' %}">{{ t_log_in }}</a>
+        </li>
+
+        <li class="theme-dropdown__item">
+          <a href="{{ customer_registration_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_create_account }}">{{ t_create_account }}</a>
+        </li>
+      {% endif %}
+    </ul>
+  {% endcapture %}
+
+  {%- capture login_link -%}
+    {% case login_behavior %}
+      {% when 'dropdown' %}
+        <button
+          type="button"
+          class="{{ login_link_class }}"
+          id="{{ login_dropdown_target }}"
+          data-bs-toggle="dropdown"
+          data-bs-display="static"
+          aria-expanded="false"
+          aria-label="{{ login_text }}"
+        >
+          {{- login_content -}}
+        </button>
+
+        {{- login_dropdown -}}
+      {% when 'link' %}
+        <a
+          href="{{ login_url }}"
+          class="{{ login_link_class }}"
+          title="{{ login_link_title }}"
+        >
+          {{- login_content -}}
+        </a>
+    {% endcase %}
+  {%- endcapture -%}
+
+  {% if login_position == 'header' %}
+    <li class="header__item header__item--login{% if header_version == 'v6' %} d-none d-sm-flex{% endif %}">
+      {{- login_link -}}
+    </li>
+  {% elsif login_position == 'mobile-nav' %}
+    {{- login_link -}}
+  {% endif %}
+{% endif %}

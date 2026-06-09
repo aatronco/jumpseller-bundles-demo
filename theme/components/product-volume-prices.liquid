@@ -1,0 +1,53 @@
+{% if prod.variants == blank %}
+  {% assign first_id = prod.id %}
+{% else %}
+  {% assign first_id = prod.variants.first.id %}
+{% endif %}
+
+{% unless product-volume-prices.options.show_discount_column %}
+  <style>
+    .product-volume-prices__entry:nth-child(3) {
+      display: none !important;
+    }
+  </style>
+{% endunless %}
+
+<product-volume-prices
+  class="product-volume-prices product-volume-prices-{{ component.id }} w-100 check-empty{% if product-volume-prices.options.mobile_first %} mobile-first{% endif %}"
+  data-name="product-volume-prices"
+  data-productid="{{ first_id }}"
+  {{ product-volume-prices.attributes }}
+>
+  <script type="application/json" class="product-volume-prices-json">
+    {
+      "options": {
+        "mobileFirst": {{ product-volume-prices.options.mobile_first | json }},
+        "hideBuy1Row": {{ product-volume-prices.options.hide_buy_1_row | json }},
+        "showDiscountColumn": {{ product-volume-prices.options.show_discount_column | json }},
+        "hideWhenLengthOne": {{ product-volume-prices.options.hide_when_length_one | json }}
+      },
+      "info": {
+        "product": {
+          "id": {{ prod.id | json }},
+          "price": {{ prod.price | json }},
+          "price_formatted": {{ prod.price | price | json }},
+          "price_with_discount_formatted": {{ prod.price | minus: prod.discount | price | json }},
+          "percentage_off": {% if prod.discount > 0 %}{{ prod.discount | divided_by: prod.price | times: 100 | round: 0 | json }}{% else %}0{% endif %},
+          "discount": {{ prod.discount | json }},
+          "volume_prices": {{ prod.volume_prices | json }}
+        },
+        "variants": [{% for variant in prod.variants %}
+          {
+            "id": {{ variant.id | json }},
+            "price": {{ variant.price | json }},
+            "price_formatted": {{ variant.price | price | json }},
+            "price_with_discount_formatted": {{ variant.price | minus: variant.discount | price | json }},
+            "percentage_off": {% if variant.discount > 0 %}{{ variant.discount | divided_by: variant.price | times: 100 | round: 0 | json }}{% else %}0{% endif %},
+            "discount": {{ variant.discount | json }},
+            "volume_prices": {{ variant.volume_prices | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}]
+      }
+    }
+  </script>
+</product-volume-prices>

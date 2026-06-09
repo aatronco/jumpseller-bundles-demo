@@ -1,0 +1,148 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign link = component.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = component.options.link_text | default: link_text_default %}
+{% assign link_external = component.options.link_external %}
+
+{% capture sw_content %}
+  {% for simple-slide in component.subcomponents['simple-slides'] %}
+    {% render 'components/simple-slide', simple-slide: simple-slide %}
+  {% else %}
+    <div class="swiper-slide">
+      <div class="theme-image-placeholder theme-image-placeholder--landscape"></div>
+    </div>
+  {% endfor %}
+{% endcapture %}
+
+{% assign class_media = 'col-12 col-md-6 theme-section__block theme-section__block--has-media' %}
+{% assign class_content = 'col-12 col-md-6 theme-section__block theme-section__block--has-content' %}
+
+{% case component.options.columns %}
+  {% when 'content-media' %}
+    {% if component.options.columns_mobile %}
+      {% assign class_media = class_media | append: ' order-2' %}
+      {% assign class_content = class_content | append: ' order-1' %}
+    {% else %}
+      {% assign class_media = class_media | append: ' order-1 order-md-2' %}
+      {% assign class_content = class_content | append: ' order-2 order-md-1' %}
+    {% endif %}
+  {% else %}
+    {% assign class_media = class_media | append: ' order-1' %}
+    {% assign class_content = class_content | append: ' order-2' %}
+{% endcase %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "See more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% assign align_desktop = component.options.content_alignment_x_desktop %}
+{% assign align_mobile = component.options.content_alignment_x_mobile %}
+{% assign align_items_desktop = align_desktop | replace: 'text-md-', 'align-items-md-' %}
+{% assign align_items_mobile = align_mobile | replace: 'text-', 'align-items-' %}
+
+<style>
+  #{{ section_id }} .theme-section__block {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    {% assign title_size = component.options.title_size %}
+    {% assign title_size_desktop = component.options.title_size_desktop | append: 'px' %}
+    {% assign title_size_mobile = component.options.title_size_mobile | append: 'px' %}
+
+    {% case title_size %}
+      {% when 'custom' %}
+        --title-size-desktop: {{ title_size_desktop }};
+        --title-size-mobile: {{ title_size_mobile }};
+        --subtitle-size-desktop: {{ component.options.subtitle_size_desktop }}px;
+        --subtitle-size-mobile: {{ component.options.subtitle_size_mobile }}px;
+      {% else %}
+        --title-size-desktop: var(--title-size-{{ title_size }}-desktop);
+        --title-size-mobile: var(--title-size-{{ title_size }}-mobile);
+        --subtitle-size-desktop: calc(var(--title-size-{{ title_size }}-desktop) * var(--subtitle-size-desktop-number));
+        --subtitle-size-mobile: calc(var(--title-size-{{ title_size }}-mobile) * var(--subtitle-size-mobile-number));
+    {% endcase %}
+    --title-weight: {{ component.options.title_weight }};
+    --title-spacing: {{ component.options.title_spacing }}px;
+    --title-text-transform: {% if component.options.title_uppercase %}uppercase{% else %}initial{% endif %};
+    --subtitle-weight: {{ component.options.subtitle_weight }};
+    --subtitle-spacing: {{ component.options.subtitle_spacing }}px;
+    --subtitle-text-transform: {% if component.options.subtitle_uppercase %}uppercase{% else %}initial{% endif %};
+    {% if component.options.description_size == 'custom' %}
+      --description-size-desktop: {{ component.options.description_size_desktop }}px;
+      --description-size-mobile: {{ component.options.description_size_mobile }}px;
+    {% else %}
+      --description-size-desktop: var(--description-size-{{ component.options.description_size }}-desktop);
+      --description-size-mobile: var(--description-size-{{ component.options.description_size }}-mobile);
+    {% endif %}
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row align-items-{{ component.options.content_alignment_y }} {{ align_mobile }} {{ align_desktop }} theme-section__content">
+      <div
+        class="{{ class_media }}"
+        {% if options.theme_spacing == 'none' and options.theme_corners_style != 'rectangular' %}
+          data-corners="{{ component.options.corners }}"
+        {% endif %}
+        {% if options.theme_animate %}
+          data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+          data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+          data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+        {% endif %}
+      >
+        {% render 'component_swiper', sw_layout: 'slider', sw_content: sw_content, sw_columns: 1, sw_autoheight: 'true' %}
+      </div>
+
+      <div
+        class="{{ class_content }}"
+        {% if options.theme_animate %}
+          data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+          data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+          data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+        {% endif %}
+      >
+        <div class="theme-section__content-wrapper {{ align_items_mobile }} {{ align_items_desktop }}">
+          <div class="theme-section__subtitle check-empty" {{ component.attributes.textfield.subtitle }}>
+            {{- component.options.subtitle -}}
+          </div>
+
+          <h3 class="theme-section__title check-empty" {{ component.attributes.textfield.title }}>
+            {{- component.options.title -}}
+          </h3>
+
+          <div class="theme-section__description theme-section__description--push-top check-empty" {{ component.attributes.textfield.description }}>
+            {{- component.options.description | newline_to_br -}}
+          </div>
+
+          {% if link != blank %}
+            <a
+              href="{{ link }}"
+              class="button button--style button--main{% if component.options.link_outline %} button--bordered{% endif %} theme-section__button"
+              title="{{ link_text }}"
+              {% if link_external %}
+                target="_blank"
+              {% endif %}
+            >
+              <span {{ component.attributes.textfield.link_text }}>
+                {{- link_text -}}
+              </span>
+              {% if component.options.link_arrow %} <i class="ph ph-arrow-right"></i>{% endif %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

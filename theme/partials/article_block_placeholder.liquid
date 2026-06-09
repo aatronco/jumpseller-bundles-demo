@@ -1,0 +1,88 @@
+{% assign article_version = options.article_block_version %}
+
+{% case article_version %}
+  {% when 'v1' %}
+    {% if options.article_block_card %}
+      {% assign article_bundle_color = options.article_block_bundle_color %}
+    {% else %}
+      {% assign article_bundle_color = component.options.bundle_color %}
+    {% endif %}
+  {% when 'v2' %}
+    {% assign article_bundle_color = options.article_block_bundle_color %}
+{% endcase %}
+
+{% assign data_spacing = options.article_block_spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% for _ in (1..limit) %}
+  <article
+    class="theme-block article-block{% if display_option == 'carousel' %} swiper-slide{% endif %}"
+    data-version="{{ article_version }}"
+    data-columns-desktop="{{ columns_desktop }}"
+    data-columns-mobile="{{ columns_mobile }}"
+    data-spacing="{{ data_spacing }}"
+    {% if article_version == 'v1' and options.article_block_card %}
+      data-card="true"
+      data-card-image-padding="{{ options.article_block_card_image_padding }}"
+      data-card-border="{{ options.article_block_border }}"
+      data-card-shadow="{{ options.article_block_card_shadow }}"
+    {% endif %}
+    data-bundle-color="{{ article_bundle_color }}"
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+    {% endif %}
+  >
+    <div class="theme-block__wrapper article-block__wrapper{% if columns_desktop == 1 %} flex-md-row align-items-md-center{% endif %}">
+      {% if options.article_block_image %}
+        <a href="#" class="article-block__anchor" title="{% t 'Read article' %}">
+          <div class="aspect-ratio-rectangular theme-image-placeholder"></div>
+        </a>
+      {% endif %}
+
+      <div class="{% if article_version == 'v1' %}theme-block__content {% endif %}article-block__content">
+        {% for article_content in options.article_block_content_order %}
+          {% case article_content %}
+            {% when 'date' %}
+              {% if options.article_block_date %}
+                <div class="article-block__date">
+                  {{- 'now' | date: format: options.article_block_date_format -}}
+                </div>
+              {% endif %}
+            {% when 'title' %}
+              <a href="#" class="article-block__title" title="{% t 'Read article' %}">
+                {%- t "Article title" -%}
+              </a>
+            {% when 'excerpt' %}
+              {% if options.article_block_excerpt %}
+                {% assign lipsum_body = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus varius lectus at auctor porta. Aliquam id accumsan est. Sed tincidunt efficitur augue, sagittis ornare turpis dictum eget. Mauris metus metus, condimentum pretium volutpat vel, accumsan id lectus. Aliquam velit odio, dapibus id congue vitae.' %}
+                <div class="article-block__excerpt check-empty">{{ lipsum_body | strip_html | truncate: options.article_block_excerpt_length }}</div>
+              {% endif %}
+            {% when 'categories' %}
+              {% if options.article_block_categories %}
+                {% capture placeholder_name %}{% t "Category" %}{% endcapture %}
+                <div class="article-categories">
+                  {% for _ in (1..3) %}
+                    <a href="#" class="article-categories__link" title="{% t "Visit %{cat_name} articles", cat_name: placeholder_name %}">
+                      <div class="article-categories__icon"></div>
+                      {{- placeholder_name -}}
+                    </a>
+                  {%- endfor -%}
+                </div>
+              {% endif %}
+            {% when 'link' %}
+              {% if options.article_block_button %}
+                <a href="#" class="button button--style button--secondary{% if options.article_block_button_outline %} button--bordered{% endif %} article-block__button" title="{% t 'Read article' %}">
+                  <span>{%- t "Read article" %}</span>
+                  {% if options.article_block_button_arrow %}<i class="ph ph-arrow-right"></i>{% endif %}
+                </a>
+              {% endif %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </article>
+{% endfor %}

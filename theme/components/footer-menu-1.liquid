@@ -1,0 +1,36 @@
+{% capture t_go_to_default %}{% t "Go to" %}{% endcapture %}
+{% assign t_go_to = options.t_go_to | default: t_go_to_default %}
+
+{% case footer-menu-1.options.column_width %}
+  {% when 'auto' -%}
+    {%- assign column_width = 'col-12 col-md' %}
+  {% when 'half' -%}
+    {%- assign column_width = 'col-12 col-md-6' %}
+  {% when 'full' -%}
+    {%- assign column_width = 'col-12' %}
+{% endcase %}
+
+<div class="{{ column_width }} footer__column" {{ footer-menu-1.attributes }}>
+  <div class="footer__content">
+    <h3 class="footer__title check-empty">
+      <span {{ footer-menu-1.attributes.textfield.title }}>{{- footer-menu-1.options.title -}}</span>
+    </h3>
+
+    <ul class="no-bullet footer__menu">
+      {%- for item in menu.footer.items -%}
+        <li class="footer__item">
+          <a
+            href="{{ item.url }}"
+            class="footer__link"
+            title="{{ t_go_to }} {{ item.name }}"
+            {% if item.external %}
+              target="_blank"
+            {% endif %}
+          >
+            {{- item.name -}}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+{
+  "name": "Notification",
+  "icon": "bell",
+  "max_usage": 1,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "type": {
+      "name": "Type",
+      "type": "select",
+      "default": "info",
+      "options": [
+        {
+          "label": "Information",
+          "value": "info"
+        },
+        {
+          "label": "Success",
+          "value": "success"
+        },
+        {
+          "label": "Warning",
+          "value": "warning"
+        },
+        {
+          "label": "Danger",
+          "value": "danger"
+        }
+      ]
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Notification title"
+    },
+    "text": {
+      "name": "Text",
+      "type": "text",
+      "default": "Define the alert's text to display."
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "help": "Allows to add a link to any content of the store.",
+      "default": null
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "help": "Text that displays in the link.",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "default": "ph ph-bell"
+    },
+    "icon_size": {
+      "name": "Icon size",
+      "type": "select",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ],
+      "visible_if": "{{ block.options.icon.url != blank }}"
+    },
+    "close": {
+      "name": "Show close button",
+      "type": "checkbox",
+      "default": true
+    }
+  },
+  "mode": "subcomponents",
+  "blocks": []
+}

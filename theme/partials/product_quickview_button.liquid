@@ -1,0 +1,42 @@
+{% if qv_type == 'product-block' %}
+  {% assign button_class = 'product-block__quick-view' %}
+  {% assign button_title = options.pb_quickview_button %}
+  {%- capture button_icon -%}
+    <i
+      class="theme-icon ph ph-eye"
+      data-bs-toggle="tooltip"
+      data-bs-placement="left"
+      data-bs-title="{{ options.pb_quickview_button }}"
+      data-bs-custom-class="product-block__tooltip"
+    ></i>
+  {%- endcapture -%}
+{% elsif qv_type == 'product-mapping' %}
+  {% assign button_class = 'product-mapping__marker product-mapping__marker--quick-view' %}
+  {% assign button_title = prod.name | escape %}
+  {%- capture button_icon -%}
+    <span class="visually-hidden">{% t "See product" %}</span>
+    <i class="ph ph-plus"></i>
+  {%- endcapture -%}
+{% endif %}
+
+<quick-view>
+  <button
+    id="pb-quick-view-{{ prod.id }}"
+    class="{{ button_class }} trsn"
+    type="button"
+    title="{{ button_title }}"
+    {% if qv_type == 'product-mapping' and marker_animation != 'none' %}
+      data-animation="true"
+      data-animation-type="{{ marker_animation }}"
+    {% endif %}
+    data-bs-toggle="{{ options.pb_quickview_display }}"
+    data-bs-target="#product-quick-view"
+    data-product-name="{{ prod.name }}"
+    data-product-id="{{ prod.id }}"
+    data-product-url="{{ prod.url }}"
+    data-quick-view-url="{{ prod.url }}?sections=product-template"
+    aria-controls="product-quick-view"
+  >
+    {{ button_icon }}
+  </button>
+</quick-view>

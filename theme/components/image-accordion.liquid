@@ -1,0 +1,62 @@
+{% assign section_id = 'image-accordion-' | append: component.id %}
+{% assign list_id = section_id | append: '-list' %}
+
+{% case component.options.image_height %}
+  {% when 'small' %}
+    {% assign accordion_height = '300px' %}
+  {% when 'medium' %}
+    {% assign accordion_height = '500px' %}
+  {% when 'large' %}
+    {% assign accordion_height = '700px' %}
+{% endcase %}
+
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign data_spacing = component.options.spacing_edges %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign data_inner_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_inner_spacing = false %}
+{% endif %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --accordion-height: {{ accordion_height }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section image-accordion"
+  data-spacing="{{ data_spacing }}"
+  data-orientation="{{ component.options.orientation }}"
+  data-mode="{{ component.options.event }}"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row theme-section__content" id="{{ list_id }}">
+      <div class="image-accordion__list">
+        {% for image-accordion-item in component.subcomponents.blocks %}
+          {% render 'components/image-accordion-item', image-accordion-item: image-accordion-item, block_index: forloop.index, first_open: component.options.first_open, event: component.options.event, data_inner_spacing: data_inner_spacing, data_corners: data_corners %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

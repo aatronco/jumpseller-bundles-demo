@@ -1,0 +1,98 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% if current_url contains 'target=wishlist' %}
+  {% assign open_wishlist = true %}
+{% else %}
+  {% assign open_wishlist = false %}
+{% endif %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<theme-tabs
+  data-id="{{ component.id }}"
+  data-wishlist="{{ open_wishlist }}"
+  {{ component.attributes }}
+>
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section"
+    data-bundle-color="{{ component.options.bundle_color }}"
+  >
+    <div class="container container--adjust theme-section__container">
+      <div class="row theme-section__content">
+        <div class="theme-tabs theme-tabs--customer">
+          <details
+            class="theme-tabs__item"
+            id="theme-tabs-orders"
+            name="tab-{{ component.id }}"
+          >
+            <summary class="theme-tabs__tab button button--style button--main button--bordered">
+              <i class="theme-icon ph ph-list-bullets"></i>
+              {% t 'Orders' %}
+            </summary>
+            <div class="theme-tabs__content">
+              <div class="row theme-section__content">
+                {% render 'customer_orders' %}
+              </div>
+            </div>
+          </details>
+          <details
+            class="theme-tabs__item"
+            id="theme-tabs-subscriptions"
+            name="tab-{{ component.id }}"
+          >
+            <summary class="theme-tabs__tab button button--style button--main button--bordered">
+              <i class="theme-icon ph ph-arrows-clockwise"></i>
+              {% t 'Subscriptions' %}
+            </summary>
+            <div class="theme-tabs__content">
+              <div class="row theme-section__content">
+                {% render 'customer_subscriptions' %}
+              </div>
+            </div>
+          </details>
+          <details
+            class="theme-tabs__item"
+            id="theme-tabs-details"
+            name="tab-{{ component.id }}"
+          >
+            <summary class="theme-tabs__tab button button--style button--main button--bordered">
+              <i class="theme-icon ph ph-info"></i>
+              {% t 'Details' %}
+            </summary>
+            <div class="theme-tabs__content">
+              <div class="row theme-section__content">
+                {% render 'customer_details' %}
+              </div>
+            </div>
+          </details>
+          {% if component.options.enable_wishlist and store.customers_enabled %}
+            <details
+              class="theme-tabs__item"
+              id="theme-tabs-wishlist"
+              name="tab-{{ component.id }}"
+            >
+              <summary class="theme-tabs__tab button button--style button--main button--bordered">
+                <i class="theme-icon ph ph-heart"></i>
+                {% t 'Wishlist' %}
+                <span>
+                  {{- customer.wishlisted_products.size | prepend: '(' | append: ')' -}}
+                </span>
+              </summary>
+              <div class="theme-tabs__content">
+                <div class="row theme-section__content">
+                  {% render 'customer_wishlist' %}
+                </div>
+              </div>
+            </details>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+</theme-tabs>

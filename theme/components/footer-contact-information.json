@@ -1,0 +1,82 @@
+{
+  "name": "Contact information",
+  "icon": "circle-info",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/theme-customization/#contact-information).",
+  "max_usage": 1,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "column_width": {
+      "name": "Column width",
+      "type": "select",
+      "default": "auto",
+      "options": [
+        {
+          "label": "Auto",
+          "value": "auto"
+        },
+        {
+          "label": "Half width",
+          "value": "half"
+        },
+        {
+          "label": "Full width",
+          "value": "full"
+        }
+      ]
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Contact us"
+    },
+    "show_email": {
+      "name": "Email",
+      "type": "checkbox",
+      "default": false
+    },
+    "email_type": {
+      "name": "Email type",
+      "type": "select",
+      "default": "contact",
+      "options": [
+        {
+          "label": "Contact",
+          "value": "contact"
+        },
+        {
+          "label": "Location",
+          "value": "location"
+        }
+      ],
+      "visible_if": "{{ block.options.show_email }}"
+    },
+    "show_whatsapp": {
+      "name": "WhatsApp number",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_phone": {
+      "name": "Phone",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_address": {
+      "name": "Store's main address",
+      "type": "checkbox",
+      "default": true
+    }
+  },
+  "presentation": [
+    {
+      "help": "Allows to define which contact details will be displayed.",
+      "name": "Information",
+      "type": "heading",
+      "before": "show_email"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

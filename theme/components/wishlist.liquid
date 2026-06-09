@@ -1,0 +1,88 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign display_option = component.options.display %}
+
+{% assign section_visible = false %}
+{% if customer and customer.wishlisted_products.size > 0 %}
+  {% assign section_visible = true %}
+{% endif %}
+
+{% if options.theme_animate %}
+  {% assign has_animation = true %}
+
+  {% if component.options.animate %}
+    {% assign animate_delay = 0 | plus: component.options.animate_delay %}
+    {% assign animate_repeat = component.options.animate_repeat %}
+    {% assign animate_type = component.options.animate_type %}
+  {% else %}
+    {% assign animate_delay = 0 | plus: options.theme_animate_delay %}
+    {% assign animate_repeat = options.theme_animate_repeat %}
+    {% assign animate_type = options.theme_animate_type %}
+  {% endif %}
+{% else %}
+  {% assign has_animation = false %}
+{% endif %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% capture heading_link_text_default %}{% t "See more products" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% if customer %}
+  {% assign heading_link = '/customer?target=wishlist' %}
+{% else %}
+  {% assign heading_link = customer_login_url | append: '?target=wishlist' %}
+{% endif %}
+
+{% capture sw_content %}
+  {% for prod in customer.wishlisted_products limit: component.options.limit %}
+    {% render 'store_product', prod: prod, prod_type: 'wishlist', prod_display: display_option %}
+  {% endfor %}
+{% endcapture %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section theme-section--wishlist{% if section_visible == false %} {% if request.preview_mode %}d-block{% else %}d-none{% endif %}{% endif %}"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if has_animation %}
+    data-aos-once="{{ animate_repeat }}" data-aos="{{ animate_type }}" data-aos-delay="{{ animate_delay }}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% if display_option == 'carousel' %}
+        <swiper-slider
+          class="swiper theme-section__carousel"
+          sw-layout="wishlist-component"
+          sw-columns-desktop="3"
+          sw-columns-mobile="1"
+          sw-autoplay="{{ component.options.autoplay }}"
+          sw-speed="{{ component.options.autoplay_speed }}"
+          {% if component.options.autoplay_continuous %}
+            sw-continuous="{{ component.options.autoplay_continuous }}"
+            sw-speed-mobile="{{ component.options.autoplay_speed_mobile }}"
+          {% endif %}
+        >
+          <div class="swiper-wrapper">
+            {{ sw_content }}
+          </div>
+        </swiper-slider>
+
+        {% render 'component_swiper_navigation' %}
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

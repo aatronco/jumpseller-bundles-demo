@@ -1,0 +1,302 @@
+{% assign category_id = 'category-block-' | append: category-block.id %}
+{% assign cat = store.category[category-block.options.permalink] %}
+
+{% assign has_icon = category-block.options.icon.url %}
+
+{% assign content_position = component.options.content_position %}
+{% assign category_ratio = component.options.ratio %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+{% if content_position == 'over' %}
+  {% assign align_desktop = category-block.options.align_desktop %}
+  {% assign align_mobile = category-block.options.align_mobile %}
+  {% assign items_align_desktop = align_desktop | replace: 'text-md-', 'justify-content-md-' %}
+  {% assign items_align_mobile = align_mobile | replace: 'text-', 'justify-content-' %}
+  {% assign items_vertical_position = category-block.options.content_alignment_y_content | prepend: 'justify-content-' %}
+{% elsif content_position == 'below' %}
+  {% assign align_desktop = component.options.align_desktop %}
+  {% assign align_mobile = component.options.align_mobile %}
+  {% assign items_align_desktop = align_desktop | replace: 'text-md-', 'justify-content-md-' %}
+  {% assign items_align_mobile = align_mobile | replace: 'text-', 'justify-content-' %}
+  {% assign icon_align_x = category-block.options.content_alignment_x_icon | prepend: 'justify-content-' %}
+  {% assign icon_align_y = category-block.options.content_alignment_y_icon | prepend: 'align-items-' %}
+{% endif %}
+
+{% capture link_text_default %}{% t "See products" %}{% endcapture %}
+{% assign link_text = category-block.options.link_text | default: link_text_default %}
+{% assign link_external = category-block.options.link_external %}
+
+{% capture category_icon %}
+  {% if has_icon != blank %}
+    <div class="category-block__object {% if content_position == 'over' %}{{ items_align_mobile }} {{ items_align_desktop }}{% else %}{{ icon_align_x }} {{ icon_align_y }}{% endif %}">
+      <img src="{{ has_icon | resize: '200x200' }}" class="category-block__icon" alt="{{ category-block.options.icon.alt | default: cat.name | escape }}" width="200" height="200" loading="lazy" decoding="async" fetchpriority="low">
+    </div>
+
+    {% if content_position == 'below' %}
+      <div class="theme-section__overlay" data-bundle-color="{{ category-block.options.icon_bundle_color }}"></div>
+    {% endif %}
+  {% endif %}
+{% endcapture %}
+
+{% capture category_image %}
+  {% case category_ratio %}
+    {% when 'landscape' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x296' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x206' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x729' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x358' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x898' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x443' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x1076' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x527' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x1235' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x611' %}
+          {% endif %}
+      {% endcase %}
+    {% when 'portrait' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x703' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x488' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x1729' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x848' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x2128' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x1049' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x2528' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x1248' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x2928' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x1448' %}
+          {% endif %}
+      {% endcase %}
+    {% when 'rectangular' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x395' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x275' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x927' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x477' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x1197' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x590' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x1422' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x702' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x1647' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x815' %}
+          {% endif %}
+      {% endcase %}
+    {% when 'square' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x527' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x366' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x1296' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x636' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x1596' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x787' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x1896' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x936' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x2196' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x1086' %}
+          {% endif %}
+      {% endcase %}
+  {% endcase %}
+
+  {% assign split_image_dimension_desktop = image_dimension_desktop | split: 'x' %}
+
+  {% capture image_width_and_height_default %}width="{{ split_image_dimension_desktop.first }}" height="{{ split_image_dimension_desktop.last }}"{% endcapture %}
+
+  {% assign image_desktop = category-block.options.image_desktop.url | default: cat.images.first %}
+  {% assign image_mobile = category-block.options.image_mobile.url | default: image_desktop %}
+  {% assign image_alt = category-block.options.image_mobile.alt | default: category-block.options.image_desktop.alt | default: cat.name | default: options.theme_store_name | default: store.name | escape %}
+  {% assign image_width_and_height = category-block.options.image_desktop.attributes.width_and_height | default: category-block.options.image_mobile.attributes.width_and_height | default: image_width_and_height_default %}
+
+  <div class="category-block__media">
+    {% if content_position == 'below' %}
+      {{ category_icon }}
+    {% endif %}
+
+    {% if content_position == 'over' %}
+      <div class="theme-section__overlay"></div>
+    {% endif %}
+
+    {% if image_desktop != blank %}
+      <picture class="category-block__picture">
+        <source media="screen and (min-width: 576px)" srcset="{{ image_desktop | thumb: image_dimension_desktop }}">
+        <source media="screen and (max-width: 575px)" srcset="{{ image_mobile | thumb: image_dimension_mobile }}">
+        <img
+          src="{{ image_desktop | thumb: image_dimension_desktop }}"
+          alt="{{ image_alt }}"
+          class="category-block__image"
+          {{ image_width_and_height }}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
+        >
+      </picture>
+    {% else %}
+      <div class="theme-image-placeholder{% if content_position == 'over' %} theme-image-placeholder--no-icon{% endif %}"></div>
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% capture category_content %}
+  <div class="category-block__content{% if content_position == 'over' %} {{ items_vertical_position }}{% else %} theme-block__content{% endif %}">
+    {% if content_position == 'over' %}
+      {{ category_icon }}
+    {% endif %}
+
+    <div class="category-block__title {{ items_align_mobile }} {{ items_align_desktop }}">
+      {%- if cat.name == blank %}
+        {% t "Choose a category" %}
+      {% else %}
+        {{- category-block.options.title | default: cat.name -}}
+      {% endif -%}
+      {% if content_position == 'below' and category-block.options.link_arrow %}<i class="ph ph-arrow-right"></i>{% endif %}
+    </div>
+
+    {% if category-block.options.show_description %}
+      <div class="d-none d-sm-block category-block__text check-empty" {{ category-block.attributes.textfield.description }}>
+        {{- category-block.options.description | default: cat.description -}}
+      </div>
+    {% endif %}
+
+    {% if category-block.options.show_link_text %}
+      <div class="category-block__link {{ items_align_mobile }} {{ items_align_desktop }} trsn check-empty">
+        <span {{ category-block.attributes.textfield.link_text }}>
+          {{- link_text -}}
+        </span>
+        {% if content_position == 'over' and category-block.options.link_arrow %}<i class="ph ph-arrow-right"></i>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+<style>
+  #{{ category_id }} {
+    --category-block-aspect-ratio: var(--aspect-ratio-{{ category_ratio }});
+    {% if content_position == 'over' %}
+      --theme-overlay-opacity: {{ category-block.options.image_overlay | divided_by: 100.00 }};
+    {% endif %}
+    {% if has_icon != blank %}
+      --category-block-icon-size: {{ category-block.options.icon_size }}%;
+    {% endif %}
+    {% if has_icon != blank and content_position == 'below' %}
+      --theme-overlay-opacity: {{ category-block.options.icon_overlay | divided_by: 100.00 }};
+    {% endif %}
+  }
+</style>
+
+<div
+  id="{{ category_id }}"
+  class="theme-block category-block{% if display_option == 'carousel' %} swiper-slide{% endif %} {{ align_mobile }} {{ align_desktop }}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-spacing="{{ data_spacing }}"
+  data-corners="{{ data_corners }}"
+  data-content-position="{{ content_position }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {{ category-block.attributes }}
+>
+  <div
+    class="category-block__wrapper"
+    {% if content_position == 'over' %}
+      data-bundle-color="{{ category-block.options.bundle_color }}"
+    {% endif %}
+  >
+    {% render 'theme_hover_link', link: cat.url, link_text: link_text, link_external: link_external %}
+
+    {{ category_image }}
+
+    {{ category_content }}
+  </div>
+</div>

@@ -1,0 +1,57 @@
+{% capture default_quote %}{% t "You need to add a text for this testimony." %}{% endcapture %}
+
+{% assign alignment_desktop = component.options.text_alignment_desktop %}
+{% assign alignment_mobile = component.options.text_alignment_mobile %}
+
+{% if options.theme_spacing == 'none' and component.options.card %}
+  {% assign data_spacing = false %}
+{% elsif options.theme_spacing != 'none' and component.options.card and component.options.card_spacing == false %}
+  {% assign data_spacing = false %}
+{% else %}
+  {% assign data_spacing = true %}
+{% endif %}
+
+<div
+  class="theme-block testimony-block text-{{ alignment_mobile }} text-sm-{{ alignment_desktop }}{% if display == 'carousel' %} swiper-slide{% endif %}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-spacing="{{ data_spacing }}"
+  {% if component.options.card %}
+    data-card="true"
+    data-card-border="{{ component.options.card_border }}"
+    data-bundle-color="{{ component.options.card_bundle_color }}"
+  {% endif %}
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {{ testimony.attributes }}
+>
+  <div class="theme-block__wrapper testimony-block__wrapper align-items-{{ alignment_mobile }} align-items-sm-{{ alignment_desktop }}">
+    {% if component.options.icons %}
+      <div class="testimony-block__icon"><i class="theme-icon ph ph-quotes"></i></div>
+    {% endif %}
+
+    <div class="testimony-block__quote" {{ testimony.attributes.textfield.quote }}>
+      {{- testimony.options.quote | default: default_quote | newline_to_br -}}
+    </div>
+
+    {% if testimony.options.image.url != blank %}
+      <img
+        src="{{ testimony.options.image.url | thumb: avatar_image_size }}"
+        alt="{{ testimony.options.image.alt | default: testimony.options.author | escape }}"
+        class="testimony-block__avatar"
+        width="{{ avatar_image_size }}"
+        height="{{ avatar_image_size }}"
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
+      >
+    {% endif %}
+
+    <div class="testimony-block__author check-empty" {{ testimony.attributes.textfield.author }}>
+      {{- testimony.options.author -}}
+    </div>
+  </div>
+</div>

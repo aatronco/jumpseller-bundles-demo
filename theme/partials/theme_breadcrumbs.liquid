@@ -1,0 +1,52 @@
+{% unless options.bc_display == 'none' %}
+  {% assign section_id = 'theme-section-breadcrumbs' %}
+
+  {% case options.bc_display %}
+    {% when 'all' %}
+      {% assign section_display = 'd-block' %}
+    {% when 'mobile' %}
+      {% assign section_display = 'd-block d-sm-none' %}
+    {% when 'desktop' %}
+      {% assign section_display = 'd-none d-sm-block' %}
+  {% endcase %}
+
+  <style>
+    #{{ section_id }} {
+      --theme-max-width: {{ options.theme_width }};
+      --section-margin-top: var(--breadcrumbs-margin-top);
+      --section-margin-bottom: var(--breadcrumbs-margin-bottom);
+    }
+  </style>
+
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section {{ section_display }}"
+    data-bundle-color="{{ options.bc_bundle_color }}"
+  >
+    <div class="container container--adjust theme-section__container">
+      <div class="row theme-section__content">
+        <div class="col-12 theme-section__column theme-section__column--no-margin">
+          <ul class="no-bullet theme-breadcrumbs">
+            {% for breadcrumb in breadcrumbs %}
+              {% if forloop.last %}
+                <li class="theme-breadcrumbs__item theme-breadcrumbs__item--current">
+                  {{- breadcrumb.text -}}
+                </li>
+              {% else %}
+                <li class="theme-breadcrumbs__item">
+                  <a href="{{ breadcrumb.url }}" class="theme-breadcrumbs__link" title="{% t 'Go back to' %} {{ breadcrumb.text }}">
+                    {{- breadcrumb.text -}}
+                  </a>
+                </li>
+
+                <li class="theme-breadcrumbs__item">
+                  <span class="theme-breadcrumbs__arrow"><i class="ph ph-caret-right"></i></span>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endunless %}

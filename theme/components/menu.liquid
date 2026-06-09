@@ -1,0 +1,71 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% capture dropdown_text_default %}{% t "Menu" %}{% endcapture %}
+
+{% capture list %}
+  <ul class="theme-menu__list justify-content-{{ component.options.text_alignment_mobile }} justify-content-md-{{ component.options.text_alignment_desktop }}{% if component.options.dropdown_list %} theme-menu__list-vertical{% endif %}">
+    {%- for menu_item in component.subcomponents.items %}
+      {% render 'components/menu-item', menu-item: menu_item %}
+    {% endfor -%}
+  </ul>
+{% endcapture %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    {% assign item_size = component.options.item_size %}
+    {% assign item_size_desktop = component.options.item_size_desktop | append: 'px' %}
+    {% assign item_size_mobile = component.options.item_size_mobile | append: 'px' %}
+    {% case item_size %}
+      {% when 'custom' %}
+        --menu-item-size-desktop: {{ item_size_desktop }};
+        --menu-item-size-mobile: {{ item_size_mobile }};
+      {% else %}
+        --menu-item-size-desktop: var(--menu-item-size-{{ item_size }}-desktop);
+        --menu-item-size-mobile: var(--menu-item-size-{{ item_size }}-mobile);
+    {% endcase %}
+    --menu-item-weight: {{ component.options.item_weight }};
+    --menu-item-spacing: {{ component.options.item_spacing }}px;
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <nav class="theme-menu">
+      {% if component.options.dropdown %}
+        <button
+          class="button button--style button--{{ component.options.dropdown_buttons_type }} theme-menu__button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#themeMenuMobile-{{ component.id }}"
+          aria-expanded="false"
+          aria-controls="themeMenuMobile-{{ component.id }}"
+        >
+          {{ component.options.dropdown_text | default: dropdown_text_default }}
+
+          {% if component.options.dropdown_icon != blank %}
+            <i class="theme-icon ph {{ component.options.dropdown_icon }}"></i>
+          {% endif %}
+        </button>
+
+        <div class="theme-menu__collpase collapse d-md-block" id="themeMenuMobile-{{ component.id }}" data-bundle-color="{{ component.options.bundle_color }}">
+          {{ list }}
+        </div>
+      {% else %}
+        {{ list }}
+      {% endif %}
+    </nav>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+{% assign item_columns = menu.category.items.size %}
+
+<div class="header-megamenu dropdown-menu">
+  <div class="container header-megamenu__container">
+    <div class="row header-megamenu__row">
+      {% for item in menu.category.items %}
+        {% render 'header_megamenu_item',
+          item: item,
+          item_columns: item_columns,
+          submenu_columns: submenu_columns,
+          submenu_columns_width: submenu_columns_width,
+          submenu_image: submenu_image,
+          submenu_image_ratio: submenu_image_ratio,
+          submenu_image_position: submenu_image_position,
+          submenu_image_width: submenu_image_width,
+          submenu_view_all: submenu_view_all,
+          t_view_all: t_view_all,
+          t_go_to: t_go_to
+        %}
+      {% endfor %}
+    </div>
+  </div>
+</div>

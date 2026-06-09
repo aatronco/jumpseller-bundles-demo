@@ -1,0 +1,115 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "See more products" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% assign image_desktop_before = component.options.image_desktop_before.url %}
+{% assign image_desktop_after = component.options.image_desktop_after.url | default: image_desktop_before %}
+
+{% if component.options.image_mobile_before.url != blank and component.options.image_mobile_after.url != blank %}
+  {% assign image_mobile_before = component.options.image_mobile_before.url %}
+  {% assign image_mobile_after = component.options.image_mobile_after.url %}
+{% else %}
+  {% assign image_mobile_before = image_desktop_before %}
+  {% assign image_mobile_after = image_desktop_after %}
+{% endif %}
+
+{% assign image_default_alt = heading_title | default: options.theme_store_name | default: store.name %}
+{% assign image_before_alt = component.options.image_mobile_before.alt | default: component.options.image_desktop_before.alt | default: image_default_alt | escape %}
+{% assign image_before_width_and_height = component.options.image_desktop_before.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+{% assign image_after_alt = component.options.image_mobile_after.alt | default: component.options.image_desktop_after.alt | default: image_default_alt | escape %}
+{% assign image_after_width_and_height = component.options.image_desktop_after.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+  {% if data_spacing == false %}
+    @media screen and (max-width: {{ section_width }}) {
+      #{{ section_id }},
+      #{{ section_id }} .theme-section__container {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+      }
+    }
+  {% endif %}
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="theme-section"
+  data-spacing="{{ data_spacing }}"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      <div class="col-12 theme-section__column theme-section__column--no-margin">
+        <image-comparison class="image-comparison">
+          <div class="image-comparison__wrapper" data-corners="{{ data_corners }}">
+            <div class="image-comparison__slider">
+              <div class="image-comparison__handler">
+                <i class="ph ph-list"></i>
+              </div>
+              <div class="image-comparison__line"></div>
+            </div>
+
+            {% if image_desktop_before == blank and image_desktop_after == blank %}
+              <div class="image-comparison__content image-comparison__content--after">
+                <div class="theme-image-placeholder theme-image-placeholder--landscape"></div>
+              </div>
+
+              <div class="image-comparison__content image-comparison__content--before">
+                <div class="theme-image-placeholder"></div>
+              </div>
+            {% else %}
+              <div class="image-comparison__content image-comparison__content--after">
+                {% if image_desktop_after != blank %}
+                  <picture class="image-comparison__picture">
+                    <source media="screen and (min-width: 576px)" srcset="{{ image_desktop_after }}">
+                    <source media="screen and (max-width: 575px)" srcset="{{ image_mobile_after }}">
+                    <img src="{{ image_desktop_after }}" alt="{{ image_after_alt }}" class="image-comparison__object" {{ image_after_width_and_height }} loading="lazy" fetchpriority="auto">
+                  </picture>
+                {% else %}
+                  <div class="theme-image-placeholder"></div>
+                {% endif %}
+              </div>
+
+              <div class="image-comparison__content image-comparison__content--before">
+                <picture class="image-comparison__picture">
+                  <source media="screen and (min-width: 576px)" srcset="{{ image_desktop_before }}">
+                  <source media="screen and (max-width: 575px)" srcset="{{ image_mobile_before }}">
+                  <img src="{{ image_desktop_before }}" alt="{{ image_before_alt }}" class="image-comparison__object" {{ image_before_width_and_height }} loading="lazy" fetchpriority="auto">
+                </picture>
+              </div>
+            {% endif %}
+          </div>
+        </image-comparison>
+      </div>
+    </div>
+  </div>
+</section>

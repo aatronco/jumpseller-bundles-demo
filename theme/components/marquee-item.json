@@ -1,0 +1,58 @@
+{
+  "name": "Item",
+  "icon": "square",
+  "max_usage": 10,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "This is the item title",
+      "visible_if": "{{ component.options.show_titles }}"
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": null
+    },
+    "link_image_display": {
+      "name": "Link image",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "image_desktop": {
+      "name": "Image",
+      "type": "image"
+    },
+    "image_mobile": {
+      "name": "Image (mobile)",
+      "type": "image",
+      "visible_if": "{{ block.options.image_desktop.url != blank }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Image options",
+      "type": "heading",
+      "before": "image_desktop"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

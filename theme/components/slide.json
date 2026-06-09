@@ -1,0 +1,444 @@
+{
+  "name": "Slide",
+  "icon": "image",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "media_type": {
+      "name": "Media type",
+      "type": "select",
+      "default": "image",
+      "options": [
+        {
+          "label": "Image",
+          "value": "image"
+        },
+        {
+          "label": "Video",
+          "value": "video"
+        }
+      ]
+    },
+    "image_desktop": {
+      "name": "Image",
+      "type": "image",
+      "visible_if": "{{ block.options.media_type == 'image' }}"
+    },
+    "image_mobile": {
+      "name": "Image (mobile)",
+      "type": "image",
+      "help": "This image will be displayed only on mobile devices.",
+      "visible_if": "{{ block.options.image_desktop.url != blank and block.options.media_type == 'image' }}"
+    },
+    "video_desktop": {
+      "name": "Video source",
+      "type": "input",
+      "help": "Enter a URL to a video file or a YouTube link to display it on desktop.",
+      "default": "",
+      "visible_if": "{{ block.options.media_type == 'video' }}"
+    },
+    "video_mobile": {
+      "name": "Video source (mobile)",
+      "type": "input",
+      "help": "Enter a URL to a video file or a YouTube link to display it only on mobile.",
+      "default": "",
+      "visible_if": "{{ block.options.media_type == 'video' and block.options.video_desktop != blank }}"
+    },
+    "image_overlay": {
+      "name": "Overlay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 90,
+      "step": 10,
+      "unit": "",
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_alignment_x_image_desktop": {
+      "name": "Horizontal",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content and block.options.media_type == 'image' }}"
+    },
+    "content_alignment_y_image_desktop": {
+      "name": "Vertical",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Top",
+          "value": "top"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Bottom",
+          "value": "bottom"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content and block.options.media_type == 'image' }}"
+    },
+    "content_alignment_x_image_mobile": {
+      "name": "Horizontal",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content and block.options.media_type == 'image' }}"
+    },
+    "content_alignment_y_image_mobile": {
+      "name": "Vertical",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Top",
+          "value": "top"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Bottom",
+          "value": "bottom"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content and block.options.media_type == 'image' }}"
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": "/"
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_button": {
+      "name": "Link as button",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ component.options.show_content and block.options.link != blank }}"
+    },
+    "link_outline": {
+      "name": "Outline style",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ component.options.show_content and block.options.link != blank }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ component.options.show_content and block.options.link != blank }}"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "system-1",
+      "pack": "color",
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_width": {
+      "name": "Maximum desktop width",
+      "type": "slider",
+      "default": 60,
+      "min": 40,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "help": "Choose an icon to display.",
+      "default": "ph ph-info",
+      "visible_if": "{{ component.options.show_content and component.options.enable_icons }}"
+    },
+    "subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "placeholder": "Add a subtitle to your slide",
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Slide title",
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "description": {
+      "name": "Description",
+      "type": "text",
+      "default": "",
+      "placeholder": "Add a description for this slide",
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "align_desktop": {
+      "name": "Alignment",
+      "type": "select",
+      "default": "text-md-center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-md-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-md-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-md-end"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_alignment_x_desktop": {
+      "name": "Horizontal position",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_alignment_y_desktop": {
+      "name": "Vertical position",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Top",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Bottom",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "align_mobile": {
+      "name": "Alignment",
+      "type": "select",
+      "default": "text-center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-end"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_alignment_x_mobile": {
+      "name": "Horizontal position",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_alignment_y_mobile": {
+      "name": "Vertical position",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Top",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Bottom",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_image_desktop": {
+      "name": "Image",
+      "type": "image",
+      "help": "This image will be displayed next to the slide content.",
+      "visible_if": "{{ component.options.show_content }}"
+    },
+    "content_image_desktop_size": {
+      "name": "Size on desktop",
+      "type": "select",
+      "default": "90",
+      "options": [
+        {
+          "label": "Small",
+          "value": "80"
+        },
+        {
+          "label": "Medium",
+          "value": "90"
+        },
+        {
+          "label": "Large",
+          "value": "100"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content and block.options.content_image_desktop.url != blank }}"
+    },
+    "content_image_mobile": {
+      "name": "Image (mobile)",
+      "type": "image",
+      "visible_if": "{{ component.options.show_content and block.options.content_image_desktop.url != blank }}"
+    },
+    "columns": {
+      "name": "Image position",
+      "type": "select",
+      "help": "Allows to define the order for the **Image** column.",
+      "default": "content-media",
+      "options": [
+        {
+          "label": "Left",
+          "value": "media-content"
+        },
+        {
+          "label": "Right",
+          "value": "content-media"
+        }
+      ],
+      "visible_if": "{{ component.options.show_content and block.options.content_image_desktop.url != blank }}"
+    },
+    "columns_mobile": {
+      "name": "Respect order on mobile",
+      "type": "checkbox",
+      "help": "If enabled, the **Image** column will always be displayed before the **Content** on mobile devices.",
+      "default": true,
+      "visible_if": "{{ component.options.show_content and block.options.content_image_desktop.url != blank and block.options.columns == 'media-content' }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Background options",
+      "type": "heading",
+      "before": "media_type"
+    },
+    {
+      "help": "Background image options to define the position on desktop devices",
+      "name": "Desktop options",
+      "type": "heading",
+      "before": "content_alignment_x_image_desktop"
+    },
+    {
+      "help": "Background image options to define the position on mobile devices",
+      "name": "Mobile Image options",
+      "type": "heading",
+      "before": "content_alignment_x_image_mobile"
+    },
+    {
+      "name": "Link options",
+      "type": "heading",
+      "before": "link"
+    },
+    {
+      "name": "Content options",
+      "type": "heading",
+      "before": "bundle_color"
+    },
+    {
+      "help": "Slide content options for desktop devices.",
+      "name": "Desktop",
+      "type": "heading",
+      "before": "align_desktop"
+    },
+    {
+      "help": "Slide content options for mobile devices.",
+      "name": "Mobile",
+      "type": "heading",
+      "before": "align_mobile"
+    },
+    {
+      "name": "Content image options",
+      "type": "heading",
+      "before": "content_image_desktop"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

@@ -1,0 +1,47 @@
+{% case dropdown_position %}
+  {% when 'header', 'top-bar' %}
+    {% assign dropdown_id = 'header-dropdown-languages' %}
+    {% assign dropdown_class = 'header' %}
+    {% assign item_text_display = header_items_text %}
+  {% else %}
+    {% assign dropdown_id = 'sidebar-dropdown-languages' %}
+    {% assign dropdown_class = 'sidebar-menu' %}
+    {% assign item_text_display = true %}
+{% endcase %}
+
+<button
+  type="button"
+  class="button {% if dropdown_position == 'sidebar' %}button--style sidebar-menu__button{% else %}header__link{% endif %}"
+  id="{{ dropdown_id }}"
+  data-bs-toggle="dropdown"
+  data-bs-display="static"
+  aria-expanded="false"
+  aria-label="{% t 'Languages' %}"
+>
+  {% if component.options.items_buttons and dropdown_position == 'header' %}
+    <span class="button button--style button--{{ component.options.items_buttons_type }} theme-section__button header__button">
+      <i class="theme-icon ph ph-globe {{ dropdown_class }}__icon"></i>
+    </span>
+  {% else %}
+    <i class="theme-icon ph ph-globe {{ dropdown_class }}__icon"></i>
+  {% endif %}
+
+  {% if item_text_display %}
+    <div class="{% if dropdown_position != 'sidebar' %}d-none d-md-block{% endif %} uppercase {{ dropdown_class }}__text">
+      {{- languages.first.code -}}
+    </div>
+
+    <i class="theme-icon ph ph-caret-down {{ dropdown_class }}__angle"></i>
+  {% endif %}
+</button>
+
+<ul class="dropdown-menu {% if dropdown_position == 'header' %}dropdown-menu-end{% elsif dropdown_position == 'sidebar' %}dropdown-menu-start{% elsif dropdown_position == 'top-bar' %}dropdown-menu-md-end dropdown-menu{% endif %} theme-dropdown" aria-labelledby="{{ dropdown_id }}">
+  {% for language in languages %}
+    <li class="theme-dropdown__item">
+      <a href="{{ language.url }}" class="dropdown-item theme-dropdown__link{% if forloop.first %} theme-dropdown__link--active{% endif %}" title="{% t 'Change to' %} {{ language.name }}">
+        {{- language.name -}}
+        {% if forloop.first %} <i class="theme-icon ph ph-check"></i>{% endif %}
+      </a>
+    </li>
+  {% endfor %}
+</ul>

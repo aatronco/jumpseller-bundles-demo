@@ -1,0 +1,482 @@
+{
+  "name": "Header",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/theme-customization/#header).",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "customer__account",
+    "customer__address",
+    "customer__details",
+    "customer__login",
+    "customer__reset_password"
+  ],
+  "options": {
+    "version": {
+      "name": "Header Version",
+      "type": "select",
+      "help": "Choose the version of the 'Header' you would like to use on your theme.",
+      "default": "v1",
+      "options": [
+        {
+          "label": "Classic",
+          "value": "v1"
+        },
+        {
+          "label": "Retail",
+          "value": "v2"
+        },
+        {
+          "label": "Compact",
+          "value": "v3"
+        },
+        {
+          "label": "Prime",
+          "value": "v4"
+        },
+        {
+          "label": "Slim",
+          "value": "v5"
+        },
+        {
+          "label": "Minimal",
+          "value": "v6"
+        }
+      ]
+    },
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "help": "When choosing **Default**, the option defined at [Theme settings > Design > Theme styles > Maximum container width](/general/design) will be applied.",
+      "default": "default",
+      "options": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Small",
+          "value": "1320px"
+        },
+        {
+          "label": "Medium",
+          "value": "1620px"
+        },
+        {
+          "label": "Large",
+          "value": "1920px"
+        },
+        {
+          "label": "Extra Large",
+          "value": "2220px"
+        },
+        {
+          "label": "Browser width",
+          "value": "100vw"
+        }
+      ]
+    },
+    "fixed": {
+      "name": "Fix header",
+      "type": "checkbox",
+      "default": true
+    },
+    "overlap": {
+      "name": "Overlap",
+      "type": "checkbox",
+      "help": "This will only be visible on tablets and desktop devices.",
+      "default": false,
+      "visible_if": "{{ block.options.fixed }}"
+    },
+    "overlap_opacity": {
+      "name": "Overlap transparency",
+      "type": "slider",
+      "default": 60,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "visible_if": "{{ block.options.fixed and block.options.overlap }}"
+    },
+    "floating": {
+      "name": "Floating style",
+      "type": "checkbox",
+      "help": "This is only displayed on tablets and desktop devices.",
+      "default": false,
+      "visible_if": "{{ block.options.fixed }}"
+    },
+    "floating_shadow": {
+      "name": "Shadow opacity",
+      "type": "slider",
+      "default": 25,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "visible_if": "{{ block.options.fixed and block.options.floating }}"
+    },
+    "floating_toolbar": {
+      "name": "Floating toolbar",
+      "type": "checkbox",
+      "help": "Allows to display the cart, search and custommer buttons in a floating toolbar.",
+      "default": false
+    },
+    "floating_toolbar_position": {
+      "name": "Toolbar position",
+      "type": "select",
+      "default": "right",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ],
+      "visible_if": "{{ block.options.floating_toolbar }}"
+    },
+    "search": {
+      "name": "Enable search",
+      "type": "checkbox",
+      "help": "Allows to enable or disable the search functionality on the theme.",
+      "default": true
+    },
+    "logo": {
+      "name": "Logo",
+      "type": "image"
+    },
+    "logo_mobile": {
+      "name": "Logo (mobile)",
+      "type": "image",
+      "visible_if": "{{ block.options.logo.url != blank }}"
+    },
+    "logo_height": {
+      "name": "Height (desktop)",
+      "type": "slider",
+      "default": 50,
+      "min": 10,
+      "max": 120,
+      "step": 1,
+      "unit": "px"
+    },
+    "logo_height_mobile": {
+      "name": "Height (mobile)",
+      "type": "slider",
+      "default": 40,
+      "min": 10,
+      "max": 120,
+      "step": 1,
+      "unit": "px"
+    },
+    "menu_font_size_desktop": {
+      "name": "Size on desktop menu",
+      "type": "slider",
+      "default": 14,
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ 'v1 v2 v5' contains block.options.version }}"
+    },
+    "menu_font_size_mobile": {
+      "name": "Size on mobile menu",
+      "type": "slider",
+      "default": 16,
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px"
+    },
+    "menu_uppercase": {
+      "name": "First level items in all caps",
+      "type": "checkbox",
+      "default": false
+    },
+    "menu_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "help": "Allows to define the weight of the Header menu items.",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": ""
+    },
+    "menu_buttons": {
+      "name": "Show as button",
+      "type": "checkbox",
+      "help": "If enabled, the first level menu items will be displayed as buttons only on desktop devices.",
+      "default": false,
+      "visible_if": "{{ block.options.version == 'v1' or block.options.version == 'v2' or block.options.version == 'v5' }}"
+    },
+    "menu_buttons_type": {
+      "name": "Style",
+      "type": "select",
+      "default": "secondary",
+      "options": [
+        {
+          "label": "Main",
+          "value": "main"
+        },
+        {
+          "label": "Secondary",
+          "value": "secondary"
+        }
+      ],
+      "visible_if": "{{ 'v1 v2 v5' contains block.options.version and block.options.menu_buttons }}"
+    },
+    "items_font_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 14,
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px"
+    },
+    "items_font_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 16,
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px"
+    },
+    "items_border": {
+      "name": "Separation border",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.version == 'v4' or block.options.version == 'v5' or block.options.version == 'v6' }}"
+    },
+    "items_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false
+    },
+    "items_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "help": "Allows to define the weight of all the visible items in the Header.",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": ""
+    },
+    "items_text": {
+      "name": "Show texts",
+      "type": "checkbox",
+      "help": "If disabled, header items will only display icons and texts will be hidden. On mobile devices texts will be always hidden.",
+      "default": true,
+      "visible_if": "{{ block.options.version != 'v5' or block.options.floating_toolbar and block.options.version == 'v5' }}"
+    },
+    "items_buttons": {
+      "name": "Show as button",
+      "type": "checkbox",
+      "help": "The Header items will be displayed as buttons, on desktop devices.",
+      "default": false
+    },
+    "items_buttons_type": {
+      "name": "Style",
+      "type": "select",
+      "default": "main",
+      "options": [
+        {
+          "label": "Main",
+          "value": "main"
+        },
+        {
+          "label": "Secondary",
+          "value": "secondary"
+        }
+      ],
+      "visible_if": "{{ block.options.items_buttons }}"
+    },
+    "items_login": {
+      "name": "Login behavior",
+      "type": "select",
+      "default": "dropdown",
+      "options": [
+        {
+          "label": "Dropdown",
+          "value": "dropdown"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ]
+    },
+    "items_login_wishlist": {
+      "name": "Enable Wishlist",
+      "type": "checkbox",
+      "default": true
+    },
+    "categories": {
+      "name": "Show menu",
+      "type": "checkbox",
+      "help": "Allows to display a secondary menu that displays items from the 'Categories Menu', within the Navigation settings.",
+      "default": false
+    },
+    "categories_display": {
+      "name": "Display on",
+      "type": "select",
+      "help": "Allows to choose in which devices the menu will be displayed.",
+      "default": "both",
+      "options": [
+        {
+          "label": "Both desktop and mobile",
+          "value": "both"
+        },
+        {
+          "label": "Only on desktop",
+          "value": "desktop"
+        },
+        {
+          "label": "Only on mobile",
+          "value": "mobile"
+        }
+      ],
+      "visible_if": "{{ block.options.categories }}"
+    },
+    "categories_title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Categories",
+      "visible_if": "{{ block.options.categories }}"
+    },
+    "categories_icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "help": "Allows to choose an icon for the menu item.",
+      "default": "ph ph-squares-four",
+      "visible_if": "{{ block.options.categories }}"
+    },
+    "categories_button": {
+      "name": "Show as button",
+      "type": "checkbox",
+      "help": "Allows to display the menu item as a button.",
+      "default": false,
+      "visible_if": "{{ block.options.categories }}"
+    },
+    "categories_button_type": {
+      "name": "Style",
+      "type": "select",
+      "default": "main",
+      "options": [
+        {
+          "label": "Main",
+          "value": "main"
+        },
+        {
+          "label": "Secondary",
+          "value": "secondary"
+        }
+      ],
+      "visible_if": "{{ block.options.categories and block.options.categories_button }}"
+    },
+    "border": {
+      "name": "Bottom border",
+      "type": "checkbox",
+      "help": "Allows to display a border at the bottom of the Header to create a division with the content below.",
+      "default": false
+    },
+    "actions_position": {
+      "name": "Actions position",
+      "type": "select",
+      "help": "Choose the position where the **Languages** and **Currencies** dropdown menus will appear. Note: These dropdown menus will only be displayed if more than one language or currency is available and a Top bar is installed on the header.",
+      "default": "logo-area",
+      "options": [
+        {
+          "label": "Logo area",
+          "value": "logo-area"
+        },
+        {
+          "label": "Top bar",
+          "value": "top-bar"
+        }
+      ]
+    },
+    "show_social": {
+      "name": "Social media links",
+      "type": "checkbox",
+      "help": "Allows to define if social media links will be displayed or not.",
+      "default": false
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    }
+  },
+  "presentation": [
+    {
+      "help": "By default the admin's [Branding](/admin/branding) section **Logo** will be displayed. You can override it by uploading one here.",
+      "name": "Logo options",
+      "type": "heading",
+      "before": "logo"
+    },
+    {
+      "name": "Menu items",
+      "type": "heading",
+      "before": "menu_font_size_desktop"
+    },
+    {
+      "name": "Header items",
+      "type": "heading",
+      "before": "items_font_size_desktop"
+    },
+    {
+      "name": "Categories menu",
+      "type": "heading",
+      "before": "categories"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "border"
+    }
+  ],
+  "traits": [
+    {
+      "type": "menu_links",
+      "menus": [
+        "main",
+        "category"
+      ]
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [
+    {
+      "type": "top-bar",
+      "multiple": false,
+      "property": "top-bar"
+    },
+    {
+      "type": "header-menu",
+      "multiple": false,
+      "property": "header-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header",
+      "category": "Core"
+    }
+  ]
+}

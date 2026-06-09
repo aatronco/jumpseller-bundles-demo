@@ -1,0 +1,71 @@
+{% assign sidebar_actions = options.cart_sidebar_actions %}
+
+{% capture t_cart_empty_default %}{% t "Your cart is currently empty." %}{% endcapture %}
+{% assign t_cart_empty = options.t_cart_empty | default: t_cart_empty_default %}
+{% capture t_order_summary_default %}{% t "Order summary" %}{% endcapture %}
+{% assign t_order_summary = options.t_order_summary | default: t_order_summary_default %}
+{% capture t_proceed_to_checkout_default %}{% t "Proceed to Checkout" %}{% endcapture %}
+{% assign t_proceed_to_checkout = options.t_proceed_to_checkout | default: t_proceed_to_checkout_default %}
+
+{% capture sidebar_button_checkout %}
+  <a
+    href="{{ order.checkout_url }}"
+    class="button button--style button--main{% if sidebar_actions == 'cart' %} button--bordered{% endif %} button--full sidebar-actions__button"
+    title="{{ t_proceed_to_checkout }}"
+  >
+    <span>{{- t_proceed_to_checkout -}}</span>
+  </a>
+{% endcapture %}
+
+{% capture sidebar_button_cart %}
+  <a
+    href="{{ order.url }}"
+    class="button button--style button--main{% if sidebar_actions == 'checkout' %} button--bordered{% endif %} button--full sidebar-actions__button"
+    title="{{ t_go_to_cart }}"
+  >
+    <span>{%- t "Go to Cart" -%}</span>
+  </a>
+{% endcapture %}
+
+<div
+  class="offcanvas offcanvas-end sidebar{% if order.products_count > 0 %} has-items{% endif %}"
+  tabindex="-1"
+  id="sidebar-cart"
+  aria-labelledby="sidebar-cart-title"
+  data-bundle-color="{{ bundle_color }}"
+>
+  <div class="offcanvas-header sidebar-header">
+    <h5 class="offcanvas-title sidebar-header__title" id="sidebar-cart-title">
+      {% if options.cart_sidebar_icon %}
+        <i class="theme-icon ph {{ options.theme_icon_cart }} sidebar-header__icon"></i>
+      {% endif %}
+      {{ t_order_summary }}
+    </h5>
+    <button type="button" class="button sidebar-header__close" data-bs-dismiss="offcanvas" aria-label="{% t 'Close' %}"><i class="ph ph-x"></i></button>
+  </div>
+
+  <cart-area class="offcanvas-body sidebar-body position-relative">
+    <div class="loading-spinner__wrapper">
+      <div class="loading-spinner"></div>
+    </div>
+    <div class="sidebar-body__text sidebar-body__text--empty">{{ t_cart_empty }}</div>
+    <div class="row sidebar-body__content cart-area__content">
+      {% for prod in order.products %}
+        {% render 'store_product', prod: prod, prod_type: 'normal', prod_display: 'grid' %}
+      {% endfor %}
+    </div>
+    {% render 'store_totals' %}
+  </cart-area>
+
+  <div class="sidebar-actions">
+    <div class="sidebar-actions__text check-empty">{{ options.t_sidebar_calculation_text | newline_to_br }}</div>
+    {% if sidebar_actions == 'checkout' %}
+      {{ sidebar_button_checkout }}
+      {{ sidebar_button_cart }}
+    {% elsif sidebar_actions == 'cart' %}
+      {{ sidebar_button_cart }}
+      {{ sidebar_button_checkout }}
+    {% endif %}
+  </div>
+  <!-- end .sidebar-actions -->
+</div>

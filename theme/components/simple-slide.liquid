@@ -1,0 +1,28 @@
+{% assign image_desktop = simple-slide.options.image_desktop.url %}
+{% assign image_mobile = simple-slide.options.image_mobile.url | default: image_desktop %}
+{% assign image_alt = simple-slide.options.image_mobile.alt | default: simple-slide.options.image_desktop.alt | default: component.options.title | default: options.theme_store_name | default: store.name | escape %}
+{% assign image_width_and_height = simple-slide.options.image_desktop.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+{% capture slide_image %}
+  {% if image_desktop != blank %}
+    <picture class="theme-section__picture">
+      <source media="screen and (min-width: 576px)" srcset="{{ image_desktop }}">
+      <source media="screen and (max-width: 575px)" srcset="{{ image_mobile }}">
+      <img
+        src="{{ image_desktop }}"
+        alt="{{ image_alt }}"
+        class="theme-section__image simple-slide__image"
+        {{ image_width_and_height }}
+        loading="lazy"
+        decoding="auto"
+        fetchpriority="auto"
+      >
+    </picture>
+  {% else %}
+    <div class="theme-image-placeholder theme-image-placeholder--landscape"></div>
+  {% endif %}
+{% endcapture %}
+
+<div class="swiper-slide" {{ simple-slide.attributes }}>
+  {{ slide_image }}
+</div>

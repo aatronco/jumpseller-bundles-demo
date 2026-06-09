@@ -1,0 +1,213 @@
+{% assign banner_id = 'banner-block-' | append: banner.id %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+{% if has_content %}
+  {% assign image_class = 'w-100 position-relative d-block z-1 h-100 trsn banner-block__image' %}
+{% else %}
+  {% assign image_class = 'banner-block__image' %}
+{% endif %}
+
+{% assign link = banner.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = banner.options.link_text | default: link_text_default %}
+{% assign link_external = banner.options.link_external %}
+{% assign link_image = link.image %}
+
+{% if banner.options.image_desktop.url != blank %}
+  {% assign image_desktop = banner.options.image_desktop.url %}
+  {% assign image_desktop_width = banner.options.image_desktop.width %}
+  {% assign image_mobile = banner.options.image_mobile.url | default: image_desktop %}
+  {% assign image_mobile_width = banner.options.image_mobile.width | default: image_desktop_width %}
+{% elsif link != blank and link_image != blank %}
+  {% assign image_desktop = link_image %}
+  {% assign image_desktop_width = link_image.width %}
+  {% assign image_mobile = image_desktop %}
+  {% assign image_mobile_width = link_image.width %}
+{% endif %}
+{% assign image_ratio = component.options.ratio %}
+{% assign image_alt = banner.options.image_mobile.alt | default: banner.options.image_desktop.alt | default: banner.options.title | default: options.theme_store_name | default: store.name | escape %}
+{% assign image_width_and_height = banner.options.image_desktop.attributes.width_and_height | default: link_image.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+{% capture image_sizes %}
+  (min-width: 992px) calc((min(100vw, {{ section_width }}) - (({{ columns_desktop }} - 1) * var(--block-gap))) / {{ columns_desktop }}), (min-width: 768px) calc((100vw - (({{ columns_tablet }} - 1) * var(--block-gap))) / {{ columns_tablet }}), (min-width: 576px) calc((100vw - ((
+  {{- columns_mobile }} - 1) * var(--block-gap))) / {{ columns_mobile }})
+{% endcapture %}
+
+{% capture desktop_srcset %}
+  {%- if image_desktop_width >= 400 -%}{{ image_desktop | resize: width: 400 }} 400w,{%- endif -%}
+  {%- if image_desktop_width >= 600 -%}{{ image_desktop | resize: width: 600 }} 600w,{%- endif -%}
+  {%- if image_desktop_width >= 800 -%}{{ image_desktop | resize: width: 800 }} 800w,{%- endif -%}
+  {%- if image_desktop_width >= 1200 -%}{{ image_desktop | resize: width: 1200 }} 1200w,{%- endif -%}
+  {%- if image_desktop_width >= 1600 -%}{{ image_desktop | resize: width: 1600 }} 1600w,{%- endif -%}
+  {%- if image_desktop_width >= 2000 -%}{{ image_desktop | resize: width: 2000 }} 2000w,{%- endif -%}
+  {{ image_desktop }}
+  {{ image_desktop.width }}w
+{% endcapture %}
+
+{% if image_mobile != image_desktop %}
+  {% capture mobile_srcset %}
+    {% if image_mobile_width >= 320 %}{{ image_mobile | resize: width: 320 }} 320w,{% endif %}
+    {% if image_mobile_width >= 480 %}{{ image_mobile | resize: width: 480 }} 480w,{% endif %}
+    {% if image_mobile_width >= 640 %}{{ image_mobile | resize: width: 640 }} 640w,{% endif %}
+    {% if image_mobile_width >= 800 %}{{ image_mobile | resize: width: 800 }} 800w,{% endif %}
+  {% endcapture %}
+{% endif %}
+
+{% capture banner_image %}
+  {% if image_desktop != blank %}
+    <picture class="{% if has_content %}position-relative z-1 h-100{% endif %} w-100 d-block">
+      {% if image_mobile != image_desktop %}
+        <source
+          media="(max-width: 575px)"
+          srcset="{{ mobile_srcset | strip }}"
+          sizes="{{ image_sizes | strip }}"
+        >
+      {% endif %}
+
+      <source
+        media="(min-width: 576px)"
+        srcset="{{ desktop_srcset | strip }}"
+        sizes="{{ image_sizes | strip }}"
+      >
+
+      <img
+        src="{{ image_desktop | resize: width: 1200 }}"
+        srcset="{{ desktop_srcset | strip }}"
+        sizes="{{ image_sizes | strip }}"
+        alt="{{ image_alt }}"
+        class="{{ image_class }}"
+        {{ image_width_and_height }}
+        loading="lazy"
+        decoding="async"
+        fetchpriority="auto"
+      >
+    </picture>
+  {% else %}
+    <div class="theme-image-placeholder{% if has_content and content_position == 'over' %} theme-image-placeholder--no-icon{% endif %}{% if has_content and content_position == 'after' %} aspect-ratio-square{% endif %}{% if has_content == false %} aspect-ratio-landscape{% endif %}"></div>
+  {% endif %}
+{% endcapture %}
+
+{% capture banner_media %}
+  <div class="banner-block__media{% if content_position == 'after' %} banner-block__media--relative{% endif %} aspect-ratio-{{ image_ratio }}">
+    {% if content_position == 'over' %}
+      <div class="theme-section__overlay"></div>
+    {% endif %}
+    {{ banner_image }}
+  </div>
+{% endcapture %}
+
+{% capture banner_content %}
+  {% if data_spacing == false and content_position == 'after' %}
+    {% assign banner_content_class = 'theme-block__content banner-block__content' %}
+  {% else %}
+    {% assign banner_content_class = 'banner-block__content' %}
+  {% endif %}
+
+  {% case content_position %}
+    {% when 'after' %}
+      {% assign banner_content_class = banner_content_class | append: ' position-relative' %}
+    {% else %}
+      {% if image_ratio == 'landscape' %}
+        {% assign banner_content_class = banner_content_class | append: ' position-relative' %}
+      {% else %}
+        {% assign banner_content_class = banner_content_class | append: ' position-absolute' %}
+      {% endif %}
+  {% endcase %}
+
+  {% if component.options.border and content_position == 'over' %}
+    <div class="theme-section__inner-border"></div>
+  {% endif %}
+
+  <div class="{{ banner_content_class }}">
+    <div class="theme-section__subtitle check-empty" {{ banner.attributes.textfield.subtitle }}>
+      {{- banner.options.subtitle -}}
+    </div>
+
+    <div class="theme-section__title check-empty" {{ banner.attributes.textfield.title }}>
+      {{- banner.options.title -}}
+    </div>
+
+    {% if content_position == 'after' and banner.options.description != blank %}
+      <div class="theme-section__description" {{ banner.attributes.textfield.description }}>
+        {{- banner.options.description | newline_to_br -}}
+      </div>
+    {% endif %}
+
+    {% if link != blank and banner.options.link_button %}
+      <a
+        href="{{ link }}"
+        class="button{% if banner.options.link_button_as_text %} button--text{% else %} button--style button--main{% endif %}{% if banner.options.link_outline %} button--bordered{% endif %} theme-section__button"
+        title="{{ link_text }}"
+        {% if link_external %}
+          target="_blank"
+        {% endif %}
+      >
+        <span {{ banner.attributes.textfield.link_text }}>
+          {{- link_text -}}
+        </span>
+        {%- if banner.options.link_arrow %} <i class="ph ph-arrow-right"></i>{% endif %}
+      </a>
+    {% endif %}
+  </div>
+{% endcapture %}
+
+<div
+  class="theme-block banner-block{% if display_option == 'carousel' %} swiper-slide{% endif %}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-spacing="{{ data_spacing }}"
+  data-corners="{{ data_corners }}"
+  {% if has_content %}
+    data-content-position="{{ content_position }}"
+  {% endif %}
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {{ banner.attributes }}
+>
+  {% if has_content %}
+    <style>
+      #{{ banner_id }} {
+        --banner-block-content-alignment-desktop: {{ banner.options.content_alignment_x_desktop }};
+        --banner-block-content-alignment-mobile: {{ banner.options.content_alignment_x_mobile }};
+        {% if has_content %}
+          --banner-block-content-position-y-desktop: {{ banner.options.content_alignment_y_desktop }};
+          --banner-block-content-position-y-mobile: {{ banner.options.content_alignment_y_mobile }};
+          --theme-image-position-desktop: {{ banner.options.content_alignment_x_image_desktop }} {{ banner.options.content_alignment_y_image_desktop }};
+          --theme-image-position-mobile: {{ banner.options.content_alignment_x_image_mobile }} {{ banner.options.content_alignment_y_image_mobile }};
+        {% endif %}
+        {% if content_position == 'over' %}
+          --theme-overlay-opacity: {{ banner.options.image_overlay | divided_by: 100.00 }};
+        {% endif %}
+      }
+    </style>
+  {% endif %}
+
+  <div
+    id="{{ banner_id }}"
+    class="banner-block__wrapper{% if has_content %} aspect-ratio-{{ component.options.ratio }}{% else %} h-100{% endif %}"
+    {% if has_content and content_position == 'over' %}
+      data-bundle-color="{{ banner.options.bundle_color }}"
+    {% endif %}
+  >
+    {% render 'theme_hover_link', link: link, link_text: link_text, link_external: link_external %}
+
+    {% if has_content %}
+      {{- banner_media -}}
+      {{- banner_content -}}
+    {% else %}
+      {{ banner_image }}
+    {% endif %}
+  </div>
+</div>

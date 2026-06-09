@@ -1,0 +1,70 @@
+<div
+  class="theme-block review-block {% if display_option == 'carousel' %}swiper-slide{% else %}col-12{% endif %}"
+  data-columns-mobile="1"
+  data-columns-desktop="{{ component.options.columns_desktop }}"
+  data-spacing="{{ data_spacing }}"
+  {% if component.options.card %}
+    data-card="true"
+    data-card-border="{{ component.options.card_border }}"
+    data-card-shadow="{{ component.options.card_shadow }}"
+    data-bundle-color="{{ component.options.card_bundle_color }}"
+  {% endif %}
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+>
+  <feature-review class="theme-block__wrapper review-block__wrapper">
+    <div class="review-block__header{% if component.options.text_alignment == 'center' %} flex-column{% endif %}">
+      {% if component.options.show_icon %}
+        <div class="review-block__icon review-block__icon--{{ icon_alignment }} review-block__icon--{{ component.options.icon }}">
+          <i class="theme-icon ph ph-quotes"></i>
+        </div>
+      {% endif %}
+
+      {% if component.options.image %}
+        <a href="{{ review.product.url }}" class="review-block__anchor{% if component.options.text_alignment == 'end' %} order-2{% endif %}" title="{% t 'See product' %}">
+          {% if review.product.images.first != blank %}
+            <img src="{{ review.product.images.first | thumb: '50x50' }}" alt="{{ review.product.name }}" class="theme-section__picture" width="50" height="50" loading="lazy" decoding="async" fetchpriority="low">
+          {% else %}
+            <div class="aspect-ratio-square theme-image-placeholder theme-image-placeholder--small"></div>
+          {% endif %}
+        </a>
+      {% endif %}
+
+      <div class="d-flex flex-column">
+        <a href="{{ review.product.url }}" class="review-block__name" title="{% t 'Go to' %} {{ review.product.name }}">
+          {{- review.product.name -}}
+        </a>
+
+        <div class="review-block__rating">
+          {% render 'product_rating', prod: review.product %}
+        </div>
+      </div>
+    </div>
+    <!-- end .review-block__header -->
+
+    <div class="review-block__content">{{ review.full_review }}</div>
+
+    <button type="button" id="show-more" class="button review-block__expand"></button>
+    <button type="button" id="show-less" class="button review-block__expand"></button>
+
+    <div class="review-block__footer">
+      {% if component.options.show_name %}
+        <div class="review-block__customer">
+          {% if component.options.name_filter == 'first_name' %}
+            {{ review.customer_name | strip | split: ' ' | first }}
+          {% else %}
+            {{ review.customer_name }}
+          {% endif %}
+        </div>
+      {% endif %}
+      {%- if component.options.show_date %}
+        <div class="review-block__date">
+          {{- review.date | date: format: component.options.date -}}
+        </div>
+      {% endif %}
+    </div>
+  </feature-review>
+</div>

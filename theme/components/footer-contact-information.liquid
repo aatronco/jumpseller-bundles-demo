@@ -1,0 +1,72 @@
+{% case footer-contact-information.options.column_width %}
+  {% when 'auto' -%}
+    {%- assign column_width = 'col-12 col-md' %}
+  {% when 'half' -%}
+    {%- assign column_width = 'col-12 col-md-6' %}
+  {% when 'full' -%}
+    {%- assign column_width = 'col-12' %}
+{% endcase %}
+
+<div class="{{ column_width }} footer__column" {{ footer-contact-information.attributes }}>
+  <div class="footer__content">
+    <h3 class="footer__title check-empty" {{ footer-contact-information.attributes.textfield.title }}>
+      {{- footer-contact-information.options.title -}}
+    </h3>
+
+    <ul class="no-bullet footer__menu">
+      {% if footer-contact-information.options.show_email %}
+        <li class="footer__item">
+          {% if footer-contact-information.options.email_type == 'location' %}
+            {% assign email_source = store.location.email %}
+          {% else %}
+            {% assign email_source = store.email %}
+          {% endif %}
+
+          <a
+            href="mailto:{{ email_source }}"
+            class="footer__link"
+            title="{% t 'Send us an email' %}"
+            aria-label="{% t 'Send us an email' %}"
+          >
+            <i class="theme-icon ph ph-envelope-simple footer__icon"></i>
+            {{- email_source -}}
+          </a>
+        </li>
+      {% endif %}
+
+      {% if footer-contact-information.options.show_phone and store.location.phone != blank %}
+        <li class="footer__item">
+          <a
+            href="tel:{{ store.location.phone }}"
+            class="footer__link"
+            title="{% t 'Call us' %}"
+            aria-label="{% t 'Call us' %}"
+          >
+            <i class="theme-icon ph ph-phone footer__icon"></i>
+            {{- store.location.phone -}}
+          </a>
+        </li>
+      {% endif %}
+
+      {% if footer-contact-information.options.show_whatsapp and social.whatsapp.url != blank %}
+        <li class="footer__item">
+          <a
+            href="{{ social.whatsapp.url }}&amp;text={% t 'Hello' %} {{ store.name }}!"
+            class="footer__link"
+            title="{% t 'Send us a WhatsApp message' %}"
+            aria-label="{% t 'Send us a WhatsApp message' %}"
+          >
+            <i class="theme-icon ph ph-whatsapp-logo footer__icon"></i>
+            {{- social.whatsapp.handler | remove: ' ' -}}
+          </a>
+        </li>
+      {% endif %}
+
+      {% if footer-contact-information.options.show_address %}
+        <li class="footer__item">
+          {%- render 'store_main_address', address_position: 'footer' -%}
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>

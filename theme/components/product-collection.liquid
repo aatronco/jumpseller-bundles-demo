@@ -1,0 +1,231 @@
+{% capture t_go_to_default %}{% t "Go to" %}{% endcapture %}
+{% assign t_go_to = options.t_go_to | default: t_go_to_default %}
+
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign display_option = component.options.display %}
+{% assign display_image = component.options.display_image %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+{% assign collection_limit = component.options.limit %}
+
+{% case component.options.source %}
+  {% when 'category' %}
+    {% if component.options.category != blank %}
+      {% assign collection = store.category[component.options.category].products -%}
+      {% assign collection_permalink = store.category[component.options.category] -%}
+      {% assign collection_image = collection_permalink.images.first %}
+      {% assign collection_link = collection_permalink.url %}
+    {% elsif store.all_products_category %}
+      {% assign collection = store.all_products_category.products -%}
+      {% assign collection_permalink = store.all_products_category -%}
+      {% assign collection_image = collection_permalink.images.first %}
+      {% assign collection_link = collection_permalink.url %}
+    {% endif %}
+
+    {% if component.options.category != blank and collection_permalink %}
+      {% assign heading_title_default = collection_permalink.name %}
+    {% elsif store.all_products_category %}
+      {% assign heading_title_default = store.all_products_category.name %}
+    {% else %}
+      {% capture heading_title_default %}{% t "Choose a category" %}{% endcapture %}
+    {% endif %}
+  {% when 'latest' %}
+    {% assign collection = products.latest -%}
+    {% capture heading_title_default %}{% t "Latest products" %}{% endcapture %}
+  {% when 'featured' %}
+    {% assign collection = products.featured -%}
+    {% capture heading_title_default %}{% t "Featured products" %}{% endcapture %}
+  {% when 'best_sold' %}
+    {% assign collection = store.best_sold_products -%}
+    {% capture heading_title_default %}{% t "Best sold products" %}{% endcapture %}
+  {% when 'handpicked' %}
+    {% assign collection = component.options.handpicked -%}
+    {% assign collection_limit = 40 %}
+    {% capture heading_title_default %}{% t "Handpicked products" %}{% endcapture %}
+  {% when 'recently' %}
+    {% assign collection = 'recently_viewed' -%}
+    {% capture heading_title_default %}{% t "Recently viewed" %}{% endcapture %}
+    {% if false %}{% render 'product_block', _marker: true %}{% endif %}
+{% endcase %}
+
+{% assign heading_title = component.options.heading_title | default: heading_title_default %}
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link | default: collection_link %}
+
+{% capture heading_link_text_default %}{% t "See more products" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% if display_image %}
+  {% case section_width %}
+    {% when '1320px' %}
+      {% assign image_dimension_desktop = '320x530' %}
+    {% when '1620px' %}
+      {% assign image_dimension_desktop = '390x565' %}
+    {% when '1920px' %}
+      {% assign image_dimension_desktop = '460x666' %}
+    {% when '2220px' %}
+      {% assign image_dimension_desktop = '535x775' %}
+  {% endcase %}
+
+  {% assign image_dimension_mobile = '767x575' %}
+  {% assign image_dimension_mobile_small = '418x314' %}
+
+  {% if component.options.image_desktop.url != blank %}
+    {% assign image_desktop = component.options.image_desktop.url | thumb: image_dimension_desktop %}
+    {% assign image_mobile = component.options.image_mobile.url | default: image_desktop | thumb: image_dimension_mobile %}
+    {% assign image_mobile_small = component.options.image_mobile.url | default: image_desktop | thumb: image_dimension_mobile_small %}
+    {% assign image_alt = component.options.image_mobile.alt | default: component.options.image_desktop.alt | default: collection_permalink.name | escape %}
+  {% elsif collection_image != blank %}
+    {% assign image_desktop = collection_image | thumb: image_dimension_desktop %}
+    {% assign image_mobile = collection_image | thumb: image_dimension_mobile %}
+    {% assign image_mobile_small = collection_image | thumb: image_dimension_mobile_small %}
+    {% assign image_alt = collection_permalink.name | escape %}
+  {% endif %}
+
+  {% capture image_object %}
+    <div
+      class="featured-image"
+      data-display="{{ display_option }}"
+      data-columns-desktop="{{ options.pb_columns_desktop }}"
+      data-columns-mobile="{{ options.pb_columns_mobile }}"
+    >
+      <div class="featured-image__container">
+        <div class="featured-image__media">
+          <a href="{{ heading_link }}" class="featured-image__anchor" title="{{ t_go_to }} {{ collection_permalink.name }}">
+            {% if component.options.show_image_content %}
+              {% assign content_align_desktop = component.options.image_content_align_desktop %}
+              {% assign content_align_mobile = component.options.image_content_align_mobile %}
+              {% assign content_align_items_desktop = content_align_desktop | replace: 'text-md-', 'align-items-md-' %}
+              {% assign content_align_items_mobile = content_align_mobile | replace: 'text-', 'align-items-' %}
+              {% assign content_justify_desktop = 'justify-content-md-' | append: component.options.content_alignment_y_image_desktop %}
+              {% assign content_justify_mobile = 'justify-content-' | append: component.options.content_alignment_y_image_mobile %}
+              <div
+                class="{{ content_align_mobile }} {{ content_align_desktop }} {{ content_align_items_mobile }} {{ content_align_items_desktop }} {{ content_justify_mobile }} {{ content_justify_desktop }} featured-image__content"
+                data-bundle-color="{{ component.options.image_bundle_color }}"
+              >
+                <h4 class="featured-image__title check-empty" {{ component.attributes.textfield.image_title }}>
+                  {{- component.options.image_title | default: collection_permalink.name | escape -}}
+                </h4>
+
+                {% if heading_link != blank and component.options.image_button != blank %}
+                  <span class="button button--style button--main featured-image__button" {{ component.attributes.textfield.image_button }}>
+                    {{- component.options.image_button | default: heading_link_text_default | escape -}}
+                  </span>
+                {% endif %}
+
+                <div class="theme-section__overlay"></div>
+              </div>
+            {% endif %}
+
+            {% if image_desktop != blank %}
+              <picture class="featured-image__picture">
+                <source media="screen and (min-width: 768px)" srcset="{{ image_desktop }}">
+                <source media="screen and (min-width: 419px) and (max-width: 767px)" srcset="{{ image_mobile }}">
+                <source media="screen and (max-width: 418px)" srcset="{{ image_mobile_small }}">
+                <img
+                  src="{{ image_desktop }}"
+                  alt="{{ image_alt }}"
+                  class="featured-image__object"
+                  width="320"
+                  height="530"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="auto"
+                >
+              </picture>
+            {% else %}
+              <div class="theme-image-placeholder"></div>
+            {% endif %}
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endcapture %}
+{% endif %}
+
+{% if collection == 'recently_viewed' %}
+  {% assign sw_layout = 'recently-viewed' %}
+  {% capture sw_content %}
+    {% for _ in (1..collection_limit) %}
+      <article class="col-6 col-sm-4 col-md-4 col-lg-3 product-block product-block--skeleton theme-block{% if display_option == 'carousel' %} swiper-slide{% endif %}">
+        <div class="product-block--skeleton-inner"></div>
+      </article>
+    {% endfor %}
+  {% endcapture %}
+{% else %}
+  {% assign sw_layout = 'product-collection' %}
+  {% capture sw_content %}
+    {% for prod in collection limit: collection_limit %}
+      {% render 'product_block', prod: prod, display_option: display_option, block_index: forloop.index, section_width: section_width %}
+    {% else %}
+      {% render 'component_placeholder_product', display_option: display_option %}
+    {% endfor %}
+  {% endcapture %}
+{% endif %}
+
+{% if display_image and collection != 'recently_viewed' %}
+  {% assign sw_columns_desktop = 3 %}
+  {% assign sw_columns_tablet = sw_columns_desktop %}
+  {% assign sw_columns_mobile_up = 2 %}
+{% else %}
+  {% assign sw_columns_desktop = options.pb_columns_desktop %}
+  {% assign sw_columns_tablet = sw_columns_desktop %}
+  {% assign sw_columns_mobile_up = 3 %}
+{% endif %}
+
+{% assign sw_columns = 'sw-columns-desktop="' | append: sw_columns_desktop | append: '" sw-columns-tablet="' | append: sw_columns_tablet | append: '" sw-columns-mobile-up="' | append: sw_columns_mobile_up | append: '" sw-columns-mobile="' | append: options.pb_columns_mobile | append: '"' %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --theme-overlay-opacity: {{ component.options.image_overlay | divided_by: 100.00 }}
+  }
+</style>
+
+{% capture component_content %}
+  {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+  <div class="row theme-section__content">
+    {% if display_image and collection != 'recently_viewed' %}
+      {{ image_object }}
+    {% endif %}
+
+    {% if display_option == 'carousel' and display_image and collection != 'recently_viewed' %}
+      <div class="col-12 col-lg-9 col-md-8 theme-section__column theme-section__column--no-margin">
+        {% render 'component_swiper', sw_layout: sw_layout, sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+      </div>
+    {% elsif display_option == 'carousel' %}
+      {% render 'component_swiper', sw_layout: sw_layout, sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+    {% else %}
+      {{ sw_content }}
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% assign should_render_component = true %}
+{% if component.options.source == 'best_sold' and collection == blank %}
+  {% assign should_render_component = false %}
+{% endif %}
+
+{% if should_render_component %}
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section"
+    data-bundle-color="{{ component.options.bundle_color }}"
+    {{ component.attributes }}
+  >
+    {% if collection == 'recently_viewed' %}
+      <recently-viewed data-display="{{ display_option }}" data-limit="{{ component.options.limit }}">
+        <div class="container container--adjust theme-section__container">
+          {{ component_content }}
+        </div>
+      </recently-viewed>
+    {% else %}
+      <div class="container container--adjust theme-section__container">
+        {{ component_content }}
+      </div>
+    {% endif %}
+  </section>
+{% endif %}

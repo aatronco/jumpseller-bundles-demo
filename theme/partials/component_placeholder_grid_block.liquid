@@ -1,0 +1,33 @@
+{% for placeholder in (1..5) %}
+  <div
+    class="theme-block grid-layout__block"
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+    {% endif %}
+  >
+    <div class="grid-layout__wrapper">
+      <div class="grid-layout__media aspect-ratio-{{ component.options.image_ratio }}">
+        <div class="theme-image-placeholder{% if title_overlap %} theme-image-placeholder--no-icon{% endif %}"></div>
+      </div>
+
+      {% if show_titles %}
+        <div
+          class="{{ align_mobile }} {{ align_desktop }} {{ justify_mobile }} {{ justify_desktop }} grid-layout__content{% if title_overlap %} grid-layout__content--overlap align-items-{{ title_alignment_y }}{% endif %}"
+          {% if title_overlap %}
+            data-bundle-color="{{ title_bundle_color }}"
+          {% endif %}
+        >
+          <div class="grid-layout__title grid-layout__title--{{ component.options.title_size }}">
+            <span>{% t "Grid block title" %} #{{ placeholder }}</span>
+          </div>
+
+          {% if title_overlap and title_overlay %}
+            <div class="theme-section__overlay grid-layout__overlay"></div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}

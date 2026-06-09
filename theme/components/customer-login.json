@@ -1,0 +1,95 @@
+{
+  "name": "Login",
+  "icon": "user",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "customer__login"
+  ],
+  "options": {
+    "columns": {
+      "name": "Position",
+      "type": "select",
+      "default": "left",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    "columns_mobile": {
+      "name": "Respect order on mobile",
+      "type": "checkbox",
+      "help": "If enabled, the **Login form** will be displayed after the **Registration section** on mobile devices.",
+      "default": false,
+      "visible_if": "{{ block.options.columns == 'right' }}"
+    },
+    "register_title": {
+      "name": "Title",
+      "type": "input",
+      "default": ""
+    },
+    "register_text": {
+      "name": "Text",
+      "type": "text",
+      "default": "By registering you can make your process shopping faster. Edit your details, add multiple addresses, review and track your orders, and more."
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Login",
+      "type": "heading",
+      "before": "columns"
+    },
+    {
+      "name": "Registration",
+      "type": "heading",
+      "before": "register_title"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Login",
+      "category": "Core"
+    }
+  ]
+}

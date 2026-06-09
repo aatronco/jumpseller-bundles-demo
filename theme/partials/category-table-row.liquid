@@ -1,0 +1,166 @@
+{% comment %}
+  Partial: category-table-row
+  Variables: prod, component, options
+  Renders a single <tr> for the wholesale product table.
+  Replicates stock/variant/cart logic from product_block.liquid.
+  Note: appointment and subscription product types are not handled —
+  they are not expected in a perfumes wholesale catalog.
+{% endcomment %}
+
+{% assign minimum_to_buy = prod.minimum_quantity | default: 1 | at_least: 1 %}
+
+{% if prod.stock_unlimited != true and prod.maximum_quantity and prod.maximum_quantity > 0 %}
+  {% assign maximum_to_buy = prod.maximum_quantity | at_most: prod.stock %}
+{% elsif prod.maximum_quantity and prod.maximum_quantity > 0 %}
+  {% assign maximum_to_buy = prod.maximum_quantity %}
+{% elsif prod.stock_unlimited != true %}
+  {% assign maximum_to_buy = prod.stock %}
+{% endif %}
+
+{% assign base_price = prod.price | minus: prod.discount %}
+{% assign d1_factor  = component.options.discount1_percent | times: 1.0 | divided_by: 100 %}
+{% assign d1_amount  = base_price | times: d1_factor %}
+{% assign price_d1   = base_price | minus: d1_amount %}
+{% assign d2_factor  = component.options.discount2_percent | times: 1.0 | divided_by: 100 %}
+{% assign d2_amount  = base_price | times: d2_factor %}
+{% assign price_d2   = base_price | minus: d2_amount %}
+
+{% assign can_buy = false %}
+{% if prod.status != 'not-available' %}
+  {% if prod.stock_unlimited == true %}
+    {% assign can_buy = true %}
+  {% elsif prod.stock >= minimum_to_buy %}
+    {% assign can_buy = true %}
+  {% endif %}
+{% endif %}
+
+{% capture t_add_to_cart_default %}{% t "Add to Cart" %}{% endcapture %}
+{% assign t_add_to_cart = options.t_add_to_cart | default: t_add_to_cart_default %}
+
+<tr class="category-table__row" data-product-id="{{ prod.id }}">
+
+  <!-- imagen con hover -->
+  <td class="category-table__cell category-table__cell--image">
+    {% if prod.images.first != blank %}
+      <div class="category-table__thumb-wrapper">
+        <img
+          src="{{ prod.images.first | thumb: '60x60' }}"
+          alt="{{ prod.name }}"
+          class="category-table__thumb"
+          width="60"
+          height="60"
+          loading="lazy"
+        >
+        <div class="category-table__hover-image">
+          <img
+            src="{{ prod.images.first | thumb: '300x300' }}"
+            alt="{{ prod.name }}"
+            class="category-table__hover-img"
+            width="300"
+            height="300"
+            loading="lazy"
+          >
+        </div>
+      </div>
+    {% else %}
+      <div class="theme-image-placeholder theme-image-placeholder--square category-table__thumb"></div>
+    {% endif %}
+  </td>
+
+  <!-- marca -->
+  <td class="category-table__cell category-table__cell--brand">{{ prod.brand }}</td>
+
+  <!-- nombre -->
+  <td class="category-table__cell category-table__cell--name">
+    <a href="{{ prod.url }}" class="category-table__name" title="{{ prod.name }}">{{ prod.name }}</a>
+  </td>
+
+  <!-- sku -->
+  <td class="category-table__cell category-table__cell--sku">{{ prod.sku }}</td>
+
+  <!-- selector de unidades -->
+  <td class="category-table__cell category-table__cell--qty">
+    {% if prod.options == blank and can_buy %}
+      <input
+        type="number"
+        min="{{ minimum_to_buy }}"
+        value="{{ minimum_to_buy }}"
+        {% if maximum_to_buy %}max="{{ maximum_to_buy }}"{% endif %}
+        data-price="{{ base_price }}"
+        name="qty"
+        form="form-{{ prod.id }}"
+        class="text text--qty category-table__qty-input"
+        aria-label="{% t 'Quantity' %}"
+      >
+    {% endif %}
+  </td>
+
+  <!-- precio normal -->
+  <td class="category-table__cell category-table__cell--price">
+    {{ base_price | price }}
+  </td>
+
+  <!-- precio d1 -->
+  {% if component.options.discount1_percent > 0 %}
+    <td class="category-table__cell category-table__cell--price category-table__cell--price-d1">
+      {% if can_buy %}
+        {{ price_d1 | price }}
+      {% else %}
+        &mdash;
+      {% endif %}
+    </td>
+  {% endif %}
+
+  <!-- precio d2 -->
+  {% if component.options.discount2_percent > 0 %}
+    <td class="category-table__cell category-table__cell--price category-table__cell--price-d2">
+      {% if can_buy %}
+        {{ price_d2 | price }}
+      {% else %}
+        &mdash;
+      {% endif %}
+    </td>
+  {% endif %}
+
+  <!-- acción -->
+  <td class="category-table__cell category-table__cell--action">
+    {% if prod.status == 'not-available' %}
+      <a href="{{ prod.url }}" class="button button--style button--secondary button--bordered button--small">{% t "See details" %}</a>
+    {% elsif prod.stock < minimum_to_buy and prod.stock_unlimited != true %}
+      <a href="{{ prod.url }}" class="button button--style button--secondary button--bordered button--small">{% t "Out of Stock" %}</a>
+    {% elsif prod.options != blank %}
+      <a href="{{ prod.url }}" class="button button--style button--main button--small">{% t "See options" %}</a>
+    {% elsif options.disable_shopping_cart != true %}
+      <form
+        action="{{ prod.add_to_cart_url }}"
+        method="post"
+        name="buy"
+        id="form-{{ prod.id }}"
+        data-product-id="{{ prod.id }}"
+        class="category-table__form"
+      >
+        {% if options.display_cart_notification %}
+          <button
+            type="button"
+            onclick="addToCartTableRow(this)"
+            class="button button--style button--main button--small"
+            name="{{ t_add_to_cart }}"
+            aria-label="{% t 'Add %{product_name} to cart', product_name: prod.name %}"
+          >
+            <i class="theme-icon ph {{ options.theme_icon_cart }}"></i>
+          </button>
+        {% else %}
+          <button
+            type="submit"
+            class="button button--style button--main button--small"
+            name="{{ t_add_to_cart }}"
+            aria-label="{% t 'Add %{product_name} to cart', product_name: prod.name %}"
+          >
+            <i class="theme-icon ph {{ options.theme_icon_cart }}"></i>
+          </button>
+        {% endif %}
+      </form>
+    {% endif %}
+  </td>
+
+</tr>

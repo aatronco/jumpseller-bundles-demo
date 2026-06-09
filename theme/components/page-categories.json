@@ -1,0 +1,390 @@
+{
+  "name": "Page categories",
+  "icon": "hashtag",
+  "help": "Allows to display a collection of page categories and their images. For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-page-categories/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error"
+  ],
+  "options": {
+    "display": {
+      "name": "Display",
+      "type": "select",
+      "default": "carousel",
+      "options": [
+        {
+          "label": "Carousel",
+          "value": "carousel"
+        },
+        {
+          "label": "Grid",
+          "value": "grid"
+        },
+        {
+          "label": "Tag cloud",
+          "value": "cloud"
+        }
+      ]
+    },
+    "columns_desktop": {
+      "name": "Columns on desktop",
+      "type": "slider",
+      "default": 6,
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "unit": "",
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "columns_mobile": {
+      "name": "Columns on mobile",
+      "type": "select",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        }
+      ],
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "spacing": {
+      "name": "Space between",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' and block.options.display != 'cloud' }}"
+    },
+    "corners": {
+      "name": "Rounded corners",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_corners_style != 'rectangular' and block.options.display != 'cloud' }}"
+    },
+    "autoplay": {
+      "name": "Autoplay",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "autoplay_speed": {
+      "name": "Autoplay speed",
+      "type": "slider",
+      "default": 4000,
+      "min": 1000,
+      "max": 10000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_continuous": {
+      "name": "Continuous autoplay",
+      "type": "checkbox",
+      "help": "If enabled, the autoplay transition will work with a continuous loop without stopping. Also, the carousel navigation elements will be hidden.",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_speed_mobile": {
+      "name": "Autoplay speed (mobile)",
+      "type": "slider",
+      "default": 2000,
+      "min": 1000,
+      "max": 5000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay and block.options.autoplay_continuous }}"
+    },
+    "show_arrows": {
+      "name": "Arrows",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "show_arrows_hover": {
+      "name": "Arrows on hover",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.show_arrows }}"
+    },
+    "show_dots": {
+      "name": "Dots",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "heading": {
+      "name": "Enable heading",
+      "type": "checkbox",
+      "default": true
+    },
+    "heading_subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Categories",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_description": {
+      "name": "Description",
+      "type": "text",
+      "default": "",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link": {
+      "name": "Link",
+      "type": "link",
+      "default": null,
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "See more",
+      "visible_if": "{{ block.options.heading and block.options.heading_link != blank }}"
+    },
+    "counter": {
+      "name": "Show amount of articles",
+      "type": "checkbox",
+      "default": true
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false
+    },
+    "align_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "text-md-start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-md-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-md-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-md-end"
+        }
+      ],
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "align_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "text-start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-end"
+        }
+      ],
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "ratio": {
+      "name": "Image ratio",
+      "type": "select",
+      "default": "square",
+      "options": [
+        {
+          "label": "Landscape",
+          "value": "landscape"
+        },
+        {
+          "label": "Portrait",
+          "value": "portrait"
+        },
+        {
+          "label": "Rectangular",
+          "value": "rectangular"
+        },
+        {
+          "label": "Square",
+          "value": "square"
+        }
+      ],
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "title_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 500,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": "",
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "title_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "title_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "link_arrow": {
+      "name": "Arrow in titles",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display != 'cloud' }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Carousel settings",
+      "type": "heading",
+      "before": "autoplay"
+    },
+    {
+      "name": "Heading options",
+      "type": "heading",
+      "before": "heading"
+    },
+    {
+      "name": "Blocks options",
+      "type": "heading",
+      "before": "counter"
+    },
+    {
+      "name": "Titles options",
+      "type": "heading",
+      "before": "title_weight"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Page categories",
+      "category": "Articles"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{% if submenu_image_position == 'left' %}
+  {% case submenu_image_ratio %}
+    {% when 'landscape' %}
+      {% assign image_width = 80 -%}
+      {%- assign image_height = 45 %}
+    {% when 'portrait' %}
+      {% assign image_width = 80 -%}
+      {%- assign image_height = 117 %}
+    {% when 'rectangular' %}
+      {% assign image_width = 80 -%}
+      {%- assign image_height = 60 %}
+    {% when 'square' %}
+      {% assign image_width = 80 -%}
+      {%- assign image_height = 80 %}
+  {% endcase %}
+
+  {% assign image_size = image_width | append: 'x' | append: image_height %}
+{% else %}
+  {% case submenu_image_width %}
+    {% when 'small' %}
+      {% assign image_percentage = 0.25 %}
+    {% when 'medium' %}
+      {% assign image_percentage = 0.5 %}
+    {% when 'large' %}
+      {% assign image_percentage = 1 %}
+  {% endcase %}
+
+  {% assign image_width = 410 | times: image_percentage | round: 0 %}
+
+  {% case submenu_image_ratio %}
+    {% when 'landscape' %}
+      {% assign image_ratio = 9.0 | divided_by: 16.0 %}
+    {% when 'portrait' %}
+      {% assign image_ratio = 4.0 | divided_by: 3.0 %}
+    {% when 'rectangular' %}
+      {% assign image_ratio = 3.0 | divided_by: 4.0 %}
+    {% when 'square' %}
+      {% assign image_ratio = 1 %}
+  {% endcase %}
+
+  {% assign image_height = image_width | times: image_ratio | round: 0 %}
+  {% assign image_size = image_width | append: 'x' | append: image_height %}
+{% endif %}
+
+{% assign image_width_and_height = 'width="' | append: image_width | append: '" height="' | append: image_height | append: '"' %}
+
+{% assign all_products_category_url = store.all_products_category.url %}
+
+{% capture submenu_image_render %}
+  {% if item.images.size > 0 %}
+    {% assign submenu_image_url = item.images.first %}
+  {% elsif item.type == 'categories' and item.url == all_products_category_url %}
+    {% assign get_category = store.all_products_category %}
+    {% assign submenu_image_url = get_category.products.first.image %}
+  {% elsif item.type == 'categories' and item.url != all_products_category_url %}
+    {% assign get_item_url = item.url | remove_first: '/' %}
+    {% assign get_category = store.category[get_item_url] %}
+    {% assign submenu_image_url = get_category.products.first.image %}
+  {% endif %}
+
+  {% if submenu_image_url != blank %}
+    <a
+      {% if item.type == 'no_url' %}
+        role="button"
+      {% else %}
+        href="{{ item.url }}"
+      {% endif %}
+      class="header-megamenu__title"
+      title="{{ t_go_to }} {{ item.name }}"
+    >
+      <img
+        src="{{ submenu_image_url | thumb: image_size }}"
+        alt="{{ item.name }}"
+        class="header-megamenu__image{% if submenu_image_position == 'left' %} header-megamenu__image--fixed{% endif %}"
+        {{ image_width_and_height }}
+        loading="eager"
+        decoding="sync"
+        fetchpriority="high"
+      >
+    </a>
+  {% endif %}
+{% endcapture %}
+
+{% if submenu_columns %}
+  {% assign columns_size = submenu_columns_width %}
+{% elsif item_columns > 6 %}
+  {% assign columns_size = 6 %}
+{% else %}
+  {% assign columns_size = 'auto' %}
+{% endif %}
+
+<div
+  class="header-megamenu__column"
+  data-columns="{{ columns_size }}"
+>
+  {% if submenu_image and submenu_image_position == 'before' %}
+    {{ submenu_image_render }}
+  {% endif %}
+
+  <a
+    {% if item.type == 'no_url' %}
+      role="button"
+    {% else %}
+      href="{{ item.url }}"
+    {% endif %}
+    class="header-megamenu__title"
+    title="{{ t_go_to }} {{ item.name }}"
+    data-type="{{ item.type }}"
+  >
+    {{- item.name -}}
+  </a>
+
+  {% if submenu_image and submenu_image_position == 'after' %}
+    {{ submenu_image_render }}
+  {% endif %}
+
+  <div class="no-bullet d-flex header-megamenu__section">
+    {% if submenu_image and submenu_image_position == 'left' %}
+      {{ submenu_image_render }}
+    {% endif %}
+
+    <ul class="no-bullet d-flex flex-column header-megamenu__list">
+      {% for item in item.items %}
+        <li class="header-megamenu__item">
+          <a
+            href="{{ item.url }}"
+            class="header-megamenu__link"
+            title="{{ t_go_to }} {{ item.name }}"
+            {% if item.external %}
+              target="_blank"
+            {% endif %}
+          >
+            {{- item.name -}}
+          </a>
+        </li>
+      {% endfor %}
+
+      {% if submenu_view_all %}
+        {% unless item.type == 'no_url' %}
+          <li class="header-megamenu__item">
+            <a href="{{ item.url }}" class="header-megamenu__link header-megamenu__link--last" title="{% t 'Go to' %} {{ item.name }}">
+              {{- t_view_all -}}
+              <i class="ph ph-arrow-right"></i
+            ></a>
+          </li>
+        {% endunless %}
+      {% endif %}
+    </ul>
+  </div>
+</div>

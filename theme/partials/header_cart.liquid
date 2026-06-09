@@ -1,0 +1,66 @@
+{% capture header_button_content %}
+  <div class="header__counter-wrapper">
+    {% if component.options.items_buttons %}
+      <span class="button button--style button--{{ component.options.items_buttons_type }} theme-section__button header__button">
+        <i class="theme-icon ph {{ options.theme_icon_cart }} header__icon"></i>
+      </span>
+    {% else %}
+      <i class="theme-icon ph {{ options.theme_icon_cart }} header__icon"></i>
+    {% endif %}
+
+    <div class="header__text header__text--counter theme-cart-counter" data-products-count="{{ order.products_count }}">{{ order.products_count }}</div>
+  </div>
+
+  {% if header_items_text %}
+    <div class="d-none {% if header_version == 'v6' %}d-sm-block{% else %}d-md-block{% endif %} header__text">{% t "Cart" %}</div>
+  {% endif %}
+{% endcapture %}
+
+{% capture mobile_nav_button_content %}
+  <div class="mobile-nav__wrapper">
+    <i class="theme-icon ph {{ options.theme_icon_cart }} mobile-nav__icon"></i>
+    <div class="mobile-nav__counter theme-cart-counter" data-products-count="{{ order.products_count }}">{{ order.products_count }}</div>
+  </div>
+  <div class="mobile-nav__total">{{ order.total | price }}</div>
+{% endcapture %}
+
+{% if options.disable_shopping_cart == false %}
+  {% case item_position %}
+    {% when 'header' %}
+      <li class="header__item header__item--cart{% if header_version == 'v6' %} d-none d-sm-flex{% endif %}">
+        {% if has_sidebar_cart %}
+          <button
+            type="button"
+            class="button header__link"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#sidebar-cart"
+            aria-controls="sidebar-cart"
+            aria-label="{% t 'Cart' %}"
+          >
+            {{ header_button_content }}
+          </button>
+        {% else %}
+          <a href="{{ cart.url }}" class="button header__link" title="{{ t_go_to_cart }}">
+            {{- header_button_content -}}
+          </a>
+        {% endif %}
+      </li>
+    {% when 'mobile-nav' %}
+      {% if has_sidebar_cart %}
+        <button
+          type="button"
+          class="button button--flex mobile-nav__link mobile-nav__link--cart"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebar-cart"
+          aria-controls="sidebar-cart"
+          aria-label="{% t 'Cart' %}"
+        >
+          {{ mobile_nav_button_content }}
+        </button>
+      {% else %}
+        <a href="{{ cart.url }}" class="button button--flex mobile-nav__link mobile-nav__link--cart" title="{{ t_go_to_cart }}">
+          {{- mobile_nav_button_content -}}
+        </a>
+      {% endif %}
+  {% endcase %}
+{% endif %}

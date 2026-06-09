@@ -1,0 +1,47 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign body_width = 'col-12' %}
+{% assign body_position = 'justify-content-start' %}
+
+{% if component.options.enable_width %}
+  {% case component.options.width %}
+    {% when 'large' %}
+      {% assign body_width = body_width | append: ' col-md-11 col-lg-10 theme-section__body--adjust' %}
+    {% when 'medium' %}
+      {% assign body_width = body_width | append: ' col-md-9 col-lg-8 theme-section__body--adjust' %}
+    {% when 'small' %}
+      {% assign body_width = body_width | append: ' col-md-7 col-lg-6 theme-section__body--adjust' %}
+  {% endcase %}
+
+  {% assign body_position = 'justify-content-' | append: component.options.content_alignment_x %}
+{% endif %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+{% if page.body != blank %}
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section"
+    data-bundle-color="{{ component.options.bundle_color }}"
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+    {% endif %}
+    {{ component.attributes }}
+  >
+    <div class="container container--adjust theme-section__container">
+      <div class="row {{ body_position }} theme-section__content">
+        <div class="{{ body_width }} {{ component.options.align_mobile }} {{ component.options.align_desktop }} theme-section__body">
+          {{- page.body -}}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}

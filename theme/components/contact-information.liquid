@@ -1,0 +1,100 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --contact-block-alignment: {{ component.options.content_alignment_x }};
+    --section-title-transform: {% if component.options.titles_uppercase %}uppercase{% else %}inherit{% endif %};
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% if component.options.show_email %}
+        <div class="contact-block">
+          <h6 class="contact-block__title"><i class="theme-icon ph ph-envelope-simple"></i> {% t "Contact email" %}</h6>
+
+          {% if component.options.email_type == 'location' %}
+            {% assign email_source = store.location.email %}
+          {% else %}
+            {% assign email_source = store.email %}
+          {% endif %}
+
+          <a
+            href="mailto:{{ email_source }}"
+            class="contact-block__link"
+            title="{% t 'Send us an email' %}"
+            aria-label="{% t 'Send us an email' %}"
+          >
+            {{- email_source -}}
+          </a>
+        </div>
+      {% endif %}
+
+      {% if store.location.phone != blank and component.options.show_phone %}
+        <div class="contact-block">
+          <h6 class="contact-block__title"><i class="theme-icon ph ph-phone"></i> {% t "Contact phone" %}</h6>
+          <a
+            href="tel:{{ store.location.phone }}"
+            class="contact-block__link"
+            title="{% t 'Call us' %}"
+            aria-label="{% t 'Call us' %}"
+          >
+            {{- store.location.phone -}}
+          </a>
+        </div>
+      {% endif %}
+
+      {% if component.options.show_whatsapp and social.whatsapp.url != blank %}
+        <div class="contact-block">
+          <h6 class="contact-block__title"><i class="theme-icon ph ph-whatsapp-logo"></i> {% t "WhatsApp number" %}</h6>
+          <a
+            href="{{ social.whatsapp.url }}&amp;text={% t 'Hello' %} {{ store.name }}!"
+            class="contact-block__link"
+            title="{% t 'Send us a WhatsApp message' %}"
+            aria-label="{% t 'Send us a WhatsApp message' %}"
+          >
+            {{- social.whatsapp.handler | remove: ' ' -}}
+          </a>
+        </div>
+      {% endif %}
+
+      {% if locations.all.size > 0 and component.options.show_address %}
+        <div class="contact-block">
+          <h6 class="contact-block__title"><i class="theme-icon ph ph-map-pin"></i> {% t "Address" %}</h6>
+
+          {% render 'store_main_address', address_position: 'contact' %}
+        </div>
+      {% endif %}
+
+      {% if component.options.show_social %}
+        <div class="contact-block">
+          <h6 class="contact-block__title">{% t "Follow us" %}</h6>
+          {% render 'store_social', position: 'contact' %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

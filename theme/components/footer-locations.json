@@ -1,0 +1,90 @@
+{
+  "name": "Locations",
+  "icon": "location-dot",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/theme-customization/#footer-locations).",
+  "max_usage": 1,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "display": {
+      "name": "Locations to display",
+      "type": "select",
+      "default": "all",
+      "options": [
+        {
+          "label": "All locations",
+          "value": "all"
+        },
+        {
+          "label": "Pickup locations",
+          "value": "pickups"
+        }
+      ]
+    },
+    "column_width": {
+      "name": "Column width",
+      "type": "select",
+      "default": "auto",
+      "options": [
+        {
+          "label": "Auto",
+          "value": "auto"
+        },
+        {
+          "label": "Half width",
+          "value": "half"
+        },
+        {
+          "label": "Full width",
+          "value": "full"
+        }
+      ]
+    },
+    "show_email": {
+      "name": "Email",
+      "type": "checkbox",
+      "default": false
+    },
+    "show_phone": {
+      "name": "Phone",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_address": {
+      "name": "Address",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_more_details_link": {
+      "name": "Details Popup",
+      "type": "checkbox",
+      "help": "Allows to display a link that will open a popup window on click, with detailed information of the location inside of it.",
+      "default": true
+    },
+    "show_more_details_link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "View more details",
+      "visible_if": "{{ block.options.show_more_details_link }}"
+    },
+    "show_map": {
+      "name": "Address map",
+      "type": "checkbox",
+      "help": "Allows to display the Map of each location address inside the popup window.",
+      "default": true,
+      "visible_if": "{{ block.options.show_more_details_link }}"
+    }
+  },
+  "presentation": [
+    {
+      "help": "Allows to define which locations details will be displayed.",
+      "name": "Information",
+      "type": "heading",
+      "before": "show_email"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

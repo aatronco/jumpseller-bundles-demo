@@ -1,0 +1,131 @@
+{% capture t_cc_description_default %}{% t "This website uses cookies to ensure you get the best experience." %}{% endcapture %}
+{% assign t_cc_description = options.t_cc_description | default: t_cc_description_default %}
+{% capture t_cc_necessary_desc_default %}{% t "These cookies are essential for the website to function and cannot be disabled." %}{% endcapture %}
+{% assign t_cc_necessary_desc = options.t_cc_necessary_desc | default: t_cc_necessary_desc_default %}
+{% capture t_cc_performance_desc_default %}{% t "They help us understand how users interact with the site and improve its performance." %}{% endcapture %}
+{% assign t_cc_performance_desc = options.t_cc_performance_desc | default: t_cc_performance_desc_default %}
+{% capture t_cc_customization_desc_default %}{% t "They help remember your preferences and provide content tailored to you." %}{% endcapture %}
+{% assign t_cc_customization_desc = options.t_cc_customization_desc | default: t_cc_customization_desc_default %}
+{% capture t_cc_marketing_desc_default %}{% t "They are used to deliver relevant ads and measure the effectiveness of our advertising campaigns." %}{% endcapture %}
+{% assign t_cc_marketing_desc = options.t_cc_marketing_desc | default: t_cc_marketing_desc_default %}
+{% capture t_cc_banner_link_text_default %}{% t "privacy policy" %}{% endcapture %}
+{% assign t_cc_banner_link_text = options.t_cc_banner_link_text | default: t_cc_banner_link_text_default %}
+
+<cookie-consent>
+  <div class="cookie-banner d-none" data-bundle-color="{{ options.cc_bundle_color }}">
+    <div class="cookie-banner__text">
+      <div class="cookie-banner__title"><i class="ph ph-cookie"></i>{% t "We use cookies" %}</div>
+      {{ t_cc_description | default: t_cc_description_default }}
+    </div>
+    <div class="cookie-banner__actions">
+      <button type="button" class="button button--style button--main" data-accept-all>
+        <span>{% t "Accept all" %}</span>
+      </button>
+      <button type="button" class="button button--style button--main button--bordered" data-reject-all>
+        <span>{% t "Reject all" %}</span>
+      </button>
+      <button type="button" class="button button--style button--secondary button--bordered" data-manage>
+        <span>{% t "Manage preferences" %}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="cookie-modal modal fade theme-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" data-bundle-color="{{ options.cc_bundle_color }}">
+        <div class="modal-header theme-modal__header">
+          <h6 class="modal-title theme-modal__title"><i class="ph ph-cookie"></i> {% t "Cookie Preferences" %}</h6>
+          <button type="button" class="button theme-modal__close" data-bs-dismiss="modal" aria-label="{% t 'Close' %}">
+            <i class="ph ph-x-circle"></i>
+          </button>
+        </div>
+        <div class="modal-body theme-modal__body">
+          <div class="accordion theme-accordion" id="cookieAccordion">
+            <div class="accordion-item theme-accordion__item">
+              <div class="cookie-modal__title-container">
+                <button type="button" class="accordion-button button theme-accordion__button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse-necessary">
+                  <i class="ph ph-caret-up"></i>
+                  <div class="theme-accordion__title">{% t "Necessary" %}</div>
+                </button>
+                <div class="switch-container form-check form-switch accordion-item__switch">
+                  <input class="form-check-input" type="checkbox" checked disabled>
+                </div>
+              </div>
+              <div id="collapse-necessary" class="accordion-collapse collapse">
+                <div class="accordion-body theme-accordion__body theme-modal__text">{{ t_cc_necessary_desc | default: t_cc_necessary_desc_default }}</div>
+              </div>
+            </div>
+
+            <div class="accordion-item theme-accordion__item">
+              <div class="cookie-modal__title-container">
+                <button type="button" class="accordion-button button theme-accordion__button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse-performance">
+                  <i class="ph ph-caret-up"></i>
+                  <div class="theme-accordion__title">{% t "Performance and analytics" %}</div>
+                </button>
+                <div class="switch-container form-check form-switch accordion-item__switch">
+                  <input class="form-check-input" type="checkbox" data-switch="performance">
+                </div>
+              </div>
+              <div id="collapse-performance" class="accordion-collapse collapse">
+                <div class="accordion-body theme-accordion__body theme-modal__text">{{ t_cc_performance_desc | default: t_cc_performance_desc_default }}</div>
+              </div>
+            </div>
+
+            <div class="accordion-item theme-accordion__item">
+              <div class="cookie-modal__title-container">
+                <button type="button" class="accordion-button button theme-accordion__button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse-personalization">
+                  <i class="ph ph-caret-up"></i>
+                  <div class="theme-accordion__title">{% t "Customization" %}</div>
+                </button>
+                <div class="switch-container form-check form-switch accordion-item__switch">
+                  <input class="form-check-input" type="checkbox" data-switch="personalization">
+                </div>
+              </div>
+              <div id="collapse-personalization" class="accordion-collapse collapse">
+                <div class="accordion-body theme-accordion__body theme-modal__text">{{ t_cc_customization_desc | default: t_cc_customization_desc_default }}</div>
+              </div>
+            </div>
+
+            <div class="accordion-item theme-accordion__item">
+              <div class="cookie-modal__title-container">
+                <button type="button" class="accordion-button button theme-accordion__button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse-marketing">
+                  <i class="ph ph-caret-up"></i>
+                  <div class="theme-accordion__title">{% t "Marketing" %}</div>
+                </button>
+                <div class="switch-container form-check form-switch accordion-item__switch">
+                  <input class="form-check-input" type="checkbox" data-switch="marketing">
+                </div>
+              </div>
+              <div class="accordion-collapse collapse" id="collapse-marketing">
+                <div class="accordion-body theme-accordion__body theme-modal__text">{{ t_cc_marketing_desc | default: t_cc_marketing_desc_default }}</div>
+              </div>
+            </div>
+          </div>
+          {% if options.cc_banner_link != blank %}
+            <div class="theme-modal__info theme-modal__text">
+              <div class="theme-modal__subtitle">{% t "More information" %}</div>
+              {% capture privacy_link -%}
+                <a href="{{ options.cc_banner_link }}" target="_blank" rel="noopener noreferrer">{{ t_cc_banner_link_text }}</a>
+              {%- endcapture %}
+              {% t "For more information, please check our %{privacy_link}", privacy_link: privacy_link %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="modal-footer theme-modal__footer">
+          <div>
+            <button type="button" class="button button--style button--main button--bordered" data-modal-accept>
+              <span>{% t "Accept all" %}</span>
+            </button>
+            <button type="button" class="button button--style button--secondary button--bordered" data-modal-reject>
+              <span>{% t "Reject all" %}</span>
+            </button>
+          </div>
+          <button type="button" class="button button--style button--main" data-modal-save>
+            <span>{% t "Accept current selection" %}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</cookie-consent>

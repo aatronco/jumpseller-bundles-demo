@@ -1,0 +1,163 @@
+{
+  "name": "Custom code",
+  "icon": "code",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-custom-code/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "checkout__cart",
+    "checkout__checkout",
+    "customer__account",
+    "customer__login"
+  ],
+  "options": {
+    "custom_code": {
+      "name": "Code",
+      "type": "html",
+      "help": "Here you can add the external code.",
+      "default": ""
+    },
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "help": "When choosing **Default**, the option defined at [Theme settings > Design > Theme styles > Maximum container width](/general/design) will be applied.",
+      "default": "default",
+      "options": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Small",
+          "value": "1320px"
+        },
+        {
+          "label": "Medium",
+          "value": "1620px"
+        },
+        {
+          "label": "Large",
+          "value": "1920px"
+        },
+        {
+          "label": "Extra Large",
+          "value": "2220px"
+        },
+        {
+          "label": "Browser width",
+          "value": "100vw"
+        }
+      ]
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Custom code",
+      "category": "Other"
+    }
+  ]
+}

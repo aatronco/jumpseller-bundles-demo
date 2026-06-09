@@ -1,0 +1,73 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign display_option = component.options.display %}
+
+{% assign columns_desktop = component.options.columns_desktop %}
+{% assign columns_mobile = component.options.columns_mobile %}
+
+{% assign avatar_image_size = component.options.avatar_image_size %}
+{% assign avatar_shape = component.options.avatar_shape %}
+
+{% case avatar_image_size %}
+  {% when 'small' %}
+    {% assign avatar_image_size = '50' %}
+  {% when 'medium' %}
+    {% assign avatar_image_size = '75' %}
+  {% when 'large' %}
+    {% assign avatar_image_size = '100' %}
+{% endcase %}
+
+{% case avatar_shape %}
+  {% when 'rectangular' %}
+    {% assign avatar_shape = '0' %}
+  {% when 'rounded' %}
+    {% assign avatar_shape = '16' %}
+  {% when 'circle' %}
+    {% assign avatar_shape = '100' %}
+{% endcase %}
+
+{% capture sw_content %}
+  {% for testimony in component.subcomponents.testimonies %}
+    {% render 'components/testimony', testimony: testimony, display: display_option, columns_mobile: columns_mobile, columns_desktop: columns_desktop, avatar_image_size: avatar_image_size, block_index: forloop.index %}
+  {% endfor %}
+{% endcapture %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "See more testimonies" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}"{% endcapture -%}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --avatar-size: {{ avatar_image_size | append: 'px' }};
+    --avatar-shape: {{ avatar_shape | append: 'px' }};
+    {% if component.options.card and component.options.card_border %}
+      --color-border-opacity: {{ component.options.card_border_opacity | divided_by: 100.00 }};
+    {% endif %}
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% if display_option == 'carousel' %}
+        {% render 'component_swiper', sw_layout: 'testimonials', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

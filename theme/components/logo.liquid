@@ -1,0 +1,86 @@
+{% unless options.theme_spacing == 'none' %}
+  {% assign data_spacing = component.options.spacing %}
+{% endunless %}
+
+{% capture sizes_attribute %}
+  (max-width: 575px) calc( (100vw - (var(--block-gap) * ({{ columns_mobile }} - 1))) / {{ columns_mobile }} ), (min-width: 576px) calc( ({{ section_width }} - (var(--block-gap) * ({{ columns_desktop }} - 1))) / {{ columns_desktop }})
+{% endcapture %}
+
+{% assign link = logo.options.link %}
+{% capture link_text_default %}{% t "See more" %}{% endcapture %}
+{% assign link_text = logo.options.link_text | default: link_text_default %}
+{% assign link_image = link.image %}
+
+{% if logo.options.image_desktop.url != blank %}
+  {% assign image_desktop = logo.options.image_desktop.url %}
+  {% assign image_mobile = logo.options.image_mobile.url | default: image_desktop %}
+{% elsif link != blank and link_image != blank %}
+  {% assign image_desktop = link_image %}
+  {% assign image_mobile = image_desktop %}
+{% endif %}
+
+{% assign widths = '200,300,400,500,600,800,1000' | split: ',' %}
+{% if component.options.image_format %}
+  {% capture srcset_desktop %}
+    {% for width_size in widths %}
+      {{ image_desktop | resize: width: width_size }}
+      {{ width_size }}w{% unless forloop.last %}, {% endunless %}
+    {% endfor %}
+  {% endcapture %}
+
+  {% capture srcset_mobile %}
+    {% for width_size in widths %}
+      {{ image_mobile | resize: width: width_size }}
+      {{ width_size }}w{% unless forloop.last %}, {% endunless %}
+    {% endfor %}
+  {% endcapture %}
+{% endif %}
+
+{% assign image_alt = logo.options.image_mobile.alt | default: logo.options.image_desktop.alt | default: options.theme_store_name | default: store.name | escape %}
+
+<div
+  class="theme-block logo-block{% if display_option == 'carousel' %} swiper-slide{% endif %}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-spacing="{{ data_spacing | default: false }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {{ logo.attributes }}
+>
+  <div class="logo-block__content">
+    {% render 'theme_hover_link', link: link, link_text: link_text, link_external: logo.options.link_external %}
+
+    {% if image_desktop != blank %}
+      <picture
+        class="logo-block__picture"
+      >
+        {% if image_mobile != image_desktop and image_format %}
+          <source
+            media="(max-width: 575px)"
+            srcset="{{ srcset_mobile | strip }}"
+            sizes="{{ sizes_attribute | strip }}"
+          >
+        {% endif %}
+
+        <img
+          src="{{ image_desktop }}"
+          {% if image_format %}
+            srcset="{{ srcset_desktop | strip }}"
+            sizes="{{ sizes_attribute | strip }}"
+          {% endif %}
+          alt="{{ image_alt }}"
+          class="logo-block__image"
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
+          {{ image_desktop.attributes.width_and_height }}
+        >
+      </picture>
+    {% else %}
+      <div class="aspect-ratio-{{ component.options.image_dimension }} theme-image-placeholder"></div>
+    {% endif %}
+  </div>
+</div>

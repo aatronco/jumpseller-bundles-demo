@@ -1,0 +1,755 @@
+{
+  "name": "Banners",
+  "icon": "th-large",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-banners/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "customer__account",
+    "customer__login"
+  ],
+  "options": {
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "help": "When choosing **Default**, the option defined at [Theme settings > Design > Theme styles > Maximum container width](/general/design) will be applied.",
+      "default": "default",
+      "options": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Small",
+          "value": "1320px"
+        },
+        {
+          "label": "Medium",
+          "value": "1620px"
+        },
+        {
+          "label": "Large",
+          "value": "1920px"
+        },
+        {
+          "label": "Extra Large",
+          "value": "2220px"
+        },
+        {
+          "label": "Browser width",
+          "value": "100vw"
+        }
+      ]
+    },
+    "columns_desktop": {
+      "name": "Columns on desktop",
+      "type": "select",
+      "default": "4",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        }
+      ]
+    },
+    "columns_mobile": {
+      "name": "Columns on mobile",
+      "type": "select",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        }
+      ]
+    },
+    "spacing": {
+      "name": "Space between",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' }}"
+    },
+    "corners": {
+      "name": "Rounded corners",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_corners_style != 'rectangular' }}"
+    },
+    "display": {
+      "name": "Display",
+      "type": "select",
+      "default": "grid",
+      "options": [
+        {
+          "label": "Carousel",
+          "value": "carousel"
+        },
+        {
+          "label": "Grid",
+          "value": "grid"
+        }
+      ]
+    },
+    "autoplay": {
+      "name": "Autoplay",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "autoplay_speed": {
+      "name": "Autoplay speed",
+      "type": "slider",
+      "default": 4000,
+      "min": 1000,
+      "max": 6000,
+      "step": 500,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_continuous": {
+      "name": "Continuous autoplay",
+      "type": "checkbox",
+      "help": "If enabled, the autoplay transition will work with a continuous loop without stopping. Also, the carousel navigation elements will be hidden.",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_speed_mobile": {
+      "name": "Autoplay speed (mobile)",
+      "type": "slider",
+      "default": 2000,
+      "min": 1000,
+      "max": 5000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay and block.options.autoplay_continuous }}"
+    },
+    "show_arrows": {
+      "name": "Arrows",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "show_arrows_hover": {
+      "name": "Arrows on hover",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.show_arrows }}"
+    },
+    "show_dots": {
+      "name": "Dots",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "show_content": {
+      "name": "Banners content",
+      "type": "checkbox",
+      "default": true
+    },
+    "content_position": {
+      "name": "Position",
+      "type": "select",
+      "default": "over",
+      "options": [
+        {
+          "label": "Over the image",
+          "value": "over"
+        },
+        {
+          "label": "After the image",
+          "value": "after"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "ratio": {
+      "name": "Image ratio",
+      "type": "select",
+      "default": "square",
+      "options": [
+        {
+          "label": "Landscape",
+          "value": "landscape"
+        },
+        {
+          "label": "Portrait",
+          "value": "portrait"
+        },
+        {
+          "label": "Rectangular",
+          "value": "rectangular"
+        },
+        {
+          "label": "Square",
+          "value": "square"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "border": {
+      "name": "Inner border",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.show_content and block.options.content_position == 'over' }}"
+    },
+    "title_size": {
+      "name": "Size",
+      "type": "select",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Extra Large",
+          "value": "extra-large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "title_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 32,
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "title_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 24,
+      "min": 8,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "title_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": "",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "title_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "title_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "subtitle_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 13,
+      "min": 5,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "subtitle_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 7,
+      "min": 5,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "subtitle_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": "",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "subtitle_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "help": "Allows to define the space between letters for all Subtitles in the component.",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "subtitle_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.show_content and block.options.show_content }}"
+    },
+    "description_size": {
+      "name": "Size",
+      "type": "select",
+      "help": "Size of the description that shows after a title in the component.",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content and block.options.content_position == 'after' }}"
+    },
+    "description_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 16,
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.content_position == 'after' and block.options.description_size == 'custom' }}"
+    },
+    "description_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 14,
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.content_position == 'after' and block.options.description_size == 'custom' }}"
+    },
+    "heading": {
+      "name": "Enable heading",
+      "type": "checkbox",
+      "default": false
+    },
+    "heading_subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "placeholder": "Add a subtitle to your banners",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Section title",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_description": {
+      "name": "Description",
+      "type": "text",
+      "default": "",
+      "placeholder": "Add a description for the header of your banner",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link": {
+      "name": "Link",
+      "type": "link",
+      "default": null,
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.heading and block.options.heading_link != blank }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Carousel settings",
+      "type": "heading",
+      "before": "autoplay"
+    },
+    {
+      "name": "Content options",
+      "type": "heading",
+      "before": "show_content"
+    },
+    {
+      "name": "Titles",
+      "type": "heading",
+      "before": "title_size"
+    },
+    {
+      "name": "Subtitles",
+      "type": "heading",
+      "before": "subtitle_size_desktop"
+    },
+    {
+      "name": "Description options",
+      "type": "heading",
+      "before": "description_size"
+    },
+    {
+      "name": "Heading options",
+      "type": "heading",
+      "before": "heading"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [
+    {
+      "type": "banner",
+      "multiple": true,
+      "property": "banners"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banners",
+      "category": "Hero",
+      "children": [
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        }
+      ]
+    },
+    {
+      "name": "Banners: Carousel",
+      "options": {
+        "display": "carousel",
+        "columns_mobile": "2",
+        "columns_desktop": "3"
+      },
+      "category": "Hero",
+      "children": [
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        }
+      ]
+    },
+    {
+      "name": "Banners: Profiles",
+      "options": {
+        "ratio": "portrait",
+        "heading_title": "Meet our team",
+        "columns_mobile": "2",
+        "columns_desktop": "4"
+      },
+      "category": "Hero",
+      "children": [
+        {
+          "type": "banner",
+          "options": {
+            "title": "Name",
+            "subtitle": "Position",
+            "content_alignment_x_mobile": "center",
+            "content_alignment_y_mobile": "end",
+            "content_alignment_x_desktop": "center",
+            "content_alignment_y_desktop": "end"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "title": "Name",
+            "subtitle": "Position",
+            "content_alignment_x_mobile": "center",
+            "content_alignment_y_mobile": "end",
+            "content_alignment_x_desktop": "center",
+            "content_alignment_y_desktop": "end"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "title": "Name",
+            "subtitle": "Position",
+            "content_alignment_x_mobile": "center",
+            "content_alignment_y_mobile": "end",
+            "content_alignment_x_desktop": "center",
+            "content_alignment_y_desktop": "end"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "title": "Name",
+            "subtitle": "Position",
+            "content_alignment_x_mobile": "center",
+            "content_alignment_y_mobile": "end",
+            "content_alignment_x_desktop": "center",
+            "content_alignment_y_desktop": "end"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Banners: Big grid",
+      "options": {
+        "ratio": "landscape",
+        "display": "grid",
+        "title_size": "large",
+        "columns_mobile": "1",
+        "columns_desktop": "2"
+      },
+      "category": "Hero",
+      "children": [
+        {
+          "type": "banner",
+          "options": {
+            "title": "Title",
+            "subtitle": "Subtitle",
+            "content_alignment_x_mobile": "start",
+            "content_alignment_y_mobile": "center",
+            "content_alignment_x_desktop": "start",
+            "content_alignment_y_desktop": "center"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "title": "Title",
+            "subtitle": "Subtitle",
+            "content_alignment_x_mobile": "end",
+            "content_alignment_y_mobile": "center",
+            "content_alignment_x_desktop": "end",
+            "content_alignment_y_desktop": "center"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "title": "Title",
+            "subtitle": "Subtitle",
+            "content_alignment_x_mobile": "start",
+            "content_alignment_y_mobile": "center",
+            "content_alignment_x_desktop": "start",
+            "content_alignment_y_desktop": "center"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "title": "Title",
+            "subtitle": "Subtitle",
+            "content_alignment_x_mobile": "end",
+            "content_alignment_y_mobile": "center",
+            "content_alignment_x_desktop": "end",
+            "content_alignment_y_desktop": "center"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Banners: Under text",
+      "options": {
+        "ratio": "rectangular",
+        "display": "grid",
+        "title_size": "small",
+        "columns_mobile": "1",
+        "columns_desktop": "3",
+        "content_position": "after"
+      },
+      "category": "Hero",
+      "children": [
+        {
+          "type": "banner",
+          "options": {
+            "description": "",
+            "content_alignment_x_mobile": "start",
+            "content_alignment_y_mobile": "start",
+            "content_alignment_x_desktop": "start",
+            "content_alignment_y_desktop": "start"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "description": "",
+            "content_alignment_x_mobile": "start",
+            "content_alignment_y_mobile": "start",
+            "content_alignment_x_desktop": "start",
+            "content_alignment_y_desktop": "start"
+          }
+        },
+        {
+          "type": "banner",
+          "options": {
+            "description": "",
+            "content_alignment_x_mobile": "start",
+            "content_alignment_y_mobile": "start",
+            "content_alignment_x_desktop": "start",
+            "content_alignment_y_desktop": "start"
+          }
+        }
+      ]
+    }
+  ]
+}

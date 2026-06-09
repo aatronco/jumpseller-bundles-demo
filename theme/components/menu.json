@@ -1,0 +1,392 @@
+{
+  "name": "Menu",
+  "icon": "list",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-menu/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "checkout__cart",
+    "checkout__checkout",
+    "customer__account",
+    "customer__address",
+    "customer__details",
+    "customer__login",
+    "customer__reset_password"
+  ],
+  "options": {
+    "text_alignment_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "text_alignment_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "items_buttons": {
+      "name": "Show as button",
+      "type": "checkbox",
+      "help": "Items will be displayed as buttons.",
+      "default": false
+    },
+    "items_buttons_type": {
+      "name": "Style",
+      "type": "select",
+      "default": "main",
+      "options": [
+        {
+          "label": "Main",
+          "value": "main"
+        },
+        {
+          "label": "Secondary",
+          "value": "secondary"
+        }
+      ],
+      "visible_if": "{{ block.options.items_buttons }}"
+    },
+    "dropdown": {
+      "name": "Enable dropdown",
+      "type": "checkbox",
+      "default": false
+    },
+    "dropdown_text": {
+      "name": "Text",
+      "type": "input",
+      "default": "Menu",
+      "visible_if": "{{ block.options.dropdown }}"
+    },
+    "dropdown_icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "default": "ph ph-list",
+      "visible_if": "{{ block.options.dropdown }}"
+    },
+    "dropdown_buttons_type": {
+      "name": "Style",
+      "type": "select",
+      "default": "main",
+      "options": [
+        {
+          "label": "Main",
+          "value": "main"
+        },
+        {
+          "label": "Secondary",
+          "value": "secondary"
+        }
+      ],
+      "visible_if": "{{ block.options.dropdown }}"
+    },
+    "dropdown_list": {
+      "name": "Items as a list",
+      "type": "checkbox",
+      "default": true
+    },
+    "item_size": {
+      "name": "Size",
+      "type": "select",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ]
+    },
+    "item_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 18,
+      "min": 10,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.item_size == 'custom' }}"
+    },
+    "item_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 14,
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.item_size == 'custom' }}"
+    },
+    "item_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": ""
+    },
+    "item_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 20,
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 20,
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Mobile view",
+      "type": "heading",
+      "before": "dropdown"
+    },
+    {
+      "name": "Item options",
+      "type": "heading",
+      "before": "item_size"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [
+    {
+      "type": "menu-item",
+      "multiple": true,
+      "property": "items"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Menu",
+      "category": "Navigation",
+      "children": [
+        {
+          "type": "menu-item"
+        },
+        {
+          "type": "menu-item"
+        },
+        {
+          "type": "menu-item"
+        },
+        {
+          "type": "menu-item"
+        }
+      ]
+    },
+    {
+      "name": "Menu with icons",
+      "category": "Navigation",
+      "children": [
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "ph ph-info"
+          }
+        },
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "ph ph-storefront"
+          }
+        },
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "ph ph-rocket-launch"
+          }
+        },
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "ph ph-t-shirt"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Menu with badges",
+      "category": "Navigation",
+      "children": [
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "",
+            "badge": true,
+            "position": "top",
+            "background": "#CB3434",
+            "badge_text": "New"
+          }
+        },
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "",
+            "badge": true,
+            "position": "top",
+            "background": "#344FCB",
+            "badge_text": "Sale"
+          }
+        },
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "",
+            "badge": true,
+            "position": "top",
+            "background": "#9CCB34",
+            "badge_text": "Last"
+          }
+        },
+        {
+          "type": "menu-item",
+          "options": {
+            "icon": "",
+            "badge": true,
+            "position": "top",
+            "background": "#F9EAE5",
+            "badge_text": "Cyber"
+          }
+        }
+      ]
+    }
+  ]
+}

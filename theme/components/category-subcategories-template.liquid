@@ -1,0 +1,99 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign align_desktop = options.text_alignment_heading_desktop %}
+{% assign align_mobile = options.text_alignment_heading_mobile %}
+
+{% assign heading_link = component.options.heading_link %}
+
+{% assign column_class_title = 'order-1 col-12' %}
+{% assign column_class_underline = 'order-2 col-12' %}
+{% assign column_class_description = 'order-3 col-12' %}
+
+{% case align_desktop %}
+  {% when 'center' %}
+    {% if heading_link %}
+      {% assign column_class_title = 'order-1 col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3' %}
+      {% assign column_class_underline = 'order-2 order-md-3 col-12' %}
+      {% assign column_class_description = 'order-3 order-md-4 col-12' %}
+    {% endif %}
+
+    {% assign column_class_link = 'order-4 order-md-2 col-12 col-md-2 col-lg-3 text-md-end text-' | append: align_mobile %}
+  {% when 'start' %}
+    {% if heading_link %}
+      {% assign column_class_title = 'order-1 col-12 col-md-9' %}
+      {% assign column_class_underline = 'order-2 order-md-3 col-12' %}
+      {% assign column_class_description = 'order-3 order-md-4 col-12' %}
+    {% endif %}
+
+    {% assign column_class_link = 'order-4 order-md-2 col-12 col-md-3 text-md-end text-' | append: align_mobile %}
+{% endcase %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+{% for subcategory in category.subcategories %}
+  {% if subcategory.products != empty %}
+    {% assign display_option = component.options.display %}
+
+    {% assign link = subcategory.url %}
+    {% capture link_text_default %}{% t "See more products" %}{% endcapture %}
+    {% assign link_text = component.options.heading_link_text | default: link_text_default %}
+
+    {% capture sw_content %}
+      {% for prod in subcategory.products limit: component.options.limit %}
+        {% render 'product_block', prod: prod, display_option: display_option, section_width: section_width, block_index: forloop.index %}
+      {% endfor %}
+    {% endcapture %}
+
+    {%- capture sw_columns %}sw-columns-desktop="{{ options.pb_columns_desktop }}" sw-columns-mobile="{{ options.pb_columns_mobile }}"{% endcapture -%}
+
+    <section
+      id="{{ section_id }}"
+      class="container-fluid theme-section"
+      data-bundle-color="{{ component.options.bundle_color }}"
+      {{ component.attributes }}
+    >
+      <div class="container container--adjust theme-section__container">
+        <div class="row align-items-start align-items-md-center text-{{ align_mobile }} text-md-{{ align_desktop }} theme-section__heading">
+          <div class="col-12 {{ column_class_title }} order-1 theme-section__column">
+            <h3 class="theme-section__title check-empty">
+              {{- subcategory.name -}}
+            </h3>
+          </div>
+
+          {% render 'component_heading_underline', underline_class: column_class_underline %}
+
+          {% if component.options.heading_description %}
+            <div class="{{ column_class_description }} order-3 order-md-4 theme-section__column">
+              <div class="theme-section__description check-empty">
+                {{- subcategory.description -}}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if component.options.heading_link %}
+            <div class="{{ column_class_link }} theme-section__column">
+              <a href="{{ link }}" class="theme-section__link" title="{{ link_text }}">
+                <span {{ component.attributes.textfield.heading_link_text }}>{{ link_text }}</span> <i class="ph ph-arrow-right"></i>
+              </a>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="row theme-section__content">
+          {% if display_option == 'carousel' %}
+            {% render 'component_swiper', sw_layout: 'products', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+          {% else %}
+            {{ sw_content }}
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}

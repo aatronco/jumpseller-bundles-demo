@@ -1,0 +1,25 @@
+{% assign section_id = 'product-title-' | append: product-title.id %}
+
+<style>
+  #{{ section_id }} {
+    {% if product-title.options.title_size %}
+      --title-size-desktop: {{ product-title.options.title_size_desktop }}px;
+      --title-size-mobile: {{ product-title.options.title_size_mobile }}px;
+    {% endif %}
+    --title-text-transform: {% if product-title.options.uppercase %}uppercase{% else %}initial{% endif %};
+  }
+</style>
+
+<div class="w-100 check-empty{% if product-title.options.mobile_first %} mobile-first{% endif %}" data-name="product-title" {{ product-title.attributes }}>
+  {% if template == 'product' %}
+    <h1 id="{{ section_id }}" class="theme-section__title product-page__title">
+      {{- prod.name -}}
+    </h1>
+  {% else %}
+    <h3 id="{{ section_id }}" class="theme-section__title product-page__title product-page__title--has-anchor">
+      <a href="{{ prod.url }}" title="{% t 'Go to' %} {{ prod.name }}">
+        {{- prod.name -}}
+      </a>
+    </h3>
+  {% endif %}
+</div>

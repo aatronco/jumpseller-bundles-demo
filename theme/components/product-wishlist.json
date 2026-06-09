@@ -1,0 +1,41 @@
+{
+  "name": "Wishlist",
+  "icon": "heart",
+  "help": "This subcomponent displays a button that allows logged-in users to add products to their customer account **Wishlist**. Control colors below. For more details, visit [this article](/admin/landing?url=/support/theme-customization/#wishlist).",
+  "max_usage": 1,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "enable": {
+      "name": "Show Wishlist",
+      "type": "checkbox",
+      "default": true
+    },
+    "color_icon": {
+      "name": "Icon",
+      "type": "color",
+      "default": "#000000"
+    },
+    "color_icon_active": {
+      "name": "Icon (active)",
+      "type": "color",
+      "default": "#ED0914"
+    },
+    "color_background": {
+      "name": "Background",
+      "type": "color",
+      "default": "#FFFFFF"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Colors",
+      "type": "heading",
+      "before": "color_icon"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

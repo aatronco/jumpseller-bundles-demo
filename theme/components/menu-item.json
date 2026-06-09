@@ -1,0 +1,82 @@
+{
+  "name": "Item",
+  "icon": "square",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": null
+    },
+    "text": {
+      "name": "Text",
+      "type": "input",
+      "help": "Use text up to 15 characters.",
+      "default": "",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "default": "ph ph-info",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "badge": {
+      "name": "Show",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank and block.options.link != blank }}"
+    },
+    "badge_text": {
+      "name": "Text",
+      "type": "input",
+      "default": "",
+      "visible_if": "{{ block.options.badge and block.options.link != blank }}"
+    },
+    "background": {
+      "name": "Background",
+      "type": "color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ block.options.badge and block.options.link != blank }}"
+    },
+    "position": {
+      "name": "Position",
+      "type": "select",
+      "default": "end",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Top",
+          "value": "top"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ block.options.badge and block.options.link != blank }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Badge",
+      "type": "heading",
+      "before": "badge"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

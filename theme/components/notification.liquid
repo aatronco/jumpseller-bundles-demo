@@ -1,0 +1,70 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% capture notification %}
+  <div
+    class="alert alert-{{ component.options.type }} alert-dismissible fade show theme-notification__alert"
+    role="alert"
+    {% if component.options.display == 'floating' %}
+      data-aos-anchor="#header"
+    {% endif %}
+    {{ component.attributes }}
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+    {% endif %}
+  >
+    {% if component.options.icon != blank %}
+      <i class="theme-icon ph {{ component.options.icon }} theme-notification__icon--{{ component.options.icon_size }}"></i>
+    {% endif %}
+    <div class="theme-notification__container">
+      <div class="theme-notification__title check-empty" {{ component.attributes.textfield.title }}>{{ component.options.title }}</div>
+      <div class="theme-notification__content">
+        <div class="theme-notification__text check-empty" {{ component.attributes.textfield.text }}>{{ component.options.text | newline_to_br }}</div>
+        {% if component.options.link != blank and component.options.link_text != blank %}
+          <a
+            href="{{ component.options.link }}"
+            class="theme-notification__link"
+            title="{{ component.options.link_text }}"
+            {% if component.options.link_external %}
+              target="_blank"
+            {% endif %}
+            {{ component.attributes.textfield.link_text }}
+          >
+            {{- component.options.link_text -}}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    {% if component.options.close %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% t "Close" %}"><i class="ph ph-x"></i></button>
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% if component.options.display == 'content' %}
+  <style>
+    #{{ section_id }} {
+      --section-margin-top: {{ component.options.margin_top }}px;
+      --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    }
+  </style>
+  <section
+    id="{{ section_id }}"
+    class="theme-section theme-notification"
+  >
+    <div
+      class="container container--adjust theme-section__container"
+    >
+      <div class="row theme-section__content">
+        <div class="col-12 theme-section__column theme-section__column--no-margin">
+          {{ notification }}
+        </div>
+      </div>
+    </div>
+  </section>
+{% else %}
+  <div class="theme-notification--floating theme-notification--floating--{{ component.options.content_alignment_x }}-{{ component.options.content_alignment_y }}">
+    {{ notification }}
+  </div>
+{% endif %}

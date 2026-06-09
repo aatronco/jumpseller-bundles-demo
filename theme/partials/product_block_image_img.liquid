@@ -1,0 +1,22 @@
+<img
+  srcset="
+    {%- if image.width >= 200 -%}{{ image.url | resize: width: 200 }} 200w,{%- endif -%}
+    {%- if image.width >= 320 -%}{{ image.url | resize: width: 320 }} 320w,{%- endif -%}
+    {%- if image.width >= 480 -%}{{ image.url | resize: width: 480 }} 480w,{%- endif -%}
+    {%- if image.width >= 640 -%}{{ image.url | resize: width: 640 }} 640w,{%- endif -%}
+    {%- if image.width >= 800 -%}{{ image.url | resize: width: 800 }} 800w,{%- endif -%}
+    {{ image.url }} {{ image.width }}w
+  "
+  sizes="
+    (max-width: 575px) calc((100vw - ({{ options.pb_columns_mobile | minus: 1 }} * {{ gap }}px)) / {{ options.pb_columns_mobile }}),
+    (max-width: 767px) calc((100vw - (2 * {{ gap }}px)) / 3), (max-width: 991px) calc((100vw - ({{ 3 | minus: 1 }} * {{ gap }}px)) / {{ 3 }}),
+    (max-width: 1335px) calc((100vw - ({{ options.pb_columns_desktop | at_most: 4 | minus: 1 }} * {{ gap }}px)) / {{ options.pb_columns_desktop | at_most: 4 }}),
+    calc(({{ section_width }} - ({{ options.pb_columns_desktop | minus: 1 }} * {{ gap }}px)) / {{ options.pb_columns_desktop }})
+  "
+  src="{{ image.url | resize: width: 480 }}"
+  class="{{ classes }}"
+  alt="{{ prod.name | escape }}"
+  loading="{{ loading }}"
+  fetchpriority="{{ fetchpriority }}"
+  {{ image.attribute.width_and_height }}
+>

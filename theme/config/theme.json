@@ -1,0 +1,30 @@
+{
+  "Info": {
+    "name": "Paws",
+    "author": "Jumpseller",
+    "default_lang": "en",
+    "use_system_translations": true,
+    "version": "4.13.4",
+    "capabilities": [
+      "multicurrency",
+      "product_appointments",
+      "product_price_lists",
+      "product_subscriptions",
+      "product_wishlists"
+    ]
+  },
+  "Menus": {
+    "main": {
+      "name": "Main Menu"
+    },
+    "category": {
+      "name": "Categories Menu"
+    },
+    "footer": {
+      "name": "Footer Menu 1"
+    },
+    "footer_2": {
+      "name": "Footer Menu 2"
+    }
+  }
+}

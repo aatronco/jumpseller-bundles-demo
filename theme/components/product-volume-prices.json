@@ -1,0 +1,33 @@
+{
+  "name": "Volume Prices",
+  "icon": "coins",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "mobile_first": {
+      "name": "Show before product gallery on Mobile",
+      "type": "checkbox",
+      "default": false
+    },
+    "hide_when_length_one": {
+      "name": "Hide when single volume price",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_discount_column": {
+      "name": "Show discount column",
+      "type": "checkbox",
+      "default": true
+    },
+    "hide_buy_1_row": {
+      "name": "Hide buy 1 row",
+      "type": "checkbox",
+      "default": true
+    }
+  },
+  "mode": "subcomponents",
+  "blocks": []
+}

@@ -1,0 +1,31 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --section-line-divider-thickness: {{ component.options.thickness }}px;
+    --section-line-divider-opacity: {{ component.options.opacity | divided_by: 100.0 }};
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container theme-section__line-divider" data-spacing="{{ data_spacing }}"></div>
+</section>

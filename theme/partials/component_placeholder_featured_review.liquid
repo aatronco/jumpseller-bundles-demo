@@ -1,0 +1,94 @@
+{% capture icon_alignment -%}
+  {%- if component.options.text_alignment == 'center' -%}
+    {%- case component.options.icon -%}
+      {%- when 'closing' -%}
+        start
+      {%- when 'opening' -%}
+        end
+      {%- else -%}
+        end
+    {%- endcase -%}
+  {%- elsif component.options.text_alignment == 'start' -%}
+    start
+  {%- else -%}
+    end
+  {%- endif -%}
+{%- endcapture %}
+
+{% for _ in (1..component.options.limit) %}
+  <div
+    class="theme-block review-block {% if display_option == 'carousel' %}swiper-slide{% else %}col-12{% endif %}"
+    data-columns-mobile="1"
+    data-columns-desktop="{{ component.options.columns_desktop }}"
+    data-spacing="{{ data_spacing }}"
+    {% if component.options.card %}
+      data-card="true"
+      data-card-border="{{ component.options.card_border }}"
+      data-card-shadow="{{ component.options.card_shadow }}"
+      data-bundle-color="{{ component.options.card_bundle_color }}"
+    {% endif %}
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+    {% endif %}
+  >
+    <div class="review-block__wrapper">
+      <div class="review-block__header{% if component.options.text_alignment == 'center' %} flex-column{% endif %}">
+        {% if component.options.show_icon %}
+          <div class="review-block__icon review-block__icon--{{ icon_alignment }} review-block__icon--{{ component.options.icon }}">
+            <i class="theme-icon ph ph-quotes"></i>
+          </div>
+        {% endif %}
+
+        {% if component.options.image %}
+          <a href="#" class="review-block__anchor{% if component.options.text_alignment == 'end' %} order-2{% endif %}">
+            <div class="d-flex align-items-center justify-content-center review-block__image-placeholder">
+              <i class="ph ph-image-square"></i>
+            </div>
+          </a>
+        {% endif %}
+
+        <div class="d-flex flex-column">
+          <a href="#" class="review-block__name">{% t "Product name" %}</a>
+
+          <div class="review-block__rating">
+            <div class="product-ratings">
+              <span class="product-ratings__score">3.5</span>
+
+              <span class="product-ratings__divider"></span>
+
+              <div class="product-ratings__stars">
+                <span class="ph-fill ph-star product-ratings__star product-ratings__star--filled"></span>
+                <span class="ph-fill ph-star product-ratings__star product-ratings__star--filled"></span>
+                <span class="ph-fill ph-star product-ratings__star product-ratings__star--filled"></span>
+                <span class="ph-fill ph-star product-ratings__star product-ratings__star--partial" style="--rating-partial-width: 50%"></span>
+                <span class="ph-fill ph-star product-ratings__star"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end .review-block__header -->
+
+      <div class="review-block__content">{% t "Here the comments of customers for each featured review of your products will be displayed." %}</div>
+
+      <div class="review-block__footer">
+        {% if component.options.show_name %}
+          <div class="review-block__customer">
+            {% if component.options.name_filter == 'first_name' %}
+              {% t "Customer first name" %}
+            {% else %}
+              {% t "Customer full name" %}
+            {% endif %}
+          </div>
+        {% endif %}
+        {%- if component.options.show_date -%}
+          <div class="review-block__date">
+            {{- 'now' | date: format: component.options.date -}}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{% endfor %}

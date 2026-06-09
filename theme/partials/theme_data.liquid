@@ -1,0 +1,174 @@
+{% capture t_already_have_an_account_default %}{% t "Already have an account? Log in here" %}{% endcapture %}
+{% assign t_already_have_an_account = options.t_already_have_an_account | default: t_already_have_an_account_default %}
+{% capture t_buy_default %}{% t "Buy" %}{% endcapture %}
+{% assign t_buy = options.t_buy | default: t_buy_default %}
+{% capture t_buy_now_default %}{% t "Buy now" %}{% endcapture %}
+{% assign t_buy_now = options.t_buy_now | default: t_buy_now_default %}
+{% capture t_add_to_cart_default %}{% t "Add to Cart" %}{% endcapture %}
+{% assign t_add_to_cart = options.t_add_to_cart | default: t_add_to_cart_default %}
+{% capture t_added_to_cart_default %}{% t "added to the cart" %}{% endcapture %}
+{% assign t_added_to_cart = options.t_added_to_cart | default: t_added_to_cart_default %}
+{% capture t_available_in_stock_default %}{% t "Available in stock" %}{% endcapture %}
+{% assign t_available_in_stock = options.t_available_in_stock | default: t_available_in_stock_default %}
+{% capture t_check_this_default %}{% t "Check this out:" %}{% endcapture %}
+{% assign t_check_this = options.t_check_this | default: t_check_this_default %}
+{% capture t_choose_a_time_slot_default %}{% t "Choose a time slot" %}{% endcapture %}
+{% assign t_choose_a_time_slot = options.t_choose_a_time_slot | default: t_choose_a_time_slot_default %}
+{% capture t_contact_us_default %}{% t "Contact us" %}{% endcapture %}
+{% assign t_contact_us = options.t_contact_us | default: t_contact_us_default %}
+{% capture t_continue_shopping_default %}{% t "Continue shopping" %}{% endcapture %}
+{% assign t_continue_shopping = options.t_continue_shopping | default: t_continue_shopping_default %}
+{% capture t_discount_off_default %}{% t "Discount off" %}{% endcapture %}
+{% assign t_discount_off = options.t_discount_off | default: t_discount_off_default %}
+{% capture t_go_to_default %}{% t "Go to" %}{% endcapture %}
+{% assign t_go_to = options.t_go_to | default: t_go_to_default %}
+{% capture t_go_to_cart_default %}{% t "Go to Cart" %}{% endcapture %}
+{% assign t_go_to_cart = options.t_go_to_cart | default: t_go_to_cart_default %}
+{% capture t_see_my_wishlist_default %}{% t "See my Wishlist" %}{% endcapture %}
+{% assign t_see_my_wishlist = options.t_see_my_wishlist | default: t_see_my_wishlist_default %}
+{% capture t_notify_me_default %}{% t "Notify me when available" %}{% endcapture %}
+{% assign t_notify_me = options.t_notify_me | default: t_notify_me_default %}
+{% capture t_out_of_stock_default %}{% t "Out of Stock" %}{% endcapture %}
+{% assign t_out_of_stock = options.t_out_of_stock | default: t_out_of_stock_default %}
+{% capture t_proceed_to_checkout_default %}{% t "Proceed to Checkout" %}{% endcapture %}
+{% assign t_proceed_to_checkout = options.t_proceed_to_checkout | default: t_proceed_to_checkout_default %}
+{% capture t_success_adding_to_cart_default %}{% t "Successfully added to cart" %}{% endcapture %}
+{% assign t_success_adding_to_cart = options.t_success_adding_to_cart | default: t_success_adding_to_cart_default %}
+{% capture t_success_adding_to_wishlist_default %}{% t "Successfully added to your Wishlist" %}{% endcapture %}
+{% assign t_success_adding_to_wishlist = options.t_success_adding_to_wishlist | default: t_success_adding_to_wishlist_default %}
+{% capture t_success_removing_from_wishlist_default %}{% t "Successfully removed from your Wishlist" %}{% endcapture %}
+{% assign t_success_removing_from_wishlist = options.t_success_removing_from_wishlist | default: t_success_removing_from_wishlist_default %}
+
+<script type="application/json" id="theme-data">
+  {
+    "is_preview": {{ request.preview_mode | json }},
+    "template": {{ template | json }},
+    "cart": {
+      "url": {{ cart.url | json }},
+      "debounce": {{ 50 | json }}
+    },
+    "language": {{ languages.first.code | json }},
+    "order": {
+      "totalOutstanding": {{ order.total_outstanding | json }},
+      "productsCount": {{ order.products_count | json }},
+      "checkoutUrl": {{ order.checkout_url | json }},
+      "url": {{ order.url | json }},
+      "remainingForFreeShippingMessage": {{ order.remaining_for_free_shipping_message | json }},
+      "minimumPurchase": {
+        "conditionType": {{ order.minimum_purchase.condition_type | json }},
+        "conditionValue": {{ order.minimum_purchase.condition_value | json }}
+      }
+    },
+    "currency_code": {{ store.currency_code | json }},
+    "translations": {
+      "active_price": "{% t 'Active price' %}",
+      "added_singular": "{% t '1 unit of %{name} has been added.' %}",
+      "added_qty_plural": "{% t '%{qty} units of %{name} have been added.' %}",
+      "added_to_cart": {{ t_added_to_cart | json }},
+      "add_to_cart": {{ t_add_to_cart | json }},
+      "added_to_wishlist": "{% t '%{name} was added to your Wishlist' %}",
+      "available_in_stock": {{ t_available_in_stock | json }},
+      "buy": {{ t_buy | json }},
+      "buy_now": {{ t_buy_now | json }},
+      "buy_now_not_allowed": "{% t 'You cannot buy now with the current choosen quantity.' %}",
+      "check_this": {{ t_check_this | json }},
+      "choose_a_time_slot": {{ t_choose_a_time_slot | json }},
+      "contact_us": {{ t_contact_us | json }},
+      "continue_shopping": {{ t_continue_shopping | json }},
+      "copy_to_clipboard": "{% t 'Copy to clipboard' %}",
+      "counter_text_weeks": "{% t 'weeks' %}",
+      "counter_text_days": "{% t 'days' %}",
+      "counter_text_hours": "{% t 'hours' %}",
+      "counter_text_minutes": "{% t 'minutes' %}",
+      "counter_text_seconds": "{% t 'seconds' %}",
+      "customer_register_back_link_url": {{ customer_login_url | json }},
+      "customer_register_back_link_text": {{ t_already_have_an_account | json }},
+      "discount_off": {{ t_discount_off | json }},
+      "discount_message": "{% t 'This promotion is valid from %{date_begins} to %{date_expires}' %}",
+      "error_adding_to_cart": "{% t 'Error adding to cart' %}",
+      "error_updating_to_cart": "{% t 'Error updating to cart' %}",
+      "error_adding_to_wishlist": "{% t 'Error adding to Wishlist' %}",
+      "error_removing_from_wishlist": "{% t 'Error removing from Wishlist' %}",
+      "files_too_large": "{% t 'The sum of the size of the selected files must be lower than 10MB.' %}",
+      "fill_country_region_shipping": "{% t 'Please fill in the country and region to calculate the shipping costs.' %}",
+      "go_to": {{ t_go_to | json }},
+      "go_to_cart": {{ t_go_to_cart | json }},
+      "low_stock_basic": "{% t 'Low stock' %}",
+      "low_stock_limited": "{% t 'Hurry! Few units left' %}",
+      "low_stock_alert": "{% t 'Hurry! Almost sold out' %}",
+      "low_stock_basic_exact": "{% t '%{qty} units left' %}",
+      "low_stock_limited_exact": "{% t 'Hurry! Only %{qty} units left' %}",
+      "low_stock_alert_exact": "{% t 'Hurry! Only %{qty} in stock' %}",
+      "minimum_quantity": "{% t 'Minimum quantity' %}",
+      "more_info": {{ options.store_whatsapp_contact_product | json }},
+      "newsletter_message_success": "{% t 'Successfully registered' %}",
+      "newsletter_message_error": "{% t 'Error registering, please try again later.' %}",
+      "newsletter_message_success_captcha": "{% t 'Success in captcha' %}",
+      "newsletter_message_error_captcha": "{% t 'Error in captcha' %}",
+      "newsletter_text_placeholder": "{% t 'email@domain.com' %}",
+      "newsletter_text_button": "{% t 'Subscribe' %}",
+      "notify_me_when_available": {{ t_notify_me | json }},
+      "no_shipping_methods": "{% t 'No shipping methods available for your shipping address.' %}",
+      "out_of_stock": {{ t_out_of_stock | json }},
+      "proceed_to_checkout": {{ t_proceed_to_checkout | json }},
+      "product_stock_locations_link_text": "{% t "See in Google Maps" %}",
+      "removed_from_wishlist": "{% t '%{name} was removed from your Wishlist' %}",
+      "see_my_wishlist": {{ t_see_my_wishlist | json }},
+      "send_us_a_message": {{ options.store_whatsapp_message | json }},
+      "share_on": "{% t 'Share on' %}",
+      "show_more": "{% t 'Show More' %}",
+      "show_less": "{% t 'Show Less' %}",
+      "success": "{% t 'Success' %}",
+      "success_adding_to_cart": {{ t_success_adding_to_cart | json }},
+      "success_adding_to_wishlist": {{ t_success_adding_to_wishlist | json }},
+      "success_removing_from_wishlist": {{ t_success_removing_from_wishlist | json }},
+      "SKU": "{% t 'SKU' %}",
+      "x_units_in_stock": "{% t '%{qty} units in stock' %}",
+      "lowest_price_message": "{% t 'Lowest price in the last 30 days:' %}"
+    },
+    "options": {
+      "av_popup_button_reject_redirect": {{ options.av_popup_button_reject_redirect | json }},
+      "display_cart_notification": {{ options.display_cart_notification | json }},
+      "filters_desktop": {{ options.filters_desktop | json }},
+      "pf_first_gallery_image": {{ options.pf_first_gallery_image | json }},
+      "quantity": {{ options.t_quantity | json }},
+      "tax_label": {{ options.t_price_tax | json }},
+      "price_without_tax_message": {{ options.t_price_without_tax_message | json }}
+    }
+  }
+</script>
+
+<script>
+  function callonDOMLoaded(callback) {
+    document.readyState === 'loading' ? window.addEventListener('DOMContentLoaded', callback) : callback();
+  }
+  function callonComplete(callback) {
+    document.readyState === 'complete' ? callback() : window.addEventListener('load', callback);
+  }
+  Object.defineProperty(window, 'theme', {
+    value: Object.freeze(JSON.parse(document.querySelector('#theme-data').textContent)),
+    writable: false,
+    configurable: false,
+  });
+</script>
+
+{% if store.currencies_codes.size > 1 %}
+  <script>
+    if (typeof Storage !== 'undefined') {
+      if (localStorage.getItem('global_currency') === null) {
+        const currency = window.theme.currency_code;
+        localStorage.setItem('global_currency', currency);
+        localStorage.setItem('store_currency', currency);
+      }
+    } else {
+      console.warn('Unable to use multi-currency on this store. Please update your browser.');
+      callonDOMLoaded(() => {
+        const headerCurrencyDropdown = document.querySelector('#header-dropdown-currency');
+        if (headerCurrencyDropdown) headerCurrencyDropdown.style.display = 'none';
+
+        const mobileCurrencyDropdown = document.querySelector('#sidebar-dropdown-currency');
+        if (mobileCurrencyDropdown) mobileCurrencyDropdown.parentElement.parentElement.classList = 'w-50 d-none';
+      });
+    }
+  </script>
+{% endif %}

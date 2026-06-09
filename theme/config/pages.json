@@ -1,0 +1,207 @@
+{
+  "home": {
+    "Default": {
+      "components": [
+        "header",
+        "slider-1",
+        "banners-1",
+        "product-collection-1",
+        "image-comparison-1",
+        "logo-gallery-1",
+        "footer"
+      ]
+    }
+  },
+  "product": {
+    "Default": {
+      "components": [
+        "header",
+        "product-main-1",
+        "bought-together-packs-1",
+        "product-reviews-1",
+        "recommended-products-1",
+        "footer"
+      ]
+    }
+  },
+  "category": {
+    "Default": {
+      "components": [
+        "header",
+        "category-heading-1",
+        "template-image-1",
+        "product-feed",
+        "footer"
+      ]
+    },
+    "All categories": {
+      "components": [
+        "header",
+        "category-heading-1",
+        "template-image-1",
+        "category-accordion-template-1",
+        "footer"
+      ]
+    },
+    "Brands": {
+      "components": [
+        "header",
+        "category-heading-1",
+        "template-image-1",
+        "category-brands-template-1",
+        "footer"
+      ]
+    },
+    "Show subcategories": {
+      "components": [
+        "header",
+        "category-heading-1",
+        "template-image-1",
+        "category-subcategories-template-1",
+        "footer"
+      ]
+    },
+    "lista-mayorista": {
+      "components": [
+        "category-table-template-63935"
+      ]
+    }
+  },
+  "page": {
+    "Default": {
+      "components": [
+        "header",
+        "template-heading-1",
+        "template-image-1",
+        "page-body-1",
+        "footer"
+      ]
+    },
+    "Post": {
+      "components": [
+        "header",
+        "template-heading-post",
+        "template-image-post",
+        "page-body-post",
+        "line-divider-1",
+        "page-share-1",
+        "article-pager-1",
+        "related-articles-1",
+        "newsletter-1",
+        "footer"
+      ]
+    }
+  },
+  "page_category": {
+    "Default": {
+      "components": [
+        "header",
+        "category-heading-1",
+        "template-image-1",
+        "page-category-template-1",
+        "footer"
+      ]
+    },
+    "Blog": {
+      "components": [
+        "header",
+        "category-heading-1",
+        "template-image-1",
+        "handpicked-articles-1",
+        "page-categories-1",
+        "page-category-articles-1",
+        "page-category-articles-2",
+        "page-category-articles-3",
+        "footer"
+      ]
+    }
+  },
+  "searchresults": {
+    "Default": {
+      "components": [
+        "header",
+        "category-heading-1",
+        "product-feed",
+        "footer"
+      ]
+    }
+  },
+  "contactpage": {
+    "Default": {
+      "components": [
+        "header",
+        "contact-information-1",
+        "contact-form-1",
+        "contact-map-1",
+        "footer"
+      ]
+    }
+  },
+  "error": {
+    "Default": {
+      "components": [
+        "header",
+        "latest-products-404",
+        "footer"
+      ]
+    }
+  },
+  "checkout__cart": {
+    "Default": {
+      "components": [
+        "cart-products-1",
+        "cart-cross-selling-1"
+      ]
+    }
+  },
+  "checkout__checkout": {
+    "Default": {
+      "components": [
+        "checkout-form-1"
+      ]
+    }
+  },
+  "customer__account": {
+    "Default": {
+      "components": [
+        "header",
+        "customer-heading-1",
+        "customer-tabs-1",
+        "footer"
+      ]
+    }
+  },
+  "customer__address": {
+    "Default": {
+      "components": [
+        "header",
+        "footer"
+      ]
+    }
+  },
+  "customer__details": {
+    "Default": {
+      "components": [
+        "header",
+        "footer"
+      ]
+    }
+  },
+  "customer__login": {
+    "Default": {
+      "components": [
+        "header",
+        "customer-login-1",
+        "footer"
+      ]
+    }
+  },
+  "customer__reset_password": {
+    "Default": {
+      "components": [
+        "header",
+        "footer"
+      ]
+    }
+  }
+}

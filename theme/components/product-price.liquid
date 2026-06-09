@@ -1,0 +1,85 @@
+{% assign first_id = prod.variants.first.id | default: prod.id %}
+
+{% if options.pf_price_tax and store.tax_on_product_price == false %}
+  {% assign price_tax_label = true %}
+{% else %}
+  {% assign price_tax_label = false %}
+{% endif %}
+
+{% assign eu_countries = 'AT,BE,BG,HR,CY,CZ,DK,EE,FI,FR,DE,GR,HU,IE,IT,LV,LT,LU,MT,NL,PL,PT,RO,SK,SI,ES,SE' | split: ',' %}
+
+{% if eu_countries contains store.country_code %}
+  {% assign eu_store = true %}
+{% else %}
+  {% assign eu_store = false %}
+{% endif %}
+
+{% if options.disable_prices or prod.quotable and prod.status == 'not-available' %}
+  {% assign disable_prices = true %}
+{% else %}
+  {% assign disable_prices = false %}
+{% endif %}
+
+<product-price
+  class="product-price product-price-{{ component.id }} w-100 check-empty{% if product-price.options.mobile_first %} mobile-first{% endif %}"
+  data-name="product-price"
+  data-display="{{ product-price.options.display }}"
+  data-productid="{{ first_id }}"
+  {{ product-price.attributes }}
+>
+  <script type="application/json" class="product-price-json">
+    {
+      "options": {
+        "disablePrices": {{ disable_prices | json }},
+        "display": {{ product-price.options.display | json }},
+        "mobileFirst": {{ product-price.options.mobile_first | json }},
+        "showTaxLabel": {{ price_tax_label | json }},
+        "taxLabelUppercase": {{ options.pf_price_tax_uppercase | json }},
+        "showDiscountBadge": {{ product-price.options.show_discount_badge | json }},
+        "showDiscountBadgeText": {{ options.t_label_discount | json }},
+        "showDiscountBadgeShape": {{ product-price.options.discount_badge_shape | json }},
+        "showDiscountMessage": {{ product-price.options.show_discount_message | json }},
+        "showPriceWithoutTax": {{ options.pf_show_price_without_tax | json }},
+        "showLowestRecentPrice": {{ eu_store | json }}
+      },
+      "info": {
+        "product": {
+          "id": {{ prod.id | json }},
+          "price": {{ prod.price | json }},
+          "status": {{ prod.status | json }},
+          "discount": {{ prod.discount | json }},
+          "price_formatted": {{ prod.price | price | json }},
+          "price_with_discount_formatted": {{ prod.price | minus: prod.discount | price | json }},
+          "discount_begins": {{ prod.discount_begins | json }},
+          "discount_expires": {{ prod.discount_expires | json }},
+          "date_begins": {{ prod.discount_begins | date: '%d-%m-%Y' | json }},
+          "date_expires": {{ prod.discount_expires | date: '%d-%m-%Y' | json }},
+          "price_tax": {{ prod.tax | json }},
+          "lowest_price": {% if prod.discount > 0 %}{{ prod.lowest_price | json }}{% else %}0{% endif %},
+          "lowest_price_formatted": {% if prod.discount > 0 %}{{ prod.lowest_price | price | json }}{% else %}{{ 0 | price | json }}{% endif %},
+          "price_without_tax_formatted": {{ prod.price | minus: prod.discount | minus: prod.tax | price | json }},
+          "percentage_off": {% if prod.discount > 0 %}{{ prod.discount | divided_by: prod.price | times: 100 | round: 0 | json }}{% else %}0{% endif %}
+        },
+        "variants": [{% for variant in prod.variants %}
+          {
+            "id": {{ variant.id | json }},
+            "price": {{ variant.price | json }},
+            "status": {{ variant.status | json }},
+            "discount": {{ variant.discount | json }},
+            "price_formatted": {{ variant.price | price | json }},
+            "price_with_discount_formatted": {{ variant.price | minus: variant.discount | price | json }},
+            "discount_begins": {{ variant.discount_begins | json }},
+            "discount_expires": {{ variant.discount_expires | json }},
+            "date_begins": {{ variant.discount_begins | date: '%d-%m-%Y' | json }},
+            "date_expires": {{ variant.discount_expires | date: '%d-%m-%Y' | json }},
+            "price_tax": {{ variant.tax | json }},
+            "lowest_price": {% if variant.discount > 0 %}{{ variant.lowest_price | json }}{% else %}0{% endif %},
+            "lowest_price_formatted": {% if variant.discount > 0 %}{{ variant.lowest_price | price | json }}{% else %}{{ 0 | price | json }}{% endif %},
+            "price_without_tax_formatted": {{ variant.price | minus: variant.discount | minus: variant.tax | price | json }},
+            "percentage_off": {% if variant.discount > 0 %}{{ variant.discount | divided_by: variant.price | times: 100 | round: 0 | json }}{% else %}0{% endif %}
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}]
+      }
+    }
+  </script>
+</product-price>

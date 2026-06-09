@@ -1,0 +1,87 @@
+{% capture t_cart_error_title_default %}{% t "Your shopping cart is empty." %}{% endcapture %}
+{% assign t_cart_error_title = options.t_cart_error_title | default: t_cart_error_title_default %}
+{% capture t_category_error_title_default %}{% t "There are still no products available here" %}{% endcapture %}
+{% assign t_category_error_title = options.t_category_error_title | default: t_category_error_title_default %}
+{% capture t_search_error_title_default %}{% t "There are no results available" %}{% endcapture %}
+{% assign t_search_error_title = options.t_search_error_title | default: t_search_error_title_default %}
+{% capture t_search_error_text_default %}{% t "We haven't found any products that match your search for" %}{% endcapture %}
+{% assign t_search_error_text = options.t_search_error_text | default: t_search_error_text_default %}
+
+<div class="col-12{% unless template == 'cart' %} col-md-10 offset-md-1 col-lg-8 offset-lg-2{% endunless %} text-center theme-message">
+  <div class="theme-message__wrapper">
+    {% case template %}
+      {% when 'category' %}
+        <h5 class="theme-message__title">
+          {{- t_category_error_title -}}
+        </h5>
+        <div class="theme-message__text check-empty">
+          {{ options.t_category_error_text }}
+        </div>
+      {% when 'page_category' %}
+        <h5 class="theme-message__title">
+          {%- t "There no published articles here yet" -%}
+        </h5>
+        <div class="theme-message__text">
+          {%- t "You can try looking at other content of the store for now." -%}
+        </div>
+        <a
+          href="{{ store.url }}"
+          class="button button--style button--secondary theme-message__button"
+          title="{% t 'Go back to Home page' %}"
+        >
+          <span>{%- t "Go to Home page" -%}</span>
+        </a>
+      {% when 'searchresults' %}
+        <h5 class="theme-message__title">
+          {{- t_search_error_title -}}
+        </h5>
+        <div class="theme-message__text">
+          {{ t_search_error_text }}
+          <b>{{ search.query }}</b>. {{ options.t_try_searching_or_go_home }}
+        </div>
+        <a
+          href="{{ store.url }}"
+          class="button button--style button--secondary theme-message__button"
+          title="{% t 'Go back to Home page' %}"
+        >
+          <span>{%- t "Go to Home page" -%}</span>
+        </a>
+      {% when 'cart' %}
+        <h5 class="theme-message__title">
+          {{- t_cart_error_title -}}
+        </h5>
+        <a
+          href="{{ store.url }}"
+          class="button button--style button--secondary theme-message__button"
+          title="{% t 'Go back to Home page' %}"
+        >
+          <span>{%- t "Go to Home page" -%}</span>
+        </a>
+      {% when 'customer_account' %}
+        <h5 class="theme-message__title">
+          {%- t "You have not made any purchases." -%}
+        </h5>
+        <a
+          href="{{ store.url }}"
+          class="button button--style button--main theme-message__button"
+          title="{% t 'Start shopping' %}"
+        >
+          <span>{%- t "Start shopping" -%}</span>
+        </a>
+      {% when 'error' %}
+        <h5 class="theme-message__title">
+          {{- error.title -}}
+        </h5>
+        <div class="theme-message__text">
+          {{- error.message -}}
+        </div>
+        <a
+          href="{{ error.link | default: store.url }}"
+          class="button button--style button--secondary theme-message__button"
+          title="{% t 'Go back & Keep Shopping' %}"
+        >
+          <span>{%- t "Go back & Keep Shopping" -%}</span>
+        </a>
+    {% endcase %}
+  </div>
+</div>

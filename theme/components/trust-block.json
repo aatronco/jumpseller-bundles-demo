@@ -1,0 +1,61 @@
+{
+  "name": "Block",
+  "icon": "square",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "help": "Choose an icon to display.",
+      "default": "ph ph-info",
+      "visible_if": "{{ component.options.enable_icons }}"
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Block Title"
+    },
+    "text": {
+      "name": "Text",
+      "type": "text",
+      "default": "Trust bar block description"
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": null
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color",
+      "visible_if": "{{ component.options.card }}"
+    }
+  },
+  "mode": "subcomponents",
+  "blocks": []
+}

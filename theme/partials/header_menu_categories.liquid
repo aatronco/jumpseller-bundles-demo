@@ -1,0 +1,201 @@
+{% assign items_buttons = component.options.items_buttons %}
+{% assign items_buttons_type = component.options.items_buttons_type %}
+{% assign menu_buttons = component.options.menu_buttons %}
+{% assign menu_buttons_type = component.options.menu_buttons_type %}
+{% assign categories_button = component.options.categories_button %}
+{% assign categories_button_type = component.options.categories_button_type %}
+
+{%- assign base_btn = 'button button--small button--style theme-section__button header__button header__button--menu' -%}
+
+{%- capture cat_button_classes -%}
+  {%- if categories_button -%}
+    {{ base_btn }} button--{{ categories_button_type }}
+  {%- elsif menu_buttons -%}
+    {{ base_btn }} button--{{ menu_buttons_type }}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign cat_button_classes = cat_button_classes | strip -%}
+
+{%- if categories_button -%}
+  {%- assign active_button_type = categories_button_type -%}
+{%- elsif menu_buttons -%}
+  {%- assign active_button_type = menu_buttons_type -%}
+{%- else -%}
+  {%- assign active_button_type = items_buttons_type -%}
+{%- endif -%}
+
+{%- if active_button_type -%}
+  {% assign cat_button_mobile = 'button--style button--' | append: active_button_type | append: ' header-nav__anchor--categories-mobile' %}
+{%- endif -%}
+
+{% capture button_content %}
+  {% case header_version %}
+    {% when 'v3', 'v4', 'v6' %}
+      {% if categories_icon != blank %}
+        {% if items_buttons %}
+          <span class="button button--small button--style button--{{ active_button_type }} theme-section__button header__button"><i class="theme-icon {{ categories_icon }} header__icon"></i></span>
+        {% else %}
+          <i class="theme-icon {{ categories_icon }} header__icon"></i>
+        {% endif %}
+      {% endif %}
+      {% if header_items_text %}
+        <div class="d-none {% if header_version == 'v6' %}d-sm-block{% else %}d-md-block{% endif %} header__text">
+          {{- categories_title -}}
+        </div>
+      {% endif %}
+    {% when 'v5' %}
+      {% if categories_icon != blank %}
+        <i class="theme-icon {{ categories_icon }}"></i>
+      {% endif %}
+      <span class="d-none d-md-block">{{- categories_title -}}</span>
+    {% else %}
+      {% if categories_icon != blank %}
+        <i class="theme-icon {{ categories_icon }}"></i>
+      {% endif %}
+      <span>{{- categories_title -}}</span>
+  {% endcase %}
+{% endcapture %}
+
+{% case categories_display %}
+  {% when 'both' %}
+    {% if header_version == 'v6' %}
+      {% assign item_visibility = 'd-none d-sm-flex' %}
+    {% else %}
+      {% assign item_visibility = 'd-flex' %}
+    {% endif %}
+  {% when 'desktop' %}
+    {% assign item_visibility = 'd-none d-lg-flex' %}
+  {% when 'mobile' %}
+    {% if header_version == 'v6' %}
+      {% assign item_visibility = 'd-none' %}
+    {% else %}
+      {% assign item_visibility = 'd-flex d-lg-none' %}
+    {% endif %}
+{% endcase %}
+
+{% case header_version %}
+  {% when 'v3', 'v4', 'v6' %}
+    <li class="header__item {{ item_visibility }}">
+      <button
+        type="button"
+        class="button header__link"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#mobile-categories"
+        aria-controls="mobile-categories"
+        aria-label="{{- categories_title | escape -}}"
+      >
+        {{ button_content }}
+      </button>
+    </li>
+  {% else %}
+    {% unless categories_display == 'desktop' %}
+      <li class="d-block d-lg-none header-nav__item">
+        <button
+          type="button"
+          class="button header-nav__anchor {{ cat_button_mobile }} header-nav__anchor--categories"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#mobile-categories"
+          aria-controls="mobile-categories"
+          aria-label="{{- categories_title | escape -}}"
+        >
+          {{ button_content }}
+        </button>
+      </li>
+    {% endunless %}
+
+    {% unless categories_display == 'mobile' %}
+      <li class="d-none d-lg-block header-nav__item dropdown{% if menu_event == 'hover' %} header-nav__item--hover{% endif %}{% if submenu_type == 'megamenu' %} header-nav__item--inherit{% endif %}">
+        {% case menu_event %}
+          {% when 'click' %}
+            <a
+              role="button"
+              class="d-none d-lg-flex button {{ cat_button_classes }} dropdown-toggle header-nav__anchor header-nav__anchor--categories"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="outside"
+              aria-expanded="false"
+              aria-label="{% t 'Open submenu' %}"
+              data-event="click"
+            >
+              {{- button_content -}}
+            </a>
+          {% when 'hover' %}
+            <a
+              role="button"
+              class="d-none d-lg-flex button {{ cat_button_classes }} header-nav__anchor header-nav__anchor--categories"
+              title="{% t 'Open submenu' %}"
+              data-event="hover"
+            >
+              {{- button_content -}}
+            </a>
+        {% endcase %}
+
+        {% case submenu_type %}
+          {% when 'flyout' %}
+            <div class="dropdown-menu header-flyout">
+              <ul class="no-bullet header-flyout__menu">
+                {% for item in menu.category.items %}
+                  <li class="header-flyout__item{% if item.dropdown %} dropdown{% if menu_event == 'hover' %} header-flyout__item--hover{% endif %}{% endif %}">
+                    {% if item.dropdown %}
+                      {% case menu_event %}
+                        {% when 'click' %}
+                          <a
+                            role="button"
+                            class="dropdown-item dropdown-toggle header-flyout__link header-flyout__link--has-dropdown{% if item.active and item.type != 'no_url' %} header-flyout__link--active{% endif %}"
+                            data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside"
+                            aria-expanded="false"
+                            aria-label="{{ item.name }}"
+                            data-event="click"
+                          >
+                            <span>{{- item.name -}}</span>
+                            <i class="ph ph-caret-right header-flyout__caret"></i>
+                          </a>
+                        {% when 'hover' %}
+                          <a
+                            {% if item.type == 'no_url' %}
+                              role="button"
+                            {% else %}
+                              href="{{ item.url }}"
+                            {% endif %}
+                            class="dropdown-item header-flyout__link header-flyout__link--has-dropdown{% if item.active and item.type != 'no_url' %} header-flyout__link--active{% endif %}"
+                            title="{{ t_go_to }} {{ item.name }}"
+                            data-event="hover"
+                          >
+                            <span>{{- item.name -}}</span>
+                            <i class="ph ph-caret-right header-flyout__caret"></i>
+                          </a>
+                      {% endcase %}
+
+                      {% render 'header_flyout', item: item, menu_event: menu_event, submenu_view_all: submenu_view_all, t_view_all: t_view_all, t_go_to: t_go_to %}
+                    {% else %}
+                      <a
+                        href="{{ item.url }}"
+                        class="dropdown-item header-flyout__link{% if item.active and item.type != 'no_url' %} header-flyout__link--active{% endif %}"
+                        title="{{ t_go_to }} {{ item.name }}"
+                        {% if item.external %}
+                          target="_blank"
+                        {% endif %}
+                      >
+                        <span>{{- item.name -}}</span>
+                      </a>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% when 'megamenu' %}
+            {% render 'header_megamenu_categories',
+              submenu_columns: submenu_columns,
+              submenu_columns_width: submenu_columns_width,
+              submenu_image: submenu_image,
+              submenu_image_ratio: submenu_image_ratio,
+              submenu_image_position: submenu_image_position,
+              submenu_image_width: submenu_image_width,
+              submenu_view_all: submenu_view_all,
+              t_view_all: t_view_all,
+              t_go_to: t_go_to
+            %}
+        {% endcase %}
+      </li>
+    {% endunless %}
+{% endcase %}

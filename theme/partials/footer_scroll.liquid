@@ -1,0 +1,34 @@
+{% assign scroll_icon = component.options.scroll_icon %}
+{% capture scroll_text_default %}{% t "Back to top" %}{% endcapture %}
+{% assign scroll_text = component.options.scroll_text | default: scroll_text_default | escape %}
+{% capture scroll_divider %}
+  <div class="col-12 footer__column">
+    <hr class="footer__divider">
+  </div>
+{% endcapture %}
+
+<div class="row align-items-center footer__wrapper">
+  {% if scroll_position == 'end' %}
+    {{ scroll_divider }}
+  {% endif %}
+
+  <div class="col-12 footer__column">
+    <button
+      type="button"
+      class="button footer__scroll{% if component.options.scroll_uppercase %} footer__scroll--uppercase{% endif %} footer__scroll--{{ scroll_position }}"
+      aria-label="{{ scroll_text }}"
+      onclick="footerScrollLink();"
+    >
+      {% if scroll_icon != blank %}
+        <i class="{{ scroll_icon }}"></i>
+      {% endif %}
+      <span>
+        {{- scroll_text -}}
+      </span>
+    </button>
+  </div>
+
+  {% if scroll_position == 'start' %}
+    {{ scroll_divider }}
+  {% endif %}
+</div>

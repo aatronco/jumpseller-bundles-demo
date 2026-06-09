@@ -1,0 +1,53 @@
+{
+  "name": "Product Accordion",
+  "icon": "arrows-from-dotted-line",
+  "max_usage": 1,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "collapse": {
+      "name": "Collapsible items",
+      "type": "checkbox",
+      "default": true
+    },
+    "first": {
+      "name": "First item opened",
+      "type": "checkbox",
+      "default": false
+    },
+    "show_icons": {
+      "name": "Show icons",
+      "type": "checkbox",
+      "default": true
+    },
+    "borders": {
+      "name": "Borders style",
+      "type": "select",
+      "default": "top-bottom",
+      "options": [
+        {
+          "label": "All sides",
+          "value": "all"
+        },
+        {
+          "label": "Top & Bottom",
+          "value": "top-bottom"
+        },
+        {
+          "label": "No borders",
+          "value": "none"
+        }
+      ]
+    }
+  },
+  "mode": "children",
+  "blocks": [
+    {
+      "type": "product-accordion-item",
+      "multiple": true,
+      "property": "items"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{% if product-wishlist.options.enable and store.customers_enabled %}
+  {% assign wishlist_id = 'product-wishlist-' | append: product-wishlist.id %}
+
+  <style>
+    #{{ wishlist_id }} {
+      --product-page-wishlist-color-icon: {{ product-wishlist.options.color_icon }};
+      --product-page-wishlist-color-icon-active: {{ product-wishlist.options.color_icon_active }};
+      --product-page-wishlist-color-background: {{ product-wishlist.options.color_background }};
+      --product-page-wishlist-color-border: {{ product-wishlist.options.color_icon | color_opacity: 0.1 }};
+    }
+  </style>
+
+  {% render 'product_wishlist', prod: prod, attributes: product-wishlist.attributes, wishlist_id: wishlist_id %}
+{% endif %}

@@ -1,0 +1,323 @@
+{% capture t_go_to_default %}{% t "Go to" %}{% endcapture %}
+{% assign t_go_to = options.t_go_to | default: t_go_to_default %}
+{% capture t_go_to_cart_default %}{% t "Go to Cart" %}{% endcapture %}
+{% assign t_go_to_cart = options.t_go_to_cart | default: t_go_to_cart_default %}
+
+{% assign header_version = component.options.version %}
+
+{% if header_version == 'v5' and component.options.floating_toolbar %}
+  {% assign header_items_text = component.options.items_text %}
+{% elsif header_version == 'v5' %}
+  {% assign header_items_text = false %}
+{% else %}
+  {% assign header_items_text = component.options.items_text %}
+{% endif %}
+
+{% if component.options.width == 'default' %}
+  {% assign header_width = options.theme_width %}
+{% else %}
+  {% assign header_width = component.options.width %}
+{% endif %}
+
+{% if component.options.fixed %}
+  {% assign header_fixed = true %}
+
+  {% if component.options.overlap %}
+    {% assign header_overlap = true %}
+  {% else %}
+    {% assign header_overlap = false %}
+  {% endif %}
+
+  {% if component.options.floating %}
+    {% assign header_floating = true %}
+  {% else %}
+    {% assign header_floating = false %}
+  {% endif %}
+
+{% else %}
+  {% assign header_fixed = false %}
+{% endif %}
+
+{% if component.options.search %}
+  {% assign has_search = true %}
+{% else %}
+  {% assign has_search = false %}
+{% endif %}
+
+{% if component.subcomponents['header-menu'] %}
+  {% assign has_desktop_menu = true %}
+{% else %}
+  {% assign has_desktop_menu = false %}
+{% endif %}
+
+{% if component.options.categories %}
+  {% assign has_categories_menu = true %}
+{% else %}
+  {% assign has_categories_menu = false %}
+{% endif %}
+
+{% assign submenu_view_all = component.subcomponents['header-menu'].options.submenu_view_all %}
+{% capture t_view_all_default %}{% t "View all" %}{% endcapture %}
+{% assign t_view_all = options.t_view_all | default: t_view_all_default %}
+
+{% assign has_sidebar_cart = false %}
+{% if options.cart_sidebar %}
+  {% assign has_sidebar_cart = true %}
+{% endif %}
+
+{% assign has_header_toolbar = component.options.floating_toolbar %}
+
+{%- capture header_menu_item -%}
+  {%- render 'header_menu_item', header_version: header_version, header_items_text: header_items_text, has_search: has_search, has_desktop_menu: has_desktop_menu, submenu_view_all: submenu_view_all, t_view_all: t_view_all, t_go_to: t_go_to -%}
+{%- endcapture -%}
+
+{%- capture header_cart_item -%}
+  {%- render 'header_cart', header_version: header_version, header_items_text: header_items_text, has_sidebar_cart: has_sidebar_cart, item_position: 'header', t_go_to_cart: t_go_to_cart -%}
+{%- endcapture -%}
+
+{%- capture mobile_nav_cart_item -%}
+  {%- render 'header_cart', header_version: header_version, header_items_text: header_items_text, has_sidebar_cart: has_sidebar_cart, item_position: 'mobile-nav', t_go_to_cart: t_go_to_cart -%}
+{%- endcapture -%}
+
+{%- capture dark_mode_toggle -%}
+  <li class="header__item">
+    <button type="button" class="button header__link dark-mode-toggle" aria-label="Toggle dark mode">
+      <i class="theme-icon ph ph-moon header__icon dark-mode-toggle__icon dark-mode-toggle__icon--to-dark"></i>
+      <i class="theme-icon ph ph-sun header__icon dark-mode-toggle__icon dark-mode-toggle__icon--to-light"></i>
+      {%- if header_items_text -%}
+        <div class="d-none d-md-block header__text dark-mode-toggle__label--to-dark">Dark</div>
+        <div class="d-none d-md-block header__text dark-mode-toggle__label--to-light">Light</div>
+      {%- endif -%}
+    </button>
+  </li>
+{%- endcapture -%}
+
+{% capture desktop_menu_items %}
+  {% if has_desktop_menu %}
+    {% render 'components/header-menu', header-menu: component.subcomponents['header-menu'], header_version: header_version, header_items_text: header_items_text, submenu_view_all: submenu_view_all, t_view_all: t_view_all, t_go_to: t_go_to %}
+  {% endif %}
+{% endcapture %}
+
+{% if component.subcomponents['top-bar'] and component.subcomponents['top-bar-slides'].size > 0 %}
+  {% assign header_slider = true %}
+  {% assign header_slider_fixed = component.subcomponents['top-bar'].options.fixed %}
+{% else %}
+  {% assign header_slider = false %}
+{% endif %}
+
+{%- capture social_items -%}
+  {%- if component.options.show_social -%}
+    <li class="header__item d-none d-lg-flex">
+      {%- render 'store_social', position: 'header' -%}
+    </li>
+  {%- endif -%}
+{%- endcapture -%}
+
+{% assign login_behavior = component.options.items_login %}
+
+{% capture languages_currency %}
+  {%- if component.options.actions_position == 'logo-area' -%}
+    {%- render 'header_language_currency', header_version: header_version, header_items_text: header_items_text, has_header_toolbar: has_header_toolbar, dropdown_position: 'header' -%}
+  {% endif %}
+{% endcapture %}
+
+{% if customer %}
+  {% assign wishlist_url = '/customer?target=wishlist' %}
+{% else %}
+  {% assign wishlist_url = customer_login_url | append: '?target=wishlist' %}
+{% endif %}
+
+<style>
+  .header__area {
+    --theme-max-width: {{ header_width }};
+    --header-logo-height-mobile: {{ component.options.logo_height_mobile }}px;
+    --header-logo-height-desktop: {{ component.options.logo_height }}px;
+    {% if header_fixed %}
+      --header-overlap-opacity: {{ component.options.overlap_opacity | divided_by: 100.0 }};
+      --header-floating-shadow: {{ component.options.floating_shadow | divided_by: 100.0 }};
+    {% endif %}
+    --header-items-font-size-desktop: {{ component.options.items_font_size_desktop }}px;
+    --header-items-font-size-mobile: {{ component.options.items_font_size_mobile }}px;
+  }
+  body {
+    --header-items-font-weight: {{ component.options.items_weight }};
+    --header-nav-font-weight: {{ component.options.menu_weight }};
+    --header-nav-font-size-desktop: {{ component.options.menu_font_size_desktop }}px;
+    --header-nav-font-size-mobile: {{ component.options.menu_font_size_mobile }}px;
+    --header-nav-text-transform: {{ component.options.menu_uppercase | replace: 'true', 'uppercase' | replace: 'false', 'initial' }};
+  }
+  {% unless component.options.items_login_wishlist and store.customers_enabled %}
+    .theme-dropdown__item--wishlist {
+      display: none;
+    }
+  {% endunless %}
+</style>
+
+<header
+  class="header header__area{% if header_fixed %} header--fixed{% endif %}{% if header_slider and header_slider_fixed %} header--push{% endif %}{% if header_fixed and header_overlap %} header--transparent{% endif %}"
+  data-fixed="{{ header_fixed }}"
+  data-border="{{ component.options.border }}"
+  data-uppercase="{{ component.options.items_uppercase }}"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  data-version="{{ header_version }}"
+  data-toolbar="{{ has_header_toolbar }}"
+  data-overlap="{{ header_overlap }}"
+  data-floating="{{ header_floating }}"
+  {% if header_version == 'v4' or header_version == 'v5' %}
+    data-items-border="{{ component.options.items_border }}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="h-100 header__container">
+    <div class="row h-100 align-items-center {% if has_search == false and header_version == 'v2' %}justify-content-center{% else %}justify-content-between{% endif %} header__wrapper">
+      {% case header_version %}
+        {% when 'v1' %}
+          <div class="col header__column">
+            <ul class="justify-content-start header__menu">
+              {{- header_menu_item -}}
+            </ul>
+          </div>
+
+          <div class="col header__column">
+            {% render 'header_logo', logo_position: 'desktop' %}
+          </div>
+
+          <div class="col header__column">
+            <ul class="justify-content-end header__menu">
+              {{- languages_currency -}}
+              {%- render 'header_login', login_behavior: login_behavior, login_position: 'header', header_items_text: header_items_text, wishlist_url: wishlist_url, header_version: header_version -%}
+              {{- dark_mode_toggle -}}
+              {{- header_cart_item -}}
+            </ul>
+          </div>
+        {% when 'v2' %}
+          <div class="col-12 {% if has_search %}col-lg{% else %}col-lg-auto{% endif %} header__column">
+            {%- render 'header_logo', logo_position: 'desktop' -%}
+          </div>
+
+          <div class="col-auto header__column d-block{% if has_desktop_menu %} d-lg-none{% endif %}">
+            <ul class="justify-content-start header__menu">
+              {{- header_menu_item -}}
+            </ul>
+          </div>
+
+          {% if has_search %}
+            <div class="col col-lg header__column">
+              {%- render 'header_menu_search_item', header_version: header_version, header_items_text: header_items_text -%}
+            </div>
+          {% endif %}
+
+          <div class="col-auto col-lg header__column">
+            <ul class="justify-content-end header__menu">
+              {{- languages_currency -}}
+              {%- render 'header_login', login_behavior: login_behavior, login_position: 'header', header_items_text: header_items_text, wishlist_url: wishlist_url, header_version: header_version -%}
+              {{- dark_mode_toggle -}}
+              {{- header_cart_item -}}
+            </ul>
+          </div>
+        {% when 'v3' %}
+          <div class="col header__column">
+            <ul class="justify-content-start header__menu">
+              {{- header_menu_item -}}
+              {{- social_items -}}
+            </ul>
+          </div>
+
+          <div class="col header__column">
+            {% render 'header_logo', logo_position: 'desktop' %}
+          </div>
+
+          <div class="col header__column">
+            <ul class="justify-content-end header__menu">
+              {{- languages_currency -}}
+              {%- render 'header_login', login_behavior: login_behavior, login_position: 'header', header_items_text: header_items_text, wishlist_url: wishlist_url, header_version: header_version -%}
+              {{- dark_mode_toggle -}}
+              {{- header_cart_item -}}
+            </ul>
+          </div>
+        {% when 'v4' %}
+          <div class="col-12 col-lg header__column">
+            {% render 'header_logo', logo_position: 'desktop' %}
+          </div>
+
+          <div class="col-12 col-lg header__column">
+            <ul class="justify-content-center justify-content-lg-end header__menu">
+              {{- header_menu_item -}}
+              {{- languages_currency -}}
+              {{- social_items -}}
+              {%- render 'header_login', login_behavior: login_behavior, login_position: 'header', header_items_text: header_items_text, wishlist_url: wishlist_url, header_version: header_version -%}
+              {{- dark_mode_toggle -}}
+              {{- header_cart_item -}}
+            </ul>
+          </div>
+        {% when 'v5' %}
+          <div class="col col-lg-auto header__column">
+            {% render 'header_logo', logo_position: 'desktop' %}
+          </div>
+
+          <div class="col-auto col-lg header__column">
+            <ul class="justify-content-end header__menu">
+              {{- header_menu_item -}}
+              {{- languages_currency -}}
+              {{- social_items -}}
+              {%- render 'header_login', login_behavior: login_behavior, login_position: 'header', header_items_text: header_items_text, wishlist_url: wishlist_url, header_version: header_version -%}
+              {{- dark_mode_toggle -}}
+              {{- header_cart_item -}}
+            </ul>
+          </div>
+        {% when 'v6' %}
+          <div class="col-auto header__column">
+            <ul class="justify-content-start header__menu">
+              {{- header_menu_item -}}
+            </ul>
+          </div>
+
+          <div class="col col-sm-auto header__column">
+            {% render 'header_logo', logo_position: 'desktop' %}
+          </div>
+
+          <div class="col header__column">
+            <ul class="justify-content-end header__menu">
+              {%- if has_search %}
+                {%- render 'header_menu_search_item', header_version: header_version, header_items_text: header_items_text -%}
+              {% endif %}
+              {% unless has_header_toolbar %}
+                {%- render 'header_login', login_behavior: login_behavior, login_position: 'header', header_items_text: header_items_text, wishlist_url: wishlist_url, header_version: header_version -%}
+                {{- dark_mode_toggle -}}
+              {{- header_cart_item -}}
+              {% endunless -%}
+            </ul>
+          </div>
+      {% endcase %}
+    </div>
+  </div>
+  <!-- end .header__container -->
+
+  {% if header_version == 'v1' or header_version == 'v2' %}
+    {{ desktop_menu_items }}
+  {% endif %}
+
+  {% if has_header_toolbar %}
+    {% render 'header_toolbar', header_version: header_version, wishlist_url: wishlist_url, has_sidebar_cart: has_sidebar_cart, t_go_to_cart: t_go_to_cart, login_behavior: login_behavior %}
+  {% endif %}
+
+  {% if header_fixed and header_overlap %}
+    <div class="header__overlay"></div>
+  {% endif %}
+</header>
+
+{% render 'mobile_menu', header_version: header_version, t_view_all: t_view_all %}
+
+{% if header_version == 'v6' %}
+  {% render 'mobile_nav', login_behavior: login_behavior, mobile_nav_cart_item: mobile_nav_cart_item, header_items_text: header_items_text, has_search: has_search, has_categories_menu: has_categories_menu, wishlist_url: wishlist_url, header_version: header_version %}
+{% endif %}
+
+{% if has_categories_menu %}
+  {% render 'mobile_categories', t_view_all: t_view_all %}
+{% endif %}
+
+{% if header_slider %}
+  {% render 'components/top-bar', top-bar: component.subcomponents['top-bar'], header_version: header_version, has_header_toolbar: has_header_toolbar %}
+{% endif %}
+
+{% render 'header_sidebar', bundle_color: component.options.bundle_color, t_go_to_cart: t_go_to_cart %}

@@ -1,0 +1,193 @@
+<product-appointments
+  id="product-appointments-{{ prod.id }}"
+  {% if prod.appointment_settings.availability == 'weekly_recurring' %}
+    disabled-dates="{{ prod.appointment_settings.unavailable_weekdays | join: ',' }}"
+    blocked-dates="{{ prod.appointment_settings.blocked_dates | join: ',' }}"
+  {% endif %}
+  first-date="{{ prod.earliest_appointment_date | date: "%Y-%m-%d" }}"
+  last-date="{{ prod.latest_appointment_date | date: "%Y-%m-%d" }}"
+  class="product-appointments product-options variants"
+>
+  <script type="application/json" class="product-appointments-json">
+    {
+      "info": {
+        "option_key": "{{ prod.appointment_settings.availability }}-{{ prod.id }}",
+        "product_id": {{ prod.id | json }},
+        "type": {{ prod.appointment_settings.type | json }},
+        "availability": {{ prod.appointment_settings.availability | json }},
+        "duration": {{ prod.appointment_settings.duration | json }},
+        "humanized_duration": {{ prod.appointment_settings.humanized_duration | json }},
+        "unavailable_weekdays": {{ prod.appointment_settings.unavailable_weekdays | json }},
+        "specific_dates_timeslots": [
+          {% for timeslot in prod.appointment_settings.specific_dates_timeslots %}
+            {
+              "start_datetime": {{ timeslot.start_datetime | date: '%d-%m-%Y %H:%M' | json }},
+              "end_datetime": {{ timeslot.end_datetime | date: '%d-%m-%Y %H:%M' | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        "capacity": {{ prod.appointment_settings.capacity | json }},
+        "location": {
+          "address": {{ prod.appointment_location.address_with_street_number | json }},
+          "complement": {{ prod.appointment_location.complement | json }},
+          "postal": {{ prod.appointment_location.postal | json }},
+          "municipality": {{ prod.appointment_location.municipality | json }},
+          "city": {{ prod.appointment_location.city | json }}
+        }
+      },
+      "options": {},
+      "status": {
+        "noTimeslotsForDate": {{ options.t_no_timeslots | json }}
+      }
+    }
+  </script>
+  {% assign label_option = random.hex %}
+  {% if prod.appointment_settings.availability == 'specific_dates' %}
+    {% if prod.appointment_settings.type == 'in_person' %}
+      <div class="product-options__fieldset">
+        <div class="product-options__title"><i class="theme-icon ph ph-map-pin"></i> {% t "Location" %}</div>
+        <div class="product-options__group">
+          {% assign location_address = prod.appointment_location.address_with_street_number %}
+          {% capture location_address_params -%}
+            {%- if prod.appointment_location.complement != blank %}{{ prod.appointment_location.complement }}, {% endif -%}
+            {%- if prod.appointment_location.postal != blank %}{{ prod.appointment_location.postal }}, {% endif -%}
+            {%- if prod.appointment_location.municipality != blank %}{{ prod.appointment_location.municipality }}, {% endif -%}
+            {{- prod.appointment_location.city }}, {{ prod.appointment_location.region }}, {{ prod.appointment_location.country -}}
+          {%- endcapture %}
+          {% capture location_address_url -%}
+            https://maps.google.com/maps?q={{ location_address | append: ' ' | append: location_address_params | remove: prod.appointment_location.complement | replace: '#', '' | url_encode -}}
+          {%- endcapture %}
+          <a href="{{ location_address_url }}" class="product-appointments__location-link" title="{% t 'See on Google Maps' %}" target="_blank">
+            {{- prod.appointment_location.formatted | replace: '<br>', ', ' -}}
+          </a>
+        </div>
+      </div>
+      {% if prod.appointment_settings.capacity != blank %}
+        <div class="product-appointments__capacity">
+          <div class="product-options__fieldset">
+            <div class="product-options__title"><i class="theme-icon ph ph-users"></i> {% t "Capacity" %}</div>
+            {{ prod.appointment_settings.capacity }}
+          </div>
+          <div class="product-options__fieldset">
+            <div class="product-options__title"><i class="theme-icon ph ph-users"></i> {% t "Remaining Capacity" %}</div>
+            <span id="product-appointments__capacity-remaining">{{ prod.appointment_settings.capacity }}</span>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+    <fieldset id="{{ label_option }}_fieldset" class="product-options__fieldset">
+      <div class="product-options__title">
+        <i class="ph ph-calendar-blank"></i>
+        {% t "Choose an option" %}
+      </div>
+
+      <input type="hidden" class="prod-appointments" name="start_time" data-optionid="start_time">
+      <input type="hidden" class="prod-appointments" name="end_time" data-optionid="end_time">
+      {% assign label_option = random.hex %}
+      {% if prod.appointment_settings.specific_dates_timeslots.size > 0 %}
+        <select
+          id="select-{{ label_option }}"
+          data-field-type="select"
+          class="select"
+          name="specific-dates-timeslots"
+          data-optionid="{{ prod.appointment_settings.availability }}-{{ prod.id }}"
+        >
+          {% for timeslot in prod.appointment_settings.specific_dates_timeslots %}
+            {% assign start_date = timeslot.start_datetime | date: '%A %d/%m/%Y' %}
+            {% assign end_date = timeslot.end_datetime | date: '%A %d/%m/%Y' %}
+            {% assign start_time = timeslot.start_datetime | date: '%H:%M' %}
+            {% assign end_time = timeslot.end_datetime | date: '%H:%M' %}
+
+            {% capture timeslot_label -%}
+              {% t "%{start_date} (%{start_time}) to %{end_date} (%{end_time})", start_date: start_date, start_time: start_time, end_date: end_date, end_time: end_time -%}
+            {%- endcapture %}
+
+            {% capture timeslot_value -%}
+              {{ timeslot.start_datetime }};{{ timeslot.end_datetime }}
+            {%- endcapture %}
+            <option
+              value="{{ timeslot_value }}"
+              data-start_datetime="{{ timeslot.start_datetime }}"
+              data-end_datetime="{{ timeslot.end_datetime }}"
+              data-remaining="{{ timeslot.remaining_capacity }}"
+            >
+              {{ timeslot_label }}
+            </option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <select
+          id="select-{{ label_option }}"
+          data-field-type="select"
+          class="select"
+          name="specific-dates-timeslots"
+          data-optionid="{{ prod.appointment_settings.availability }}-{{ prod.id }}"
+          disabled
+        >
+          <option>
+            {% t "No available options" %}
+          </option>
+        </select>
+      {% endif %}
+    </fieldset>
+  {% else %}
+    {% if prod.appointment_settings.humanized_duration != blank and options.pf_appointment_duration_display %}
+      <div class="product-options__fieldset">
+        <div class="product-options__title">
+          <i class="ph ph-clock"></i>
+          {% t "Duration" %}
+        </div>
+        <div class="product-options__group">
+          {{ prod.appointment_settings.humanized_duration }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if prod.appointment_location.formatted != blank and options.pf_appointment_location_display and prod.appointment_settings.type == 'in_person' %}
+      <div class="product-options__fieldset">
+        <div class="product-options__title">
+          <i class="ph ph-map-pin"></i>
+          {% t "Location" %}
+        </div>
+        <div class="product-options__group">
+          {% assign location_address = prod.appointment_location.address_with_street_number %}
+          {% capture location_address_params -%}
+            {%- if prod.appointment_location.complement != blank %}{{ prod.appointment_location.complement }}, {% endif -%}
+            {%- if prod.appointment_location.postal != blank %}{{ prod.appointment_location.postal }}, {% endif -%}
+            {%- if prod.appointment_location.municipality != blank %}{{ prod.appointment_location.municipality }}, {% endif -%}
+            {{- prod.appointment_location.city }}, {{ prod.appointment_location.region }}, {{ prod.appointment_location.country -}}
+          {%- endcapture %}
+          {% capture location_address_url -%}
+            https://maps.google.com/maps?q={{ location_address | append: ' ' | append: location_address_params | remove: prod.appointment_location.complement | replace: '#', '' | url_encode -}}
+          {%- endcapture %}
+          <a href="{{ location_address_url }}" class="product-appointments__location-link" title="{% t 'See on Google Maps' %}" target="_blank">
+            {{- prod.appointment_location.formatted | replace: '<br>', ', ' -}}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="product-appointments__calendar">
+          <div class="product-options__title">{% t "Choose a date" %}</div>
+        </div>
+
+        <div class="product-appointments__slots--full" disabled>
+          {% assign label_option = random.hex %}
+          <fieldset id="{{ label_option }}_fieldset" class="product-options__fieldset">
+            <input type="hidden" class="prod-appointments" name="start_time" data-optionid="start_time">
+            <input type="hidden" class="prod-appointments" name="end_time" data-optionid="end_time">
+
+            <div class="product-options__title">{% t "Choose a slot" %}</div>
+            <div class="available-timeslots" data-field-type="radio">
+              <div class="available-timeslots__container">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</product-appointments>

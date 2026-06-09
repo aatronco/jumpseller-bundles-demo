@@ -1,0 +1,52 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+{% assign display_option = component.options.display %}
+
+{% assign columns_desktop = component.options.columns_desktop | round: 0 %}
+{% assign columns_mobile = component.options.columns_mobile | round: 0 %}
+
+{% capture sw_content %}
+  {% for category-block in component.subcomponents.categories %}
+    {% render 'components/category-block', category-block: category-block, display_option: display_option, columns_mobile: columns_mobile, columns_desktop: columns_desktop, block_index: forloop.index %}
+  {% endfor %}
+{% endcapture %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}"{% endcapture -%}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --category-block-title-weight: {{ component.options.title_weight }};
+    --category-block-title-letter-spacing: {{ component.options.title_spacing }}px;
+    --category-block-title-text-transform: {% if component.options.title_uppercase %}uppercase{% else %}initial{% endif %};
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% if display_option == 'carousel' %}
+        {% render 'component_swiper', sw_layout: 'categories', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+{
+  "name": "Cross selling products",
+  "icon": "shuffle",
+  "max_usage": 1,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "checkout__cart"
+  ],
+  "options": {
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "You might also be interested in one of these"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Cross selling products",
+      "category": "Core"
+    }
+  ]
+}

@@ -1,0 +1,618 @@
+{
+  "name": "Slider",
+  "icon": "images",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-slider/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "customer__login"
+  ],
+  "options": {
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "help": "When choosing **Default**, the option defined at [Theme settings > Design > Theme styles > Maximum container width](/general/design) will be applied.",
+      "default": "default",
+      "options": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Small",
+          "value": "1320px"
+        },
+        {
+          "label": "Medium",
+          "value": "1620px"
+        },
+        {
+          "label": "Large",
+          "value": "1920px"
+        },
+        {
+          "label": "Extra Large",
+          "value": "2220px"
+        },
+        {
+          "label": "Browser width",
+          "value": "100vw"
+        }
+      ]
+    },
+    "spacing": {
+      "name": "Left and right space",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' }}"
+    },
+    "corners": {
+      "name": "Rounded corners",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_corners_style != 'rectangular' }}"
+    },
+    "autoplay": {
+      "name": "Autoplay",
+      "type": "checkbox",
+      "default": true
+    },
+    "autoplay_speed": {
+      "name": "Autoplay speed",
+      "type": "slider",
+      "default": 5000,
+      "min": 1000,
+      "max": 10000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.autoplay }}"
+    },
+    "show_arrows": {
+      "name": "Arrows",
+      "type": "checkbox",
+      "help": "If enabled, arrows will be displayed to control the 'Slider'.",
+      "default": true
+    },
+    "show_arrows_hover": {
+      "name": "Arrows on hover",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.show_arrows }}"
+    },
+    "show_dots": {
+      "name": "Dots",
+      "type": "checkbox",
+      "help": "If enabled, dots will be displayed to control the 'Slider'.",
+      "default": true
+    },
+    "custom_nav_color": {
+      "name": "Custom navigation color",
+      "type": "checkbox",
+      "default": false
+    },
+    "nav_color": {
+      "name": "Navigation color",
+      "type": "color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ block.options.custom_nav_color }}"
+    },
+    "show_content": {
+      "name": "Show Slides content",
+      "type": "checkbox",
+      "default": true
+    },
+    "height": {
+      "name": "Height",
+      "type": "select",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Fit to content",
+          "value": "auto"
+        },
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Browser",
+          "value": "browser"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "zoom": {
+      "name": "Enable media zoom on hover",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "title_size": {
+      "name": "Size",
+      "type": "select",
+      "default": "custom",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Extra Large",
+          "value": "extra-large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "title_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 75,
+      "min": 10,
+      "max": 160,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "title_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 45,
+      "min": 10,
+      "max": 150,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "title_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 800,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": "",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "title_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "title_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "subtitle_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 20,
+      "min": 5,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "subtitle_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 16,
+      "min": 5,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.title_size == 'custom' }}"
+    },
+    "subtitle_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": "",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "subtitle_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "help": "Allows to define the space between letters for all Subtitles in the component.",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "subtitle_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "description_size": {
+      "name": "Size",
+      "type": "select",
+      "help": "Size of the description that shows after a title in the component.",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "description_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 16,
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.description_size == 'custom' }}"
+    },
+    "description_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 14,
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_content and block.options.description_size == 'custom' }}"
+    },
+    "enable_icons": {
+      "name": "Show icons",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.show_content }}"
+    },
+    "icon_size": {
+      "name": "Size",
+      "type": "select",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ],
+      "visible_if": "{{ block.options.show_content and block.options.enable_icons }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Slider settings",
+      "type": "heading",
+      "before": "autoplay"
+    },
+    {
+      "name": "Title options",
+      "type": "heading",
+      "before": "title_size"
+    },
+    {
+      "name": "Subtitle options",
+      "type": "heading",
+      "before": "subtitle_size_desktop"
+    },
+    {
+      "name": "Description options",
+      "type": "heading",
+      "before": "description_size"
+    },
+    {
+      "name": "Icon options",
+      "type": "heading",
+      "before": "enable_icons"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [
+    {
+      "type": "slide",
+      "multiple": true,
+      "property": "slides"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slider",
+      "category": "Hero",
+      "children": [
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 1 title",
+            "link_text": "See more"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 2 title",
+            "link_text": "See more"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 3 title",
+            "link_text": "See more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slider: Big titles",
+      "options": {
+        "title_size": "custom",
+        "title_size_mobile": 60,
+        "title_size_desktop": 100,
+        "subtitle_size_mobile": 16,
+        "subtitle_size_desktop": 20
+      },
+      "category": "Hero",
+      "children": [
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 1 title",
+            "link_text": "See more"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 2 title",
+            "link_text": "See more"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 3 title",
+            "link_text": "See more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slider: Bottom aligned",
+      "category": "Hero",
+      "children": [
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 1 title",
+            "link_text": "See more",
+            "content_alignment_y_mobile": "end",
+            "content_alignment_y_desktop": "end"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 2 title",
+            "link_text": "See more",
+            "content_alignment_y_mobile": "end",
+            "content_alignment_y_desktop": "end"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 3 title",
+            "link_text": "See more",
+            "align_mobile": "text-end",
+            "align_desktop": "text-md-end",
+            "content_alignment_x_mobile": "end",
+            "content_alignment_y_mobile": "end",
+            "content_alignment_x_desktop": "end",
+            "content_alignment_y_desktop": "end"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slider: Top aligned",
+      "category": "Hero",
+      "children": [
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 1 title",
+            "link_text": "See more",
+            "content_alignment_y_mobile": "start",
+            "content_alignment_y_desktop": "start"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 2 title",
+            "link_text": "See more",
+            "content_alignment_y_mobile": "start",
+            "content_alignment_y_desktop": "start"
+          }
+        },
+        {
+          "type": "slide",
+          "options": {
+            "title": "Slide 3 title",
+            "link_text": "See more",
+            "align_mobile": "text-end",
+            "align_desktop": "text-md-end",
+            "content_alignment_x_mobile": "end",
+            "content_alignment_y_mobile": "start",
+            "content_alignment_x_desktop": "end",
+            "content_alignment_y_desktop": "start"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slider: Image only",
+      "options": {
+        "show_content": false
+      },
+      "category": "Hero",
+      "children": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{% if customer.product_subscriptions.size > 0 %}
+  <div class="col-12 customer-table">
+    <div class="row d-none d-md-flex align-items-center customer-table__heading">
+      <div class="col-1 customer-table__heading-column">
+        <div class="customer-table__title">#</div>
+      </div>
+      <div class="col-2 customer-table__heading-column">
+        <div class="customer-table__title">{% t "Name" %}</div>
+      </div>
+      <div class="col-1 customer-table__heading-column">
+        <div class="customer-table__title">{% t "Status" %}</div>
+      </div>
+      <div class="col-2 customer-table__heading-column">
+        <div class="customer-table__title">{% t "Period" %}</div>
+      </div>
+      <div class="col-2 customer-table__heading-column">
+        <div class="customer-table__title">{% t "Creation date" %}</div>
+      </div>
+      <div class="col-2 customer-table__heading-column">
+        <div class="customer-table__title">{% t "Renewal date" %}</div>
+      </div>
+      <div class="col customer-table__heading-column">
+        <div class="customer-table__title">{% t "Actions" %}</div>
+      </div>
+    </div>
+    <!-- end .customer-table__heading -->
+
+    {% for customer_subscription in customer.product_subscriptions %}
+      <div class="row align-items-start align-items-md-center customer-table__row{% if forloop.first %} customer-table__row--first{% elsif forloop.last %} customer-table__row--last{% endif %}">
+        <div class="col-12 col-md-1 customer-table__column">
+          <div class="d-flex align-items-center justify-content-start">
+            <div class="customer-table__title d-block d-md-none">{% t "Subscription ID:" %}</div>
+            <div class="customer-table__text">
+              <b>{{- customer_subscription.id -}}</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-2 customer-table__column">
+          <div class="customer-table__title d-block d-md-none">{% t "Name" %}</div>
+          <div class="customer-table__text">
+            {{ customer_subscription.product.name }}
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-1 customer-table__column">
+          <div class="customer-table__title d-block d-md-none">{% t "Status" %}</div>
+          <div class="customer-table__label" data-label="{{ customer_subscription.status }}">
+            {{- customer_subscription.status | capitalize -}}
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-2 customer-table__column">
+          <div class="customer-table__title d-block d-md-none">{% t "Period" %}</div>
+          <div class="customer-table__label" data-label="{{ customer_subscription.period_label }}">
+            {{- customer_subscription.period_label -}}
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-2 customer-table__column">
+          <div class="customer-table__title d-block d-md-none">{% t "Creation date" %}</div>
+          <div class="customer-table__text">
+            {{ customer_subscription.created_at }}
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-2 customer-table__column">
+          <div class="customer-table__title d-block d-md-none">{% t "Renewal date" %}</div>
+          <div class="customer-table__text">
+            {{- customer_subscription.next_order_date | default: '-' -}}
+            {% if customer_subscription.next_order_date %}
+              ({{ customer_subscription.remaining_days_for_renewal }}
+              {% t "remaining" %})
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col customer-table__column">
+          <div class="d-flex align-items-start customer-table__actions">
+            <a
+              role="button"
+              class="button customer-table__button"
+              title="{% t 'See more details' %}"
+              data-bs-toggle="modal"
+              data-bs-target="#subscription-modal-{{ customer_subscription.id }}"
+            >
+              <i class="theme-icon ph ph-info"></i> {% t 'Subscription details' -%}
+            </a>
+            {% if customer_subscription.status == 'active' %}
+              <a
+                href="{{ customer_subscription.cancel_redirect_url }}"
+                class="button customer-table__button"
+                title="{% t 'Cancel' %}"
+                target="_blank"
+              >
+                <i class="theme-icon ph ph-x-circle"></i> {% t "Cancel" -%}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% render 'customer_subscriptions_modal', customer_subscription: customer_subscription %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="col-12 customer-tabs__message">
+    <div class="row align-items-center justify-content-between">
+      <div class="col">
+        <div class="customer-tabs__text">
+          {% t "You do not have any subscriptions." %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

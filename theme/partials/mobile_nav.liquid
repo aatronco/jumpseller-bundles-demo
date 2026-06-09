@@ -1,0 +1,80 @@
+{% capture t_search_default %}{% t "Search" %}{% endcapture %}
+{% assign t_search = options.t_search | default: t_search_default %}
+
+{% capture home_link %}
+  <a href="{{ store.url }}" class="button button--flex mobile-nav__link" title="{% t 'Go to Home page' %}">
+    <i class="theme-icon ph ph-house-line mobile-nav__icon"></i>
+    {% capture t_home_default %}{% t "Home" %}{% endcapture %}
+    {% if header_items_text %}
+      <div class="mobile-nav__text">
+        {{- options.t_home | default: t_home_default -}}
+      </div>
+    {% endif %}
+  </a>
+{% endcapture %}
+
+{% capture categories_link %}
+  {% assign categories_link_icon = component.options.categories_icon | default: 'ph ph-squares-four' %}
+  {% capture categories_link_title_default %}{% t "Categories" %}{% endcapture %}
+  {% assign categories_link_title = component.options.categories_title | default: categories_link_title_default %}
+  <button
+    type="button"
+    class="button button--flex mobile-nav__link"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#mobile-categories"
+    aria-controls="mobile-categories"
+    aria-label="{{ categories_link_title }}"
+  >
+    <i class="theme-icon {{ categories_link_icon }} mobile-nav__icon"></i>
+    {% if header_items_text %}
+      <div class="mobile-nav__text">
+        {{- categories_link_title -}}
+      </div>
+    {% endif %}
+  </button>
+{% endcapture %}
+
+<nav class="text-center d-block d-sm-none mobile-nav" data-bundle-color="{{ component.options.bundle_color }}">
+  <div class="mobile-nav__container">
+    <div class="mobile-nav__column mobile-nav__column--left">
+      {% if has_categories_menu and component.options.categories_display != 'desktop' %}
+        {{- categories_link -}}
+      {% else %}
+        {{- home_link -}}
+      {% endif %}
+
+      {% if has_search %}
+        <button type="button" class="button button--flex mobile-nav__link toggle-header-search" aria-label="{{ t_search }}">
+          <i class="theme-icon ph ph-magnifying-glass mobile-nav__icon"></i>
+          {% if header_items_text %}
+            <div class="mobile-nav__text">{{- t_search -}}</div>
+          {% endif %}
+        </button>
+      {% endif %}
+    </div>
+
+    {{ mobile_nav_cart_item }}
+
+    <div class="dropup mobile-nav__column mobile-nav__column--right">
+      {% render 'header_login', login_behavior: login_behavior, login_position: 'mobile-nav', header_items_text: header_items_text, wishlist_url: wishlist_url, header_version: header_version %}
+
+      <a href="{{ contact.url }}" class="button button--flex mobile-nav__link" title="{% t 'Contact us' %}">
+        <i class="theme-icon ph ph-envelope-simple mobile-nav__icon"></i>
+        {% if header_items_text %}
+          <div class="mobile-nav__text">
+            {%- t "Contact" -%}
+          </div>
+        {% endif %}
+      </a>
+
+      <button type="button" class="button button--flex mobile-nav__link dark-mode-toggle" aria-label="Toggle dark mode">
+        <i class="theme-icon ph ph-moon mobile-nav__icon dark-mode-toggle__icon dark-mode-toggle__icon--to-dark"></i>
+        <i class="theme-icon ph ph-sun mobile-nav__icon dark-mode-toggle__icon dark-mode-toggle__icon--to-light"></i>
+        {% if header_items_text %}
+          <div class="mobile-nav__text dark-mode-toggle__label--to-dark">Dark</div>
+          <div class="mobile-nav__text dark-mode-toggle__label--to-light">Light</div>
+        {% endif %}
+      </button>
+    </div>
+  </div>
+</nav>

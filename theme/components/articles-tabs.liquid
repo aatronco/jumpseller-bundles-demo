@@ -1,0 +1,68 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+{% assign display_option = component.options.display %}
+
+{% assign align_desktop = options.text_alignment_heading_desktop %}
+{% assign align_mobile = options.text_alignment_heading_mobile %}
+
+{% assign columns_desktop = component.options.columns_desktop %}
+{% assign columns_mobile = component.options.columns_mobile %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% capture heading_link_text_default %}{% t "See more articles" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% assign first_permalink = blank %}
+
+{% if component.options.heading_link and component.options.page_category_list != blank %}
+  {% assign first_permalink = component.options.page_category_list[0].url %}
+{% endif %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}"{% endcapture -%}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<theme-tabs
+  data-id="{{ component.id }}"
+  {{ component.attributes }}
+>
+  <section id="{{ section_id }}" class="container-fluid theme-section" data-bundle-color="{{ component.options.bundle_color }}">
+    <div class="container container--adjust theme-section__container">
+      {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: first_permalink, link_text: heading_link_text %}
+      <div class="theme-tabs{% if align_desktop == "center" %} justify-content-md-center{% else %} justify-content-md-start{% endif %}{% if align_mobile == "center" %} justify-content-center{% else %} justify-content-start{% endif %}">
+        {%- for tab in component.options.page_category_list %}
+          {% capture sw_content %}
+            {% for article_block in tab.pages limit: component.options.limit %}
+              {% render 'article_block', article_block: article_block, display_option: display_option, section_width: section_width, columns_mobile: columns_mobile, columns_desktop: columns_desktop, block_index: forloop.index %}
+            {% endfor %}
+          {% endcapture %}
+          <details
+            class="theme-tabs__item"
+            id="{{ tab.id }}"
+            name="tab-{{ component.id }}"
+          >
+            <summary class="theme-tabs__tab button button--style button--main button--bordered" aria-selected="false" role="tab" tabindex="0" data-permalink="{{ tab.permalink }}">{{ tab.name }}</summary>
+            <div class="theme-tabs__content">
+              <div class="row theme-section__content">
+                {% if display_option == 'carousel' %}
+                  {% render 'component_swiper', sw_layout: 'products', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+                {% else %}
+                  {{ sw_content }}
+                {% endif %}
+              </div>
+            </div>
+          </details>
+        {% endfor -%}
+      </div>
+    </div>
+  </section>
+</theme-tabs>

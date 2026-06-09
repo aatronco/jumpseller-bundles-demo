@@ -1,0 +1,229 @@
+{% assign category_id = 'category-block-' | append: page-category-block.id %}
+{% assign page_cat = page-category-block %}
+
+{% assign category_ratio = component.options.ratio %}
+
+{% assign align_desktop = component.options.align_desktop %}
+{% assign align_mobile = component.options.align_mobile %}
+
+{% assign items_align_desktop = align_desktop | replace: 'text-md-', 'justify-content-md-' %}
+{% assign items_align_mobile = align_mobile | replace: 'text-', 'justify-content-' %}
+
+{% capture link_text %}{% t "Visit %{cat_name} articles", cat_name: page_cat.name %}{% endcapture %}
+{% assign link_external = component.options.link_external %}
+
+{% capture category_image %}
+  {% case category_ratio %}
+    {% when 'landscape' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x296' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x206' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x729' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x358' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x898' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x443' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x1076' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x527' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x1235' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x611' %}
+          {% endif %}
+      {% endcase %}
+    {% when 'portrait' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x703' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x488' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x1729' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x848' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x2128' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x1049' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x2528' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x1248' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x2928' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x1448' %}
+          {% endif %}
+      {% endcase %}
+    {% when 'rectangular' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x395' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x275' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x927' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x477' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x1197' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x590' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x1422' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x702' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x1647' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x815' %}
+          {% endif %}
+      {% endcase %}
+    {% when 'square' %}
+      {% case columns_mobile %}
+        {% when 1 %}
+          {% assign image_dimension_mobile = '527x527' %}
+        {% when 2 %}
+          {% assign image_dimension_mobile = '366x366' %}
+      {% endcase %}
+
+      {% case options.theme_width %}
+        {% when '1320px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1296x1296' %}
+          {% else %}
+            {% assign image_dimension_desktop = '636x636' %}
+          {% endif %}
+        {% when '1620px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1596x1596' %}
+          {% else %}
+            {% assign image_dimension_desktop = '787x787' %}
+          {% endif %}
+        {% when '1920px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '1896x1896' %}
+          {% else %}
+            {% assign image_dimension_desktop = '936x936' %}
+          {% endif %}
+        {% when '2220px' %}
+          {% if columns_desktop == 1 %}
+            {% assign image_dimension_desktop = '2196x2196' %}
+          {% else %}
+            {% assign image_dimension_desktop = '1086x1086' %}
+          {% endif %}
+      {% endcase %}
+  {% endcase %}
+
+  {% assign split_image_dimension_desktop = image_dimension_desktop | split: 'x' %}
+  {%- capture image_width_and_height_default -%}
+    width="{{ split_image_dimension_desktop.first }}" height="{{ split_image_dimension_desktop.last }}"
+  {%- endcapture -%}
+
+  {% assign image_class = 'category-block__image' %}
+  {% assign image_alt = page_cat.name %}
+  {% assign image_width_and_height = page_cat.images.first | default: image_width_and_height_default %}
+
+  <div class="category-block__media page-category__media">
+    {% if page_cat.name != blank and page_cat.images.size > 0 %}
+      <picture class="category-block__picture">
+        <source media="screen and (min-width: 576px)" srcset="{{ page_cat.images.first | thumb: image_dimension_desktop }}">
+        <source media="screen and (max-width: 575px)" srcset="{{ page_cat.images.first | thumb: image_dimension_mobile }}">
+        <img class="{{ image_class }}" src="{{ page_cat.images.first | thumb: image_dimension_desktop }}" alt="{{ image_alt }}" {{ image_width_and_height }} loading="lazy" decoding="async" fetchpriority="low">
+      </picture>
+    {% else %}
+      <div class="theme-image-placeholder"></div>
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% capture category_content %}
+  <div class="category-block__content theme-block__content">
+    <div class="category-block__title {{ items_align_mobile }} {{ items_align_desktop }}">
+      {{- page_cat.name | escape -}}
+      {% if component.options.link_arrow %}<i class="ph ph-arrow-right"></i>{% endif %}
+    </div>
+    {% if component.options.counter %}
+      {% capture article_s -%}
+        article{% if page_cat.pages.size > 1 or page_cat.pages.size == 0 %}s{% endif -%}
+      {%- endcapture %}
+      <div class="category-block__size">{% t "%{size} %{article_s}", size: page_cat.pages.size, article_s: article_s %}</div>
+    {% endif %}
+  </div>
+{% endcapture %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+<style>
+  #{{ category_id }} {
+    --category-block-aspect-ratio: var(--aspect-ratio-{{ category_ratio }});
+  }
+</style>
+
+<div
+  id="{{ category_id }}"
+  class="theme-block category-block{% if display_option == 'carousel' %} swiper-slide{% endif %} {{ align_mobile }} {{ align_desktop }}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-spacing="{{ data_spacing }}"
+  data-corners="{{ data_corners }}"
+  data-content-position="below"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+>
+  <div class="category-block__wrapper">
+    {% render 'theme_hover_link', link: page_cat.url, link_text: link_text, link_external: link_external %}
+
+    {{ category_image }}
+
+    {{ category_content }}
+  </div>
+</div>

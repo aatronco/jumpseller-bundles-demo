@@ -1,0 +1,12 @@
+<div class="article-categories check-empty justify-content-{{ align_mobile }} justify-content-md-{{ align_desktop }}">
+  {%- for page_cat in categories_feed -%}
+    <a
+      href="{{- page_cat.url -}}"
+      class="article-categories__link"
+      title="{% t 'Visit %{cat_name} articles', cat_name: page_cat.name %}"
+    >
+      <div class="article-categories__icon"></div>
+      {{- page_cat.name -}}
+    </a>
+  {%- endfor -%}
+</div>

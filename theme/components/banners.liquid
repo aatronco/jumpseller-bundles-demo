@@ -1,0 +1,100 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign display_option = component.options.display %}
+{% assign has_content = component.options.show_content %}
+{% assign content_position = component.options.content_position %}
+
+{% assign columns_desktop = component.options.columns_desktop %}
+{% assign columns_mobile = component.options.columns_mobile %}
+{% assign columns_tablet = columns_desktop | at_most: 3 %}
+
+{% if has_content %}
+  {% assign sw_autoheight = 'false' %}
+{% else %}
+  {% assign sw_autoheight = 'true' %}
+{% endif %}
+
+{% capture sw_content %}
+  {% for banner in component.subcomponents.banners %}
+    {% render 'components/banner',
+      banner: banner,
+      display_option: display_option,
+      has_content: has_content,
+      content_position: content_position,
+      columns_mobile: columns_mobile,
+      columns_tablet: columns_tablet,
+      columns_desktop: columns_desktop,
+      section_width: section_width,
+      block_index: forloop.index
+    %}
+  {% endfor %}
+{% endcapture %}
+
+{%- capture sw_columns -%}
+  sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}" sw-columns-mobile-small="{% if has_content == false %}{{ columns_mobile }}{% else %}1{% endif %}"
+{%- endcapture -%}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --block-gap: var(--theme-block-wrapper-gap);
+    {% if has_content %}
+      {% assign title_size = component.options.title_size %}
+      {% assign title_size_desktop = component.options.title_size_desktop | append: 'px' %}
+      {% assign title_size_mobile = component.options.title_size_mobile | append: 'px' %}
+
+      {% if title_size == 'custom' %}
+        --banner-title-size-desktop: {{ title_size_desktop }};
+        --banner-title-size-mobile: {{ title_size_mobile }};
+        --banner-subtitle-size-desktop: {{ component.options.subtitle_size_desktop }}px;
+        --banner-subtitle-size-mobile: {{ component.options.subtitle_size_mobile }}px;
+      {% else %}
+        --banner-title-size-desktop: var(--title-size-{{ title_size }}-desktop);
+        --banner-title-size-mobile: var(--title-size-{{ title_size }}-mobile);
+        --banner-subtitle-size-desktop: calc(var(--title-size-{{ title_size }}-desktop) * var(--subtitle-size-desktop-number));
+        --banner-subtitle-size-mobile: calc(var(--title-size-{{ title_size }}-mobile) * var(--subtitle-size-mobile-number));
+      {% endif %}
+      --banner-title-weight: {{ component.options.title_weight }};
+      --banner-title-spacing: {{ component.options.title_spacing }}px;
+      --banner-title-text-transform: {% if component.options.title_uppercase %}uppercase{% else %}initial{% endif %};
+      --banner-subtitle-weight: {{ component.options.subtitle_weight }};
+      --banner-subtitle-spacing: {{ component.options.subtitle_spacing }}px;
+      --banner-subtitle-text-transform: {% if component.options.subtitle_uppercase %}uppercase{% else %}initial{% endif %};
+      {% if content_position == 'after' %}
+        {% case component.options.description_size %}
+          {% when 'custom' %}
+            --banner-description-size-desktop: {{ component.options.description_size_desktop }}px;
+            --banner-description-size-mobile: {{ component.options.description_size_mobile }}px;
+          {% else %}
+            --banner-description-size-desktop: var(--description-size-{{ component.options.description_size }}-desktop);
+            --banner-description-size-mobile: var(--description-size-{{ component.options.description_size }}-mobile);
+        {% endcase %}
+      {% endif %}
+    {% endif %}
+  }
+</style>
+
+<section id="{{ section_id }}" class="container-fluid theme-section" data-bundle-color="{{ component.options.bundle_color }}" {{ component.attributes }}>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% if display_option == 'carousel' %}
+        {% render 'component_swiper', sw_layout: 'banners', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: sw_autoheight %}
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

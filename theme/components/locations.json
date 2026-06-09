@@ -1,0 +1,313 @@
+{
+  "name": "Locations",
+  "icon": "location-dot",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-locations/).",
+  "max_usage": 2,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error"
+  ],
+  "options": {
+    "display": {
+      "name": "Locations to display",
+      "type": "select",
+      "default": "all",
+      "options": [
+        {
+          "label": "All locations",
+          "value": "all"
+        },
+        {
+          "label": "Pickup locations",
+          "value": "pickups"
+        }
+      ]
+    },
+    "columns_desktop": {
+      "name": "Columns on desktop",
+      "type": "select",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        }
+      ]
+    },
+    "text_alignment_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "text_alignment_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "heading": {
+      "name": "Enable heading",
+      "type": "checkbox",
+      "default": true
+    },
+    "heading_subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Our stores",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_description": {
+      "name": "Description",
+      "type": "text",
+      "default": "",
+      "placeholder": "Add a description to provide more information about your store locations",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link": {
+      "name": "Link",
+      "type": "link",
+      "default": null,
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.heading and block.options.heading_link != blank }}"
+    },
+    "show_email": {
+      "name": "Email",
+      "type": "checkbox",
+      "default": false
+    },
+    "show_phone": {
+      "name": "Phone",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_address": {
+      "name": "Address",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_details": {
+      "name": "Details Popup",
+      "type": "checkbox",
+      "help": "Allows to display a link that will open a popup window on click, with detailed information of each location inside of it.",
+      "default": true
+    },
+    "show_details_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "View more details",
+      "visible_if": "{{ block.options.show_details }}"
+    },
+    "show_map": {
+      "name": "Address map",
+      "type": "checkbox",
+      "help": "Allows to display the Map of each location address inside the popup window.",
+      "default": true,
+      "visible_if": "{{ block.options.show_details }}"
+    },
+    "card": {
+      "name": "Card style",
+      "type": "checkbox",
+      "default": true
+    },
+    "card_spacing": {
+      "name": "Space between",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' and block.options.card }}"
+    },
+    "card_border": {
+      "name": "Border",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.card }}"
+    },
+    "card_border_opacity": {
+      "name": "Border opacity",
+      "type": "slider",
+      "default": 10,
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "visible_if": "{{ block.options.card and block.options.card_border }}"
+    },
+    "card_bundle_color": {
+      "name": "Card content colors",
+      "type": "bundle",
+      "default": "default",
+      "pack": "color",
+      "visible_if": "{{ block.options.card }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Heading options",
+      "type": "heading",
+      "before": "heading"
+    },
+    {
+      "help": "Allows to define which locations details will be displayed.",
+      "name": "Information",
+      "type": "heading",
+      "before": "show_email"
+    },
+    {
+      "name": "Card options",
+      "type": "heading",
+      "before": "card_spacing"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Locations",
+      "category": "Contact"
+    }
+  ]
+}

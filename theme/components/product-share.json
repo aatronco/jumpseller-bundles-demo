@@ -1,0 +1,55 @@
+{
+  "name": "Share",
+  "icon": "share-nodes",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Share this product"
+    },
+    "show_facebook": {
+      "name": "Facebook",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_twitter": {
+      "name": "𝕏 (𝕏)",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_whatsapp": {
+      "name": "WhatsApp",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_pinterest": {
+      "name": "Pinterest",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_email": {
+      "name": "Email",
+      "type": "checkbox",
+      "default": false
+    },
+    "show_clipboard": {
+      "name": "Copy to clipboard",
+      "type": "checkbox",
+      "default": true
+    }
+  },
+  "presentation": [
+    {
+      "name": "Sharing options",
+      "type": "heading",
+      "before": "show_facebook"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

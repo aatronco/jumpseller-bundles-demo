@@ -1,0 +1,116 @@
+{% capture t_go_to_default %}{% t "Go to" %}{% endcapture %}
+{% assign t_go_to = options.t_go_to | default: t_go_to_default %}
+
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% capture t_view_all_default %}{% t "View all" %}{% endcapture %}
+{% assign t_view_all = options.t_view_all | default: t_view_all_default %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+{% if category.subcategories.size > 0 %}
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section"
+    data-bundle-color="{{ component.options.bundle_color }}"
+    {{ component.attributes }}
+  >
+    <div class="container container--adjust theme-section__container">
+      <div class="row theme-section__content">
+        {% for subcategory in category.subcategories %}
+          <div
+            class="col-12 col-md-4 theme-section__column"
+            {% if options.theme_animate %}
+              data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+              data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+              data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+            {% endif %}
+          >
+            <div
+              id="theme-section-accordion-{{ subcategory.id }}"
+              class="accordion theme-accordion theme-accordion--subcategory"
+              data-borders="{{ component.options.borders }}"
+            >
+              <div class="accordion-item theme-accordion__item">
+                <h2 class="theme-accordion__header" id="theme-section-accordion-header-{{ subcategory.id }}">
+                  {% if subcategory.subcategories.size > 0 %}
+                    <button class="accordion-button button theme-accordion__button" type="button" data-bs-toggle="collapse" data-bs-target="#theme-section-accordion-collapse-{{ subcategory.id }}" aria-expanded="false" aria-controls="theme-section-accordion-collapse-{{ subcategory.id }}">
+                      {{ subcategory.name }}
+                      <i class="ph ph-caret-down theme-accordion__caret"></i>
+                    </button>
+                  {% else %}
+                    <a href="{{ subcategory.url }}" class="accordion-button button theme-accordion__button" title="{{ t_go_to }} {{ subcategory.name }}">{{ subcategory.name }}</a>
+                  {% endif %}
+                </h2>
+                {% if subcategory.subcategories.size > 0 %}
+                  <div id="theme-section-accordion-collapse-{{ subcategory.id }}" class="accordion-collapse collapse" aria-labelledby="theme-section-accordion-header-{{ subcategory.id }}">
+                    <div class="accordion-body theme-accordion__body theme-accordion__body--inner">
+                      <div class="accordion theme-accordion__submenu" id="theme-section-accordion-{{ subcategory.id }}">
+                        {% for subsubcategory in subcategory.subcategories %}
+                          <div class="accordion-item theme-accordion__subcontainer">
+                            <h2 class="accordion-button button theme-accordion__button" id="theme-section-accordion-header-{{ subsubcategory.id }}">
+                              {% if subsubcategory.subcategories.size > 0 %}
+                                <button
+                                  class="accordion-button collapsed theme-accordion__subtitle"
+                                  type="button"
+                                  data-bs-toggle="collapse"
+                                  data-bs-target="#theme-section-accordion-collapse-{{ subsubcategory.id }}"
+                                  aria-expanded="false"
+                                  aria-controls="theme-section-accordion-collapse-{{ subsubcategory.id }}"
+                                >
+                                  {{ subsubcategory.name }}
+                                </button>
+                              {% else %}
+                                <a href="{{ subsubcategory.url }}" class="theme-accordion__subtitle" title="{{ t_go_to }} {{ subsubcategory.name }}">{{ subsubcategory.name }}</a>
+                              {% endif %}
+                            </h2>
+                            {% if subsubcategory.subcategories.size > 0 %}
+                              <div id="theme-section-accordion-collapse-{{ subsubcategory.id }}" class="accordion-collapse collapse" aria-labelledby="theme-section-accordion-header-{{ subsubcategory.id }}" data-bs-parent="#theme-section-accordion-{{ subsubcategory.id }}">
+                                <div class="accordion-body theme-accordion__body theme-accordion__body--inner">
+                                  <ul class="no-bullet theme-accordion__sublist">
+                                    {% for subsubcategory in subcategory.subcategories %}
+                                      <li class="theme-accordion__subitem">
+                                        <a href="{{ subsubcategory.url }}" class="theme-accordion__sublink" title="{{ t_go_to }} {{ subsubcategory.name }}">{{ subsubcategory.name }}</a>
+                                      </li>
+                                    {% endfor %}
+
+                                    <li class="theme-accordion__subitem">
+                                      <a href="{{ subsubcategory.url }}" class="theme-accordion__sublink" title="{{ t_go_to }} {{ subsubcategory.name }}">
+                                        {{- t_view_all }}
+                                        {{ subsubcategory.name }}
+                                        <i class="ph ph-arrow-right theme-accordion__arrow"></i
+                                      ></a>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            {% endif %}
+                          </div>
+                        {% endfor %}
+
+                        <div class="accordion-item theme-accordion__subcontainer">
+                          <h2 class="accordion-header">
+                            <a href="{{ subcategory.url }}" class="theme-accordion__subtitle theme-accordion__subtitle--view-all" title="{{ t_go_to }} {{ subcategory.name }}">
+                              {{- t_view_all -}}
+                              <i class="ph ph-arrow-right"></i
+                            ></a>
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}

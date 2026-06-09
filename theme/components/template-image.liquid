@@ -1,0 +1,78 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% case options.theme_corners_style %}
+  {% when 'rectangular' %}
+    {% assign data_corners = false %}
+  {% else %}
+    {% if options.theme_spacing == 'none' %}
+      {% assign data_corners = component.options.corners %}
+    {% else %}
+      {% assign data_corners = true %}
+    {% endif %}
+{% endcase %}
+
+{% assign column_width = 'col-12' %}
+{% assign horizontal_position = 'justify-content-center' %}
+
+{% if component.options.enable_width %}
+  {% case component.options.width %}
+    {% when 'large' %}
+      {% assign column_width = column_width | append: ' col-md-11 col-lg-10' %}
+    {% when 'medium' %}
+      {% assign column_width = column_width | append: ' col-md-9 col-lg-8' %}
+    {% when 'small' %}
+      {% assign column_width = column_width | append: ' col-md-7 col-lg-6' %}
+  {% endcase %}
+
+  {% assign horizontal_position = 'justify-content-' | append: component.options.content_alignment_x %}
+{% endif %}
+
+{% assign subject = category | default: page | default: page_category %}
+{% assign title = category.name | default: page.title | default: page_category.name %}
+{% assign image = subject.images.first %}
+{% if subject.images.size > 0 %}
+  {% assign show_image = true %}
+{% else %}
+  {% assign show_image = false %}
+{% endif %}
+
+{% capture image_object %}
+  <img src="{{ image }}" alt="{{ title | escape }}" class="theme-section__image" width="auto" height="auto" loading="lazy" decoding="auto" fetchpriority="auto">
+{% endcapture %}
+
+{% if show_image %}
+  <style>
+    #{{ section_id }} {
+      --theme-max-width: {{ options.theme_width }};
+      --section-margin-top: {{ component.options.margin_top }}px;
+      --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    }
+  </style>
+
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section"
+    data-bundle-color="{{ component.options.bundle_color }}"
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+    {% endif %}
+    {{ component.attributes }}
+  >
+    {% if component.options.enable_width and component.options.width == 'full' %}
+      {{ image_object }}
+    {% else %}
+      <div class="container theme-section__container">
+        <div class="row {{ horizontal_position }} theme-section__content">
+          <div
+            class="{{ column_width }} theme-section__column theme-section__column--no-margin theme-section__column--has-media"
+            data-corners="{{ data_corners }}"
+          >
+            {{ image_object }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </section>
+{% endif %}

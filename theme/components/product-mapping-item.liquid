@@ -1,0 +1,97 @@
+{% assign item_id = 'mapping-product-' | append: product-mapping-item.id %}
+{% assign prod = products.product[product-mapping-item.options.permalink] | default: products.all.first %}
+
+{% assign image_width = 70 | round: 0 %}
+
+{% case options.pb_image_dimension %}
+  {% when 'landscape' %}
+    {% assign image_dimension = 9.0 | divided_by: 16.0 %}
+  {% when 'portrait' %}
+    {% assign image_dimension = 4.0 | divided_by: 3.0 %}
+  {% when 'rectangular' %}
+    {% assign image_dimension = 3.0 | divided_by: 4.0 %}
+  {% when 'square' %}
+    {% assign image_dimension = 1.0 | divided_by: 1.0 %}
+{% endcase %}
+
+{% assign image_height = image_width | times: image_dimension | round: 0 %}
+
+{% assign prod_image_dimension = 'x' | append: image_width | prepend: image_height %}
+
+{% assign prod_image = prod.images.first | transform: options.pb_image_display, prod_image_dimension %}
+{% assign prod_image_width_and_height = 'width="' | append: image_width | append: '" height="' | append: image_height | append: '"' %}
+
+{% assign marker_animation = component.options.marker_animation %}
+
+{% assign position_top_desktop = product-mapping-item.options.position_top %}
+{% assign position_top_mobile = product-mapping-item.options.position_top_mobile %}
+
+<style>
+  #{{ item_id }} {
+    --mapping-marker-position-top: {{ position_top_desktop }}%;
+    --mapping-marker-position-left: {{ product-mapping-item.options.position_left }}%;
+    {% if has_image_mobile %}
+      --mapping-marker-position-top-mobile: {{ position_top_mobile }}%;
+      --mapping-marker-position-left-mobile: {{ product-mapping-item.options.position_left_mobile }}%;
+    {% endif %}
+    {% if component.options.product_quickview == false %}
+      --mapping-product-image-width: {{ image_width }}px;
+      --mapping-product-image-height: {{ image_height }}px;
+    {% endif %}
+  }
+</style>
+
+<div
+  id="{{ item_id }}"
+  class="dropdown product-mapping__dropdown"
+  {% if has_image_mobile %}
+    data-push-mobile="{% if position_top_mobile > 70 %}up{% else %}down{% endif %}"
+  {% endif %}
+  data-push-desktop="{% if position_top_desktop > 70 %}up{% else %}down{% endif %}"
+  {{ product-mapping-item.attributes }}
+>
+  {% if component.options.product_quickview %}
+    {% render 'product_quickview_button', prod: prod, qv_type: 'product-mapping', marker_animation: marker_animation %}
+  {% else %}
+    <button
+      type="button"
+      class="button product-mapping__marker"
+      {% if marker_animation != 'none' %}
+        data-animation="true"
+        data-animation-type="{{ marker_animation }}"
+      {% endif %}
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <span class="visually-hidden">{% t "See product" %}</span>
+      <i class="ph ph-plus"></i>
+    </button>
+    <div
+      id="mapping-product-{{ prod.id }}"
+      class="dropdown-menu mapping-product mapping-product--{{ component.options.product_corners }}"
+      data-bundle-color="{{ component.options.product_bundle_color }}"
+    >
+      <a
+        href="{{ prod.url }}"
+        class="mapping-product__wrapper"
+        title="{% t 'Go to' %} {{ prod.name | escape }}"
+      >
+        <img
+          src="{{ prod_image }}"
+          alt="{{ prod.name | escape }}"
+          class="mapping-product__image"
+          {{ prod_image_width_and_height }}
+          loading="lazy"
+          fetchpriority="auto"
+        >
+
+        <div class="mapping-product__info">
+          <div class="mapping-product__name">{{ prod.name }}</div>
+          {% unless options.disable_prices or prod.quotable and prod.status == 'not-available' %}
+            {% render 'product_block_price', prod: prod %}
+          {% endunless %}
+        </div>
+      </a>
+    </div>
+  {% endif %}
+</div>

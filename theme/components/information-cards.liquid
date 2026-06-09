@@ -1,0 +1,77 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign display_option = component.options.display %}
+
+{% assign icon_size = component.options.icon_size %}
+{% assign icon_shape = component.options.icon_shape %}
+
+{% case icon_size %}
+  {% when 'small' %}
+    {% assign icon_size = '50' | plus: 0 %}
+    {% assign icon_size_space = icon_size | times: 0.8 | round: 0 %}
+  {% when 'medium' %}
+    {% assign icon_size = '75' | plus: 0 %}
+    {% assign icon_size_space = icon_size | times: 0.8 | round: 0 %}
+  {% when 'large' %}
+    {% assign icon_size = '100' | plus: 0 %}
+    {% assign icon_size_space = icon_size | times: 0.75 | round: 0 %}
+{% endcase %}
+
+{% case icon_shape %}
+  {% when 'rectangular' %}
+    {% assign icon_shape = '0' %}
+  {% when 'rounded' %}
+    {% assign icon_shape = icon_size | times: 0.25 | round: 0 %}
+  {% when 'circle' %}
+    {% assign icon_shape = icon_size %}
+{% endcase %}
+
+{% assign columns_desktop = component.options.columns_desktop %}
+{% assign columns_mobile = component.options.columns_mobile %}
+
+{% capture sw_content %}
+  {% for information-card in component.subcomponents['information-cards'] %}
+    {% render 'components/information-card', information-card: information-card, columns_mobile: columns_mobile, columns_desktop: columns_desktop, display_option: display_option, block_index: forloop.index %}
+  {% endfor %}
+{% endcapture %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "See more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}"{% endcapture -%}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --icon-size: {{ icon_size | append: 'px' }};
+    --icon-size-space: {{ icon_size_space | append: 'px' }};
+    --icon-shape: {{ icon_shape | append: 'px' }};
+    {% if component.options.card_border %}
+      --color-border-opacity: {{ component.options.card_border_opacity | divided_by: 100.00 }};
+    {% endif %}
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content information-cards-wrapper">
+      {% if display_option == 'carousel' %}
+        {% render 'component_swiper', sw_layout: 'information-cards', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'true' %}
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

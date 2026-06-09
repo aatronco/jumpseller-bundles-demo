@@ -1,0 +1,82 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign column_width = 'col-12' %}
+{% assign column_position = 'justify-content-start' %}
+
+{% if component.options.enable_width %}
+  {% case component.options.width %}
+    {% when 'large' %}
+      {% assign column_width = column_width | append: ' col-md-11 col-lg-10 theme-section__body--adjust' %}
+    {% when 'medium' %}
+      {% assign column_width = column_width | append: ' col-md-9 col-lg-8 theme-section__body--adjust' %}
+    {% when 'small' %}
+      {% assign column_width = column_width | append: ' col-md-7 col-lg-6 theme-section__body--adjust' %}
+  {% endcase %}
+
+  {% assign column_position = 'justify-content-' | append: component.options.content_alignment_x %}
+{% endif %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+{% if product.description != blank or product.product_fields != blank or product.attachments != blank %}
+  <theme-tabs
+    data-id="{{ component.id }}"
+    {{ component.attributes }}
+  >
+    <section
+      id="{{ section_id }}"
+      class="container-fluid theme-section"
+      data-bundle-color="{{ component.options.bundle_color }}"
+      {% if options.theme_animate %}
+        data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+        data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+        data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+      {% endif %}
+    >
+      <div class="container container--adjust theme-section__container">
+        <div class="row {{ column_position }} theme-section__content">
+          <div class="{{ column_width }} theme-section__body">
+            <div class="theme-tabs justify-content-{{ component.options.content_alignment_x_buttons }}">
+              {% for child in component.children %}
+                {% capture tab_content %}
+                  {% case child.property %}
+                    {% when 'description' %}
+                      {% if product.description != blank %}
+                        {% render 'components/product-description', product-description: child, prod: product %}
+                      {% endif %}
+                    {% when 'fields' %}
+                      {% if product.product_fields != blank %}
+                        {% render 'components/product-fields', product-fields: child, prod: product %}
+                      {% endif %}
+                    {% when 'attachments' %}
+                      {% if product.attachments != blank %}
+                        {% render 'components/product-attachments', product-attachments: child, prod: product %}
+                      {% endif %}
+                  {% endcase %}
+                {% endcapture %}
+
+                <details
+                  class="theme-tabs__item"
+                  id="{{ child.id }}"
+                  name="tab-{{ component.id }}"
+                >
+                  <summary class="theme-tabs__tab button button--style button--main button--bordered" {{ child.attributes.textfield.title }}>{{ child.options.title }}</summary>
+                  <div class="theme-tabs__content">
+                    <div class="row theme-section__content">
+                      {{ tab_content }}
+                    </div>
+                  </div>
+                </details>
+              {% endfor -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </theme-tabs>
+{% endif %}

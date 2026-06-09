@@ -1,0 +1,245 @@
+{
+  "name": "Counter",
+  "icon": "timer",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-counter/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "checkout__cart",
+    "checkout__checkout",
+    "customer__account",
+    "customer__login"
+  ],
+  "options": {
+    "enable_width": {
+      "name": "Adjust width",
+      "type": "checkbox",
+      "default": false
+    },
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "default": "large",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ],
+      "visible_if": "{{ block.options.enable_width }}"
+    },
+    "content_alignment_x": {
+      "name": "Horizontal position",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ block.options.enable_width }}"
+    },
+    "counter_title": {
+      "name": "Title",
+      "type": "input",
+      "help": "Title that goes above the counter (clock).",
+      "default": "Counter ends in"
+    },
+    "date": {
+      "name": "Date",
+      "type": "input",
+      "help": "Mandatory. Here you need to define the date at which the timer will stop, for example, 2024/06/30 (year/month/day). When the counter reaches zero (0), the section will hide and will not be visible. Slashes (/) must not have spaces before nor after.",
+      "default": ""
+    },
+    "time": {
+      "name": "Time",
+      "type": "input",
+      "help": "Optional. Here you can additionaly define a time at which the timer will stop. Example: 23:59:59 (hour:minutes:seconds). Colons (:) must NOT have spaces before nor after.",
+      "default": "",
+      "visible_if": "{{ block.options.date != blank }}"
+    },
+    "show_border": {
+      "name": "Border",
+      "type": "checkbox",
+      "default": false
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "This is the title of the Counter"
+    },
+    "description": {
+      "name": "Description",
+      "type": "text",
+      "default": "This is the description, try to be very brief."
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "help": "Allows enabling a link where you can choose any content of the store, like categories, pages, products, external links, etc.",
+      "default": "#"
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "help": "Text that will display inside the link (button).",
+      "default": "Link to page",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_outline": {
+      "name": "Outline style",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "system-2",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Counter options",
+      "type": "heading",
+      "before": "counter_title"
+    },
+    {
+      "name": "Content options",
+      "type": "heading",
+      "before": "title"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Counter",
+      "category": "Other"
+    }
+  ]
+}

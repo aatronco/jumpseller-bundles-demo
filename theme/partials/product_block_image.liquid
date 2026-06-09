@@ -1,0 +1,33 @@
+{% case options.theme_spacing %}
+  {% when 'none' %}
+    {% assign theme_padding = 0 %}
+  {% when 'small' %}
+    {% assign theme_padding = 16 | times: 0.375 | round: 0 %}
+    {% assign theme_padding_section = theme_padding | minus: 6 | times: 0.5 | round: 0 %}
+  {% when 'medium' %}
+    {% assign theme_padding = 16 | times: 0.5625 | round: 0 %}
+    {% assign theme_padding_section = theme_padding | minus: 4 | times: 0.75 | round: 0 %}
+  {% when 'large' %}
+    {% assign theme_padding = 16 | times: 0.75 | round: 0 %}
+    {% assign theme_padding_section = theme_padding | minus: 1 | round: 0 %}
+{% endcase %}
+
+{% assign gap = theme_padding_section | times: 2.0 | round: 0 %}
+
+{% if has_color_options and color_options_position == 'top' %}
+  {% render 'product_block_colors', prod: prod %}
+{% endif %}
+
+<div class="product-block__canvas">
+  {% if prod.images.size == 0 %}
+    <picture class="product-block__picture">
+      <div class="product-block__image-placeholder theme-image-placeholder"></div>
+    </picture>
+  {% elsif prod.images.size > 0 %}
+    {% if block_index <= options.pb_columns_desktop %}{% assign fetchpriority = 'high' %}{% else %}{% assign fetchpriority = 'auto' %}{% endif %}
+    {% render 'product_block_image_img', prod: prod, image: prod.images.first, classes: 'product-block__image', section_width: section_width, gap: gap, loading: 'eager', fetchpriority: fetchpriority %}
+    {% if prod.images.size > 1 and options.pb_image_transition == 'overlap' and has_color_options == false %}
+      {% render 'product_block_image_img', prod: prod, image: prod.images[1], classes: 'product-block__image product-block__image--overlap', section_width: section_width, gap: gap, loading: 'lazy', fetchpriority: 'low' %}
+    {% endif %}
+  {% endif %}
+</div>

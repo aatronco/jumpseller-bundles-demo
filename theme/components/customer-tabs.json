@@ -1,0 +1,58 @@
+{
+  "name": "Information",
+  "icon": "user-pen",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "customer__account"
+  ],
+  "options": {
+    "enable_wishlist": {
+      "name": "Enable Wishlist",
+      "type": "checkbox",
+      "default": true
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 16,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 40,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Information",
+      "category": "Core"
+    }
+  ]
+}

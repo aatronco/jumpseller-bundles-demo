@@ -1,0 +1,68 @@
+{% capture t_order_summary_default %}{% t "Order summary" %}{% endcapture %}
+{% assign t_order_summary = options.t_order_summary | default: t_order_summary_default %}
+{% capture t_estimate_shipping_default %}{% t "Estimate shipping costs" %}{% endcapture %}
+{% assign t_estimate_shipping = options.t_estimate_shipping | default: t_estimate_shipping_default %}
+{% capture t_have_a_discount_code_default %}{% t "Have a discount code?" %}{% endcapture %}
+{% assign t_have_a_discount_code = options.t_have_a_discount_code | default: t_have_a_discount_code_default %}
+{% capture t_have_a_discount_or_gift_card_code_default %}{% t "Have a discount or gift card code?" %}{% endcapture %}
+{% assign t_have_a_discount_or_gift_card_code = options.t_have_a_discount_or_gift_card_code | default: t_have_a_discount_or_gift_card_code_default %}
+{% capture t_have_a_gift_card_code_default %}{% t "Have a gift card code?" %}{% endcapture %}
+{% assign t_have_a_gift_card_code = options.t_have_a_gift_card_code | default: t_have_a_gift_card_code_default %}
+
+<div class="cart-summary__wrapper">
+  {% if template == 'cart' and show_shipping_estimates %}
+    <div class="cart-summary__block">
+      <div class="cart-summary__title">
+        {{ t_estimate_shipping }}
+      </div>
+
+      {{ estimate_form }}
+    </div>
+  {% endif %}
+  {% if template == 'cart' and coupon_form %}
+    <div class="cart-summary__block">
+      <div class="cart-summary__title check-empty">
+        {% if store.promotions_with_code_available and store.gift_cards_available %}
+          {{ t_have_a_discount_or_gift_card_code }}
+        {% elsif store.promotions_with_code_available %}
+          {{ t_have_a_discount_code }}
+        {% elsif store.gift_cards_available %}
+          {{ t_have_a_gift_card_code }}
+        {% endif %}
+      </div>
+      <div class="cart-summary__text">
+        {%- t "Type the code and click on the button to apply it." -%}
+        {% if show_shipping_estimates %}
+          {% unless order.shipping_method %}
+            <br>
+            {%- t "Before entering your code, we suggest you estimate and define a shipping method." -%}
+          {% endunless %}
+        {% endif %}
+      </div>
+
+      {{ coupon_form }}
+    </div>
+  {% endif %}
+
+  {% unless template == 'cart' %}
+    <div class="cart-summary__block">
+      <div class="cart-summary__title">
+        {{- t_order_summary -}}
+
+        <button type="button" class="button cart-summary__toggle-products">
+          <span>{%- t "Show products" -%}</span>
+          <span>{%- t "Hide products" -%}</span>
+          <i class="ph ph-caret-down"></i>
+        </button>
+      </div>
+
+      <div class="row d-none cart-summary__products">
+        {% for prod in order.products %}
+          {% render 'store_product', prod: prod, prod_type: 'normal', prod_display: 'grid' %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endunless %}
+
+  {% render 'store_totals' %}
+</div>

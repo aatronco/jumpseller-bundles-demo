@@ -1,0 +1,34 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row theme-section__content">
+      {% paginate page_category.pages by component.options.limit %}
+        {% for article_block in paged.pages %}
+          {% render 'article_block', article_block: article_block, display_option: 'grid', section_width: section_width, columns_mobile: component.options.columns_mobile, columns_desktop: component.options.columns_desktop, block_index: forloop.index %}
+        {% else %}
+          {% render 'theme_message' %}
+        {% endfor %}
+
+        {% if paged.total_pages > 1 %}
+          {{ pager }}
+        {% endif %}
+      {% endpaginate %}
+    </div>
+  </div>
+</section>

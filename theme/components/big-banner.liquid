@@ -1,0 +1,193 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign media_type = component.options.media_type %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+{% assign has_content = component.options.show_content %}
+
+{% assign link = component.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = component.options.link_text | default: link_text_default %}
+{% assign link_external = component.options.link_external %}
+{% assign link_image = link.image %}
+
+{%- capture media_placeholder -%}
+  <div class="theme-image-placeholder{% if has_content == false %} theme-image-placeholder--big-banner{% endif %}"></div>
+{%- endcapture -%}
+
+{% capture banner_image %}
+  {% case media_type %}
+    {% when 'image' %}
+      {% if component.options.image_desktop.url != blank %}
+        {% assign image_desktop = component.options.image_desktop.url %}
+        {% assign image_mobile = component.options.image_mobile.url | default: image_desktop %}
+      {% elsif link != blank and link_image != blank %}
+        {% assign image_desktop = link_image %}
+        {% assign image_mobile = image_desktop %}
+      {% endif %}
+      {% assign image_alt = component.options.image_mobile.alt | default: component.options.image_desktop.alt | default: component.options.title | default: options.theme_store_name | default: store.name | escape %}
+      {% assign image_width_and_height = component.options.image_desktop.attributes.width_and_height | default: link_image.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+      {% if image_desktop != blank %}
+        <picture class="theme-section__picture">
+          <source media="screen and (min-width: 576px)" srcset="{{ image_desktop }}">
+          <source media="screen and (max-width: 575px)" srcset="{{ image_mobile }}">
+          <img
+            src="{{ image_desktop }}"
+            alt="{{ image_alt }}"
+            class="theme-section__image big-banner__image"
+            {{ image_width_and_height }}
+            loading="lazy"
+            decoding="auto"
+            fetchpriority="auto"
+          >
+        </picture>
+      {% else %}
+        {{ media_placeholder }}
+      {% endif %}
+    {% when 'video' %}
+      {% if component.options.video_desktop != blank %}
+        <video-background
+          class="theme-bg-video{% if has_content %} theme-bg-video--has-content{% endif %}"
+          data-video-title="{{ component.options.title | default: component.options.subtitle | escape }}"
+          data-desktop="{{ component.options.video_desktop }}"
+          {% if component.options.video_mobile != blank %}
+            data-mobile="{{ component.options.video_mobile }}"
+          {% endif %}
+        >
+        </video-background>
+      {% else %}
+        {{ media_placeholder }}
+      {% endif %}
+  {% endcase %}
+{% endcapture %}
+
+{% assign align_y_desktop = 'align-items-md-' | append: component.options.content_alignment_y_desktop %}
+{% assign align_y_mobile = 'align-items-' | append: component.options.content_alignment_y_mobile %}
+{% assign justify_x_desktop = 'justify-content-md-' | append: component.options.content_alignment_x_desktop %}
+{% assign justify_x_mobile = 'justify-content-' | append: component.options.content_alignment_x_mobile %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    {% if has_content %}
+      {% if media_type == 'image' %}
+        --theme-image-position-desktop: {{ component.options.content_alignment_x_image_desktop }} {{ component.options.content_alignment_y_image_desktop }};
+        --theme-image-position-mobile: {{ component.options.content_alignment_x_image_mobile }} {{ component.options.content_alignment_y_image_mobile }};
+      {% endif %}
+      --theme-overlay-opacity: {{ component.options.image_overlay | divided_by: 100.00 }};
+      --theme-slide-content-max-width-desktop: {{ component.options.content_width }}%;
+      --theme-slide-content-max-width-tablet: {% if component.options.content_width != 100 %}{{ component.options.content_width | plus: 10 }}%{% else %}{{ component.options.content_width }}%{% endif %};
+      {% assign title_size = component.options.title_size %}
+      {% assign title_size_desktop = component.options.title_size_desktop | append: 'px' %}
+      {% assign title_size_mobile = component.options.title_size_mobile | append: 'px' %}
+
+      {% case title_size %}
+        {% when 'custom' %}
+          --title-size-desktop: {{ title_size_desktop }};
+          --title-size-mobile: {{ title_size_mobile }};
+          --subtitle-size-desktop: {{ component.options.subtitle_size_desktop }}px;
+          --subtitle-size-mobile: {{ component.options.subtitle_size_mobile }}px;
+        {% else %}
+          --title-size-desktop: var(--title-size-{{ title_size }}-desktop);
+          --title-size-mobile: var(--title-size-{{ title_size }}-mobile);
+          --subtitle-size-desktop: calc(var(--title-size-{{ title_size }}-desktop) * var(--subtitle-size-desktop-number));
+          --subtitle-size-mobile: calc(var(--title-size-{{ title_size }}-mobile) * var(--subtitle-size-mobile-number));
+      {% endcase %}
+      --title-weight: {{ component.options.title_weight }};
+      --title-spacing: {{ component.options.title_spacing }}px;
+      --title-text-transform: {% if component.options.title_uppercase %}uppercase{% else %}initial{% endif %};
+      --subtitle-weight: {{ component.options.subtitle_weight }};
+      --subtitle-spacing: {{ component.options.subtitle_spacing }}px;
+      --subtitle-text-transform: {% if component.options.subtitle_uppercase %}uppercase{% else %}initial{% endif %};
+      {% if component.options.description_size == 'custom' %}
+        --description-size-desktop: {{ component.options.description_size_desktop }}px;
+        --description-size-mobile: {{ component.options.description_size_mobile }}px;
+      {% else %}
+        --description-size-desktop: var(--description-size-{{ component.options.description_size }}-desktop);
+        --description-size-mobile: var(--description-size-{{ component.options.description_size }}-mobile);
+      {% endif %}
+    {% endif %}
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="theme-section big-banner{% if has_content %} big-banner--has-content theme-section-height-{{ component.options.height }}{% endif %}"
+  data-spacing="{{ data_spacing }}"
+  data-corners="{{ data_corners }}"
+  data-bundle-color="{{ component.options.bundle_color_background }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="big-banner__wrapper" data-bundle-color="{{ component.options.bundle_color }}">
+      {% if link != blank %}
+        {% render 'theme_hover_link', link: link, link_text: link_text, link_external: link_external %}
+      {% endif %}
+
+      {% if has_content %}
+        {% if component.options.border %}
+          <div class="theme-section__inner-border"></div>
+        {% endif %}
+
+        <div class="big-banner__container theme-section-height-child">
+          <div class="row theme-section-height-child">
+            <div class="d-flex {{ align_y_desktop }} {{ align_y_mobile }} {{ justify_x_desktop }} {{ justify_x_mobile }}">
+              <div class="big-banner__content {{ component.options.align_mobile }} {{ component.options.align_desktop }}">
+                <div class="theme-section__subtitle check-empty" {{ component.attributes.textfield.subtitle }}>{{- component.options.subtitle -}}</div>
+
+                <h2 class="theme-section__title check-empty" {{ component.attributes.textfield.title }}>{{- component.options.title -}}</h2>
+
+                <div class="theme-section__description theme-section__description--push-top check-empty" {{ component.attributes.textfield.description }}>{{- component.options.description | newline_to_br -}}</div>
+
+                {% if link != blank and component.options.link_button %}
+                  <a
+                    href="{{ link }}"
+                    class="button button--style button--main{% if component.options.link_outline %} button--bordered{% endif %} theme-section__button"
+                    title="{{ link_text }}"
+                    {% if link_external %}
+                      target="_blank"
+                    {% endif %}
+                  >
+                    <span {{ component.attributes.textfield.link_text }}>
+                      {{- link_text -}}
+                    </span>
+                    {% if component.options.link_arrow %} <i class="ph ph-arrow-right"></i>{% endif %}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end .big-banner__container -->
+      {% endif %}
+
+      {% if has_content %}
+        <div class="theme-section__media">
+          <div class="theme-section__overlay"></div>
+
+          {{ banner_image }}
+        </div>
+      {% else %}
+        {{ banner_image }}
+      {% endif %}
+    </div>
+  </div>
+</section>

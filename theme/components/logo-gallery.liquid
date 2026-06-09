@@ -1,0 +1,58 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign display_option = component.options.display %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+{% assign image_format = component.options.image_format %}
+
+{% if image_format %}
+  {% assign sw_autoheight = 'false' %}
+{% else %}
+  {% assign sw_autoheight = 'true' %}
+{% endif %}
+
+{% assign columns_desktop = component.options.columns_desktop %}
+{% assign columns_mobile = component.options.columns_mobile %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --block-gap: var(--theme-block-wrapper-gap);
+    --logo-image-dimension: var(--aspect-ratio-{{ component.options.image_dimension }});
+    --theme-object-fit: {{ component.options.image_display }};
+  }
+</style>
+
+{% capture sw_content %}
+  {% for logo in component.subcomponents.logos %}
+    {% render 'components/logo', logo: logo, display_option: display_option, columns_mobile: columns_mobile, columns_desktop: columns_desktop, section_width: section_width, image_format: image_format, block_index: forloop.index %}
+  {% endfor %}
+{% endcapture %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}"{% endcapture -%}
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="logo-gallery row theme-section__content" data-format="{{ image_format }}">
+      {% if display_option == 'carousel' %}
+        {% render 'component_swiper', sw_layout: 'logo-gallery', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: sw_autoheight %}
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

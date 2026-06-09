@@ -1,0 +1,7 @@
+# OS
+.DS_Store
+
+# Node (si el script de setup termina en Node.js)
+node_modules/
+.env
+.env.local

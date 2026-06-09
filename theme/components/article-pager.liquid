@@ -1,0 +1,121 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign current = 0 %}
+
+{% for paged in pages.all %}
+  {% if paged.id == page.id %}
+    {% assign current = forloop.index %}
+  {% endif %}
+{% endfor %}
+
+{%- assign previous_post = null -%}
+{%- assign next_post = null -%}
+
+{%- assign index = current | minus: 1 -%}
+{% for paged in pages.all %}
+  {% if forloop.index == index and paged.template == 'Post' and previous_post == null %}
+    {% assign previous_post = paged %}
+  {% endif %}
+{% endfor %}
+
+{%- assign index = current | plus: 1 -%}
+{% for paged in pages.all %}
+  {% if forloop.index == index and paged.template == 'Post' and next_post == null %}
+    {% assign next_post = paged %}
+  {% endif %}
+{% endfor %}
+
+{% assign column_width = 'col-12' %}
+{% assign column_position = 'justify-content-start' %}
+{% assign pager_width = 'col-md-5' %}
+
+{% if component.options.enable_width %}
+  {% case component.options.width %}
+    {% when 'large' %}
+      {% assign column_width = column_width | append: ' col-md-11 col-lg-10 theme-section__body--adjust' %}
+    {% when 'medium' %}
+      {% assign column_width = column_width | append: ' col-md-9 col-lg-8 theme-section__body--adjust' %}
+    {% when 'small' %}
+      {% assign column_width = column_width | append: ' col-md-7 col-lg-6 theme-section__body--adjust' %}
+  {% endcase %}
+
+  {% assign pager_width = 'col-md-6 col-lg-5' %}
+
+  {% assign column_position = 'justify-content-' | append: component.options.content_alignment_x %}
+{% endif %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row theme-section__content {{ column_position }}">
+      <div class="{{ column_width }} theme-section__body">
+        <div class="row theme-section__content justify-content-between">
+          <div class="col-12 {{ pager_width }} theme-section__column post-pager post-pager--prev">
+            {% if previous_post %}
+              {% capture previous_post_pre_text %}{% t "Previous article" %}{% endcapture %}
+              <a href="{{ previous_post.url }}" class="post-pager__image-wrapper" title="{{ previous_post_pre_text }}">
+                {% if component.options.image %}
+                  {% if previous_post.images.first != blank %}
+                    <img src="{{ previous_post.images.first | thumb: '100x100' }}" alt="{{ previous_post.title | escape }}" class="post-pager__image" width="auto" height="auto" loading="lazy" decoding="async" fetchpriority="low">
+                  {% else %}
+                    <div class="theme-image-placeholder theme-image-placeholder--square post-pager__image"></div>
+                  {% endif %}
+                {% endif %}
+              </a>
+              <a href="{{ previous_post.url }}" class="button post-pager__text" title="{{ previous_post_pre_text }}">
+                {% if component.options.text -%}
+                  <span class="post-pager__pre">
+                    {%- if component.options.enable_arrows %}<i class="ph ph-arrow-left"></i>{% endif -%}
+                    {{- previous_post_pre_text -}}
+                  </span>
+                {%- endif %}
+                <h3 class="post-pager__title">{{ previous_post.title }}</h3>
+              </a>
+            {% endif %}
+          </div>
+
+          <div class="col-12 {{ pager_width }} theme-section__column post-pager post-pager--next">
+            {% if next_post %}
+              {% capture next_post_pre_text %}{% t "Next article" %}{% endcapture %}
+              <a href="{{ next_post.url }}" class="button post-pager__text" title="{{ next_post_pre_text }}">
+                {% if component.options.text -%}
+                  <span class="post-pager__pre">
+                    {{- next_post_pre_text -}}
+                    {%- if component.options.enable_arrows %}<i class="ph ph-arrow-right"></i>{% endif -%}
+                  </span>
+                {%- endif %}
+                <h3 class="post-pager__title">{{ next_post.title }}</h3>
+              </a>
+              <a href="{{ next_post.url }}" class="post-pager__image-wrapper" title="{{ next_post_pre_text }}">
+                {% if component.options.image %}
+                  {% if next_post.images.first != blank %}
+                    <img src="{{ next_post.images.first | thumb: '100x100' }}" alt="{{ next_post.title | escape }}" class="post-pager__image" width="auto" height="auto" loading="lazy" decoding="async" fetchpriority="low">
+                  {% else %}
+                    <div class="theme-image-placeholder theme-image-placeholder--square post-pager__image"></div>
+                  {% endif %}
+                {% endif %}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

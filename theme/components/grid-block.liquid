@@ -1,0 +1,171 @@
+{% assign block_id = 'grid-block-' | append: grid-block.id %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% capture title_default %}{% t "Add a title for this block" %}{% endcapture %}
+{% assign title = grid-block.options.title | default: title_default %}
+
+{% assign image_ratio = component.options.image_ratio %}
+{% assign image_crop = component.options.image_crop %}
+{% assign image_dimension_landscape = 9.0 | divided_by: 16.0 %}
+{% assign image_dimension_portrait = 4.0 | divided_by: 3.0 %}
+{% assign image_dimension_rectangular = 3.0 | divided_by: 4.0 %}
+{% assign image_dimension_square = 1.0 | divided_by: 1.0 %}
+
+{% case options.theme_width %}
+  {% when '1320px' %}
+    {% assign image_dimension_multiplier = 1 %}
+  {% when '1620px', '1920px' %}
+    {% assign image_dimension_multiplier = 1.2 %}
+  {% when '2220px' %}
+    {% assign image_dimension_multiplier = 1.3 %}
+  {% else %}
+    {% assign image_dimension_multiplier = 2 %}
+{% endcase %}
+
+{% case blocks_size %}
+  {% when 2 %}
+    {% assign size_image_width = 956 | times: image_dimension_multiplier %}
+  {% when 1 %}
+    {% assign size_image_width = 1296 | times: image_dimension_multiplier %}
+  {% else %}
+    {% assign size_image_width = 736 | times: image_dimension_multiplier %}
+{% endcase %}
+
+{% assign size_image_width_tablet = '767' %}
+{% assign size_image_width_mobile = '575' %}
+
+{% case image_ratio %}
+  {% when 'landscape' %}
+    {% assign size_image_height = image_dimension_landscape | times: size_image_width | round: 0 %}
+    {% assign size_image_height_tablet = image_dimension_landscape | times: size_image_width_tablet | round: 0 %}
+    {% assign size_image_height_mobile = image_dimension_landscape | times: size_image_width_mobile | round: 0 %}
+  {% when 'portrait' %}
+    {% assign size_image_height = image_dimension_portrait | times: size_image_width | round: 0 %}
+    {% assign size_image_height_tablet = image_dimension_portrait | times: size_image_width_tablet | round: 0 %}
+    {% assign size_image_height_mobile = image_dimension_portrait | times: size_image_width_mobile | round: 0 %}
+  {% when 'rectangular' %}
+    {% assign size_image_height = image_dimension_rectangular | times: size_image_width | round: 0 %}
+    {% assign size_image_height_tablet = image_dimension_rectangular | times: size_image_width_tablet | round: 0 %}
+    {% assign size_image_height_mobile = image_dimension_rectangular | times: size_image_width_mobile | round: 0 %}
+  {% when 'square' %}
+    {% assign size_image_height = image_dimension_square | times: size_image_width | round: 0 %}
+    {% assign size_image_height_tablet = image_dimension_square | times: size_image_width_tablet | round: 0 %}
+    {% assign size_image_height_mobile = image_dimension_square | times: size_image_width_mobile | round: 0 %}
+{% endcase %}
+
+{% assign size_image = 'x' | append: size_image_height | prepend: size_image_width %}
+{% assign size_image_tablet = 'x' | append: size_image_height_tablet | prepend: size_image_width_tablet %}
+{% assign size_image_mobile = 'x' | append: size_image_height_mobile | prepend: size_image_width_mobile %}
+
+{% assign link = grid-block.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = grid-block.options.link_text | default: link_text_default %}
+{% assign link_external = grid-block.options.link_external %}
+{% assign link_image = link.image %}
+
+{% capture block_image %}
+  {% if grid-block.options.image_desktop.url != blank %}
+    {% assign image_desktop = grid-block.options.image_desktop.url %}
+    {% assign image_tablet = image_desktop %}
+    {% assign image_mobile = grid-block.options.image_mobile.url %}
+  {% elsif link != blank and link_image != blank %}
+    {% assign image_desktop = link_image %}
+    {% assign image_tablet = image_desktop %}
+    {% assign image_mobile = image_desktop %}
+  {% endif %}
+  {% assign image_alt = grid-block.options.image_mobile.alt | default: grid-block.options.image_desktop.alt | default: grid-block.options.title | default: options.theme_store_name | default: store.name | escape %}
+  {% assign image_width_and_height = grid-block.options.image_desktop.attributes.width_and_height | default: link_image.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+  {% if image_crop %}
+    {% assign image_desktop = image_desktop | thumb: size_image %}
+    {% assign image_tablet = image_tablet | thumb: size_image_tablet %}
+    {% assign image_mobile = image_mobile | thumb: size_image_mobile %}
+  {% endif %}
+
+  {% if image_desktop != blank %}
+    <picture class="h-100 w-100 d-block">
+      <source media="screen and (min-width: 768px)" srcset="{{ image_desktop }}">
+      <source media="screen and (min-width: 576px) and (max-width: 767px)" srcset="{{ image_tablet }}">
+      <source media="screen and (max-width: 575px)" srcset="{{ image_mobile }}">
+      <img
+        src="{{ image_desktop }}"
+        alt="{{ image_alt }}"
+        class="grid-layout__image"
+        {{ image_width_and_height }}
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
+      >
+    </picture>
+  {% else %}
+    <div class="theme-image-placeholder"></div>
+  {% endif %}
+{% endcapture %}
+
+<div
+  id="{{ block_id }}"
+  class="theme-block grid-layout__block"
+  data-spacing="{{ data_spacing }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {{ grid-block.attributes }}
+>
+  <style>
+    #{{ block_id }} {
+      --grid-layout-image-position-desktop: {{ grid-block.options.content_alignment_x_image_desktop }} {{ grid-block.options.content_alignment_y_image_desktop }};
+      --grid-layout-image-position-mobile: {{ grid-block.options.content_alignment_x_image_mobile }} {{ grid-block.options.content_alignment_y_image_mobile }};
+      --grid-layout-image-transition: var(--theme-image-{{ image_transition | default: 'none' }});
+      --grid-layout-image-transition-hover: var(--theme-image-{{ image_transition | default: 'none' }}-hover);
+    }
+  </style>
+
+  <div class="grid-layout__wrapper">
+    {% unless request.preview_mode %}
+      {% render 'theme_hover_link', link: link, link_text: link_text, link_external: link_external %}
+    {% endunless %}
+
+    <div class="grid-layout__media aspect-ratio-{{ image_ratio }}">
+      {{ block_image }}
+    </div>
+
+    {% if show_titles and title != blank %}
+      <div
+        class="theme-block__content {{ align_mobile }} {{ align_desktop }} {{ justify_mobile }} {{ justify_desktop }} grid-layout__content{% if title_overlap %} grid-layout__content--overlap align-items-{{ title_alignment_y }}{% endif %}"
+        {% if title_overlap %}
+          data-bundle-color="{{ title_bundle_color }}"
+        {% endif %}
+      >
+        {% if link != blank %}
+          <a
+            href="{{ link }}"
+            class="grid-layout__title grid-layout__title--{{ component.options.title_size }}"
+            title="{{ link_text }}"
+            {% if link_external %}
+              target="_blank"
+            {% endif %}
+          >
+            <span {{ grid-block.attributes.textfield.title }}>{{- title -}}</span>
+            {%- if grid-block.options.link_arrow -%}
+              <i class="ph ph-arrow-right"></i>
+            {%- endif -%}
+          </a>
+        {% else %}
+          <div class="grid-layout__title grid-layout__title--{{ component.options.title_size }}">
+            <span {{ grid-block.attributes.textfield.title }}>{{- title -}}</span>
+          </div>
+        {% endif %}
+
+        {% if title_overlap and title_overlay %}
+          <div class="theme-section__overlay grid-layout__overlay"></div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>

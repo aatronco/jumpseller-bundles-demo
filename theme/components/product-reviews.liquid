@@ -1,0 +1,196 @@
+{% capture t_sort_by_default %}{% t "Sort by" %}{% endcapture %}
+{% assign t_sort_by = options.t_sort_by | default: t_sort_by_default %}
+
+{% if product.reviews != empty %}
+  {% assign section_id = 'theme-section-' | append: component.id %}
+  {% assign display_option = component.options.display %}
+  {% assign heading_underline = options.heading_title_underline %}
+
+  {% if options.theme_spacing == 'none' and component.options.card %}
+    {% assign data_spacing = false %}
+  {% elsif options.theme_spacing != 'none' and component.options.card and component.options.card_spacing == false %}
+    {% assign data_spacing = false %}
+  {% else %}
+    {% assign data_spacing = true %}
+  {% endif %}
+
+  {% assign align_desktop = options.text_alignment_heading_desktop %}
+  {% assign align_mobile = options.text_alignment_heading_mobile %}
+
+  {% case align_desktop %}
+    {% when 'center' %}
+      {% assign column_class_main = 'col-md-8 col-lg-6 order-1 order-md-2' %}
+      {% if heading_underline %}
+        {% assign column_class_rating = 'col-md-2 col-lg-3 order-2 order-md-1' %}
+        {% assign column_class_sort = 'col-md-2 col-lg-3 order-3 order-md-2' %}
+      {% else %}
+        {% assign column_class_rating = 'col-md-2 col-lg-3 order-2 order-md-1' %}
+        {% assign column_class_sort = 'col-md-2 col-lg-3 order-3 order-md-3' %}
+      {% endif %}
+      {% assign heading_align_items = 'align-items-md-center' %}
+    {% when 'start' %}
+      {% assign column_class_main = 'col-md order-1' %}
+      {% assign column_class_rating = 'col-md-auto order-2' %}
+      {% assign column_class_sort = 'col-md-auto order-3' %}
+      {% if component.options.heading_subtitle != blank or component.options.heading_description != blank %}
+        {% assign heading_align_items = 'align-items-md-end' %}
+      {% else %}
+        {% assign heading_align_items = 'align-items-md-center' %}
+      {% endif %}
+  {% endcase %}
+
+  {% capture sw_content %}
+    {% if display_option == 'carousel' %}
+      <div class="swiper-wrapper product-reviews__wrapper"></div>
+    {% else %}
+      <div class="col-12 theme-section__column">
+        <div class="row theme-section__content product-reviews__wrapper"></div>
+      </div>
+    {% endif %}
+  {% endcapture %}
+
+  {% capture sw_content %}
+    {% if display_option == 'carousel' %}
+      <div class="swiper-wrapper product-reviews__wrapper"></div>
+    {% else %}
+      <div class="row theme-section__content product-reviews__wrapper"></div>
+    {% endif %}
+  {% endcapture %}
+
+  {%- capture sw_columns %}sw-columns-desktop="{{ component.options.columns_desktop }}" sw-columns-mobile="1"{% endcapture -%}
+
+  <style>
+    #{{ section_id }} {
+      --theme-max-width: {{ options.theme_width }};
+      --section-margin-top: {{ component.options.margin_top }}px;
+      --section-margin-bottom: {{ component.options.margin_bottom }}px;
+      --review-block-alignment: {{ component.options.text_alignment }};
+      {% if component.options.card and component.options.card_border %}
+        --color-border-opacity: {{ component.options.card_border_opacity | divided_by: 100.00 }};
+      {% endif %}
+    }
+  </style>
+
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section"
+    data-bundle-color="{{ component.options.bundle_color }}"
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+    {% endif %}
+    {{ component.attributes }}
+  >
+    <product-reviews
+      id="product-reviews"
+      class="container theme-section__container d-block"
+      data-productid="{{ product.id }}"
+      data-limit="{{ component.options.limit }}"
+      data-reviews-class="{% if display_option == 'carousel' %}swiper-slide{% else %}col-12{% endif %}"
+      data-reviews-spacing="{{ data_spacing }}"
+      data-reviews-columns="{{ component.options.columns_desktop }}"
+      data-reviews-style="{{ component.options.card }}"
+      {% if component.options.card %}
+        data-reviews-style-border="{{ component.options.card_border }}"
+        data-reviews-style-bundle="{{ component.options.card_bundle_color }}"
+      {% endif %}
+      data-name-filter="{{ component.options.name_filter }}"
+    >
+      <div class="row align-items-start {{ heading_align_items }} theme-section__heading">
+        <div class="col-12 {{ column_class_main }} text-{{ align_mobile }} text-md-{{ align_desktop }} theme-section__column">
+          <div class="row theme-section__content">
+            <div class="col-12 theme-section__column">
+              <div class="theme-section__subtitle check-empty" {{ component.attributes.textfield.heading_subtitle }}>
+                {{- component.options.heading_subtitle -}}
+              </div>
+            </div>
+
+            <div class="col-12 theme-section__column">
+              <h3 class="theme-section__title check-empty" {{ component.attributes.textfield.heading_title }}>
+                {{- component.options.heading_title -}}
+              </h3>
+            </div>
+
+            {% render 'component_heading_underline', underline_class: 'col-12 d-block d-md-none' %}
+
+            <div class="col-12 theme-section__column">
+              <div class="theme-section__description check-empty" {{ component.attributes.textfield.heading_description }}>
+                {{- component.options.heading_description -}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% render 'component_heading_underline', underline_class: 'col-12 order-md-4 d-none d-md-block' %}
+
+        <div class="col-12 {{ column_class_rating }} theme-section__column">
+          {% render 'product_rating', prod: product %}
+        </div>
+
+        <div class="col-12 {{ column_class_sort }} text-{{ align_mobile }} text-md-end theme-section__column">
+          <div class="dropdown theme-section__dropdown-wrapper">
+            <button
+              type="button"
+              id="sort-reviews-dropdown"
+              class="button dropdown-toggle theme-section__toggle"
+              data-bs-toggle="dropdown"
+              data-bs-display="static"
+              aria-expanded="false"
+            >
+              <span>{{ t_sort_by }}</span>
+              <span class="product-reviews__current-sort">{% t "Latest" %}</span>
+              <i class="ph ph-caret-down"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end theme-dropdown" aria-labelledby="sort-reviews-dropdown">
+              <li>
+                <a role="button" class="dropdown-item theme-dropdown__link theme-dropdown__link--active" pr-sort="date_desc">
+                  <span>{%- t "Latest" -%}</span>
+                  <i class="ph ph-check"></i>
+                </a>
+              </li>
+              <li>
+                <a role="button" class="dropdown-item theme-dropdown__link" pr-sort="date_asc">
+                  <span>{%- t "Oldest" -%}</span>
+                  <i class="ph ph-check"></i>
+                </a>
+              </li>
+              <li>
+                <a role="button" class="dropdown-item theme-dropdown__link" pr-sort="rating_desc">
+                  <span>{%- t "Best ratings" -%}</span>
+                  <i class="ph ph-check"></i>
+                </a>
+              </li>
+              <li>
+                <a role="button" class="dropdown-item theme-dropdown__link" pr-sort="rating_asc">
+                  <span>{%- t "Lowest ratings" -%}</span>
+                  <i class="ph ph-check"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {% if display_option == 'carousel' %}
+        <div class="row theme-section__content">
+          {% render 'component_swiper', sw_layout: 'product-reviews', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+        </div>
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+
+      {% if display_option == 'grid' %}
+        <div class="row">
+          <div class="col-12 text-center">
+            <button type="button" id="load-more-reviews" class="button button--style button--secondary button--bordered">
+              {%- t "Load more reviews" %}
+              <i class="ph ph-plus-circle ph--push"></i>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+    </product-reviews>
+  </section>
+{% endif %}

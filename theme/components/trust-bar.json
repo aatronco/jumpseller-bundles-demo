@@ -1,0 +1,539 @@
+{
+  "name": "Trust bar",
+  "icon": "info-circle",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-trust-bar/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "checkout__cart",
+    "checkout__checkout",
+    "customer__account",
+    "customer__login"
+  ],
+  "options": {
+    "columns_desktop": {
+      "name": "Columns on desktop",
+      "type": "select",
+      "default": "4",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        }
+      ]
+    },
+    "columns_mobile": {
+      "name": "Columns on mobile",
+      "type": "select",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        }
+      ]
+    },
+    "display": {
+      "name": "Display",
+      "type": "select",
+      "default": "carousel",
+      "options": [
+        {
+          "label": "Carousel",
+          "value": "carousel"
+        },
+        {
+          "label": "Grid",
+          "value": "grid"
+        }
+      ]
+    },
+    "autoplay": {
+      "name": "Autoplay",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "autoplay_speed": {
+      "name": "Autoplay speed",
+      "type": "slider",
+      "default": 3000,
+      "min": 1000,
+      "max": 10000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_continuous": {
+      "name": "Continuous autoplay",
+      "type": "checkbox",
+      "help": "If enabled, the autoplay transition will work with a continuous loop without stopping. Also, the carousel navigation elements will be hidden.",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_speed_mobile": {
+      "name": "Autoplay speed (mobile)",
+      "type": "slider",
+      "default": 2000,
+      "min": 1000,
+      "max": 5000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay and block.options.autoplay_continuous }}"
+    },
+    "show_arrows": {
+      "name": "Arrows",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "show_arrows_hover": {
+      "name": "Arrows on hover",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.show_arrows }}"
+    },
+    "show_dots": {
+      "name": "Dots",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "content_alignment_x_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "content_alignment_x_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "enable_icons": {
+      "name": "Show icons",
+      "type": "checkbox",
+      "default": true
+    },
+    "icon_size": {
+      "name": "Icon size",
+      "type": "select",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ],
+      "visible_if": "{{ block.options.enable_icons }}"
+    },
+    "card": {
+      "name": "Card style",
+      "type": "checkbox",
+      "default": false
+    },
+    "card_spacing": {
+      "name": "Space between",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' and block.options.card }}"
+    },
+    "card_border": {
+      "name": "Outer border",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.card }}"
+    },
+    "card_border_inner": {
+      "name": "Inner border",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.card }}"
+    },
+    "card_border_opacity": {
+      "name": "Border opacity",
+      "type": "slider",
+      "default": 10,
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "visible_if": "{{ block.options.card and block.options.card_border or block.options.card_border_inner }}"
+    },
+    "heading": {
+      "name": "Enable heading",
+      "type": "checkbox",
+      "default": false
+    },
+    "heading_subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Section title",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_description": {
+      "name": "Description",
+      "type": "text",
+      "default": "",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link": {
+      "name": "Link",
+      "type": "link",
+      "default": null,
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "See more",
+      "visible_if": "{{ block.options.heading and block.options.heading_link != blank }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 32,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 32,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Carousel settings",
+      "type": "heading",
+      "before": "autoplay"
+    },
+    {
+      "name": "Blocks options",
+      "type": "heading",
+      "before": "content_alignment_x_desktop"
+    },
+    {
+      "name": "Card options",
+      "type": "heading",
+      "before": "card_spacing"
+    },
+    {
+      "name": "Heading options",
+      "type": "heading",
+      "before": "heading"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [
+    {
+      "type": "trust-block",
+      "multiple": true,
+      "property": "trust-blocks"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust bar",
+      "category": "Information",
+      "children": [
+        {
+          "type": "trust-block"
+        },
+        {
+          "type": "trust-block"
+        },
+        {
+          "type": "trust-block"
+        },
+        {
+          "type": "trust-block"
+        }
+      ]
+    },
+    {
+      "name": "Trust bar: Credibility",
+      "category": "Information",
+      "children": [
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-truck",
+            "text": "Get your products delivered completely FREE when purchasing over $50!",
+            "title": "Free Shipping"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-credit-card",
+            "text": "Pay through certified and encrypted gateways with credit card and bank transfer.",
+            "title": "Safe and secure payments"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-headset",
+            "text": "We have a specialized team that will assist you with any doubt or help you might need.",
+            "title": "Have Questions?",
+            "link_text": "Contact us"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-seal-check",
+            "text": "All of our products have been tested and certified with high quality standards.",
+            "title": "Guaranteed quality products"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trust bar: Sustainability",
+      "options": {
+        "heading": true,
+        "heading_title": "Our commitment to a better future",
+        "autoplay_speed": 7000,
+        "autoplay_continuous": true,
+        "autoplay_speed_mobile": 5000
+      },
+      "category": "Information",
+      "children": [
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-globe-hemisphere-west",
+            "text": "Products made with care for people and planet.",
+            "title": "Ethical Sourcing"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-recycle",
+            "text": "Minimal waste and fully recyclable materials.",
+            "title": "Eco-Friendly Packaging"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-clock-countdown",
+            "text": "We choose quality over quantity.",
+            "title": "Made to Last"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-hand-heart",
+            "text": "Supporting makers, creators, and causes we believe in.",
+            "title": "Community-Driven"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-rabbit",
+            "text": "No animal testing — ever",
+            "title": "Cruelty-Free"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-leaf",
+            "text": "We reduce our footprint at every step.",
+            "title": "Sustainable Practices"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trust bar: Policies",
+      "category": "Information",
+      "children": [
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-book-bookmark",
+            "text": "Read the rules and guidelines for using our store.",
+            "title": "Terms & Conditions"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-money-wavy",
+            "text": "Learn how we handle returns and refunds.",
+            "title": "Refund Policy"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-lock",
+            "text": "Your data is safe and never shared without consent.",
+            "title": "Privacy Policy"
+          }
+        },
+        {
+          "type": "trust-block",
+          "options": {
+            "icon": "ph ph-envelope",
+            "text": "Have questions? We are here to help.",
+            "title": "Contact Us",
+            "link_text": "Get in touch"
+          }
+        }
+      ]
+    }
+  ]
+}

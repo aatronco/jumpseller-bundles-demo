@@ -1,0 +1,216 @@
+{% capture t_go_to_default %}{% t "Go to" %}{% endcapture %}
+{% assign t_go_to = options.t_go_to | default: t_go_to_default %}
+
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign theme_width = options.theme_width %}
+
+{% assign columns_desktop = component.options.columns_desktop %}
+{% assign columns_mobile = component.options.columns_mobile %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+{% assign image_dimension = component.options.image_dimension %}
+
+{% case image_dimension %}
+  {% when 'landscape' %}
+    {% assign image_width_and_height = 'width="315" height="177"' %}
+
+    {% case theme_width %}
+      {% when '1320px' %}
+        {% if columns_desktop == 2 %}
+          {% assign size_lg = '642x361' %}
+        {% elsif columns_desktop == 3 %}
+          {% assign size_lg = '424x239' %}
+        {% else %}
+          {% assign size_lg = '315x177' %}
+        {% endif %}
+      {% else %}
+        {% if columns_desktop == 1 or columns_desktop == 2 %}
+          {% assign size_lg = '1000x563' %}
+        {% else %}
+          {% assign size_lg = '642x361' %}
+        {% endif %}
+    {% endcase %}
+
+    {% if columns_mobile == 2 %}
+      {% assign size_sm = '366x205' %}
+    {% else %}
+      {% assign size_sm = '527x296' %}
+    {% endif %}
+  {% when 'portrait' %}
+    {% assign image_width_and_height = 'width="315" height="420"' %}
+
+    {% case theme_width %}
+      {% when '1320px' %}
+        {% if columns_desktop == 2 %}
+          {% assign size_lg = '642x856' %}
+        {% elsif columns_desktop == 3 %}
+          {% assign size_lg = '424x565' %}
+        {% else %}
+          {% assign size_lg = '315x420' %}
+        {% endif %}
+      {% else %}
+        {% if columns_desktop == 1 or columns_desktop == 2 %}
+          {% assign size_lg = '1000x1333' %}
+        {% else %}
+          {% assign size_lg = '642x856' %}
+        {% endif %}
+    {% endcase %}
+
+    {% if columns_mobile == 2 %}
+      {% assign size_sm = '366x487' %}
+    {% else %}
+      {% assign size_sm = '527x702' %}
+    {% endif %}
+  {% when 'rectangular' %}
+    {% assign image_width_and_height = 'width="315" height="236"' %}
+
+    {% case theme_width %}
+      {% when '1320px' %}
+        {% if columns_desktop == 2 %}
+          {% assign size_lg = '642x482' %}
+        {% elsif columns_desktop == 3 %}
+          {% assign size_lg = '424x318' %}
+        {% else %}
+          {% assign size_lg = '315x236' %}
+        {% endif %}
+      {% else %}
+        {% if columns_desktop == 1 or columns_desktop == 2 %}
+          {% assign size_lg = '1000x750' %}
+        {% else %}
+          {% assign size_lg = '642x482' %}
+        {% endif %}
+    {% endcase %}
+
+    {% if columns_mobile == 2 %}
+      {% assign size_sm = '366x275' %}
+    {% else %}
+      {% assign size_sm = '527x395' %}
+    {% endif %}
+  {% when 'square' %}
+    {% assign image_width_and_height = 'width="315" height="315"' %}
+
+    {% case theme_width %}
+      {% when '1320px' %}
+        {% if columns_desktop == 2 %}
+          {% assign size_lg = '642x642' %}
+        {% elsif columns_desktop == 3 %}
+          {% assign size_lg = '424x424' %}
+        {% else %}
+          {% assign size_lg = '315x315' %}
+        {% endif %}
+      {% else %}
+        {% if columns_desktop == 1 or columns_desktop == 2 %}
+          {% assign size_lg = '1000x1000' %}
+        {% else %}
+          {% assign size_lg = '642x642' %}
+        {% endif %}
+    {% endcase %}
+
+    {% if columns_mobile == 2 %}
+      {% assign size_sm = '366x366' %}
+    {% else %}
+      {% assign size_sm = '527x527' %}
+    {% endif %}
+{% endcase %}
+
+<style>
+  #{{ section_id }} {
+    --cb-image-dimension: var(--aspect-ratio-{{ image_dimension }});
+    --theme-max-width: {{ theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row theme-section__content">
+      {% for subcategory in category.subcategories %}
+        {% assign link_text = component.options.link_text | default: t_go_to %}
+        {% if component.options.link_text_name %}
+          {% assign link_text = ' ' | prepend: link_text | append: subcategory.name %}
+        {% endif %}
+
+        {% case component.options.image_display %}
+          {% when 'resize' %}
+            {% assign img_src_sm = subcategory.images.first | resize: size_sm %}
+            {% assign img_src_lg = subcategory.images.first | resize: size_lg %}
+          {% when 'thumb' %}
+            {% assign img_src_sm = subcategory.images.first | thumb: size_sm %}
+            {% assign img_src_lg = subcategory.images.first | thumb: size_lg %}
+        {% endcase %}
+
+        <div
+          class="theme-block brand-block trsn {{ component.options.align_mobile }} {{ component.options.align_desktop }}"
+          data-columns-desktop="{{ columns_desktop }}"
+          data-columns-mobile="{{ columns_mobile }}"
+          data-spacing="{{ data_spacing }}"
+          data-corners="{{ data_corners }}"
+          {% if options.theme_animate %}
+            data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+            data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+            data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+          {% endif %}
+        >
+          {% if component.options.show_image %}
+            <a href="{{ subcategory.url }}" class="brand-block__anchor" title="{{ link_text }}">
+              {% if subcategory.images.first == blank %}
+                <div class="theme-image-placeholder theme-image-placeholder--{{ image_dimension }}"></div>
+              {% else %}
+                <picture class="brand-block__picture">
+                  <source media="screen and (min-width: 576px)" srcset="{{ img_src_lg }}">
+                  <source media="screen and (max-width: 575px)" srcset="{{ img_src_sm }}">
+                  <img
+                    src="{{ img_src_lg }}"
+                    class="brand-block__image"
+                    alt="{{ subcategory.name }}"
+                    {{ image_width_and_height }}
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
+                  >
+                </picture>
+              {% endif %}
+            </a>
+          {% endif %}
+
+          <div class="theme-block__content brand-block__content">
+            {% if component.options.show_titles %}
+              <a href="{{ subcategory.url }}" class="brand-block__link" title="{{ link_text }}">
+                <h5 class="brand-block__title">{{ subcategory.name }}</h5>
+              </a>
+            {% endif %}
+
+            {% if component.options.link_button %}
+              <a
+                href="{{ subcategory.url }}"
+                class="button button--style button--small button--main{% if component.options.link_outline %} button--bordered{% endif %}"
+                title="{{ link_text }}"
+              >
+                <span {{ component.attributes.textfield.link_text }}>{{ link_text }}</span>
+                {%- if component.options.link_arrow %} <i class="ph ph-arrow-right"></i>{% endif %}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+        <!-- end .brand-block -->
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- end .category-gallery -->

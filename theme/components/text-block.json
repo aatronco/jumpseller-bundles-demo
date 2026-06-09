@@ -1,0 +1,471 @@
+{
+  "name": "Text block",
+  "icon": "text",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-text-block/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "checkout__cart",
+    "checkout__checkout",
+    "customer__account",
+    "customer__login"
+  ],
+  "options": {
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Talk about whatever you want"
+    },
+    "title_size": {
+      "name": "Size",
+      "type": "select",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Extra Large",
+          "value": "extra-large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ],
+      "visible_if": "{{ block.options.title != blank }}"
+    },
+    "title_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 32,
+      "min": 10,
+      "max": 160,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' and block.options.title != blank }}"
+    },
+    "title_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 24,
+      "min": 8,
+      "max": 150,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' and block.options.title != blank }}"
+    },
+    "title_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": "",
+      "visible_if": "{{ block.options.title != blank }}"
+    },
+    "title_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title != blank }}"
+    },
+    "title_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.title != blank }}"
+    },
+    "subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "Here you can add a small subtitle"
+    },
+    "subtitle_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 13,
+      "min": 5,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' and block.options.subtitle != blank }}"
+    },
+    "subtitle_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 7,
+      "min": 5,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' and block.options.subtitle != blank }}"
+    },
+    "subtitle_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": "",
+      "visible_if": "{{ block.options.subtitle != blank }}"
+    },
+    "subtitle_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "help": "Allows to define the space between letters for all Subtitles in the component.",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.subtitle != blank }}"
+    },
+    "subtitle_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.subtitle != blank }}"
+    },
+    "text": {
+      "name": "Text",
+      "type": "text",
+      "default": "You can add information about your brand, shipping methods, promotions, company description, or even describe a product."
+    },
+    "text_size": {
+      "name": "Size",
+      "type": "select",
+      "help": "Size of the description that shows after a title in the component.",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ],
+      "visible_if": "{{ block.options.text != blank }}"
+    },
+    "text_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 16,
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.text_size == 'custom' and block.options.text != blank }}"
+    },
+    "text_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 14,
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.text_size == 'custom' and block.options.text != blank }}"
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": null
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_outline": {
+      "name": "Outline style",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "enable_width": {
+      "name": "Adjust width",
+      "type": "checkbox",
+      "default": false
+    },
+    "width": {
+      "name": "Width",
+      "type": "select",
+      "default": "large",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ],
+      "visible_if": "{{ block.options.enable_width }}"
+    },
+    "content_alignment_x": {
+      "name": "Horizontal position",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ],
+      "visible_if": "{{ block.options.enable_width }}"
+    },
+    "align_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "text-md-center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-md-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-md-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-md-end"
+        }
+      ]
+    },
+    "align_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "text-center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-end"
+        }
+      ]
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Title options",
+      "type": "heading",
+      "before": "title"
+    },
+    {
+      "name": "Subtitle options",
+      "type": "heading",
+      "before": "subtitle"
+    },
+    {
+      "name": "Text options",
+      "type": "heading",
+      "before": "text"
+    },
+    {
+      "name": "Link options",
+      "type": "heading",
+      "before": "link"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "enable_width"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Text block",
+      "category": "Content"
+    },
+    {
+      "name": "Text block: About",
+      "options": {
+        "text": "Welcome to our store. We are a team of dedicated individuals who believe in quality, care, and creating unique experiences for our customers. Every product we offer is a reflection of our commitment to excellence and attention to detail.",
+        "title": "We are passionate about what we do",
+        "subtitle": "Get to know us"
+      },
+      "category": "Content"
+    },
+    {
+      "name": "Text block: Impact",
+      "options": {
+        "text": "",
+        "title": "Welcome to our store",
+        "subtitle": "",
+        "title_weight": 700,
+        "title_size_mobile": 150,
+        "title_size_desktop": 160
+      },
+      "category": "Content"
+    },
+    {
+      "name": "Text block: Promotional",
+      "options": {
+        "title": "Our biggest sale of the season",
+        "subtitle": "Limited time",
+        "link_text": "Browse Deals",
+        "title_weight": 700,
+        "title_size_mobile": 40,
+        "title_size_desktop": 60
+      },
+      "category": "Content"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "name": "Item",
+  "icon": "square",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "default": "ph ph-truck"
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Accordion item title"
+    },
+    "content": {
+      "name": "Content",
+      "type": "text",
+      "default": "Here you can add the text or content of the item."
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": null
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "image": {
+      "name": "Image",
+      "type": "image"
+    },
+    "image_size": {
+      "name": "Size",
+      "type": "slider",
+      "default": 100,
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "visible_if": "{{ block.options.image.url != blank }}"
+    },
+    "image_position": {
+      "name": "Position",
+      "type": "select",
+      "default": "after",
+      "options": [
+        {
+          "label": "Before the content",
+          "value": "before"
+        },
+        {
+          "label": "After the content",
+          "value": "after"
+        }
+      ],
+      "visible_if": "{{ block.options.image.url != blank }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Image options",
+      "type": "heading",
+      "before": "image_size"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

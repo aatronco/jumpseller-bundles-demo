@@ -1,0 +1,92 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign display_option = component.options.display %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign align_desktop = options.text_alignment_heading_desktop %}
+{% assign align_mobile = options.text_alignment_heading_mobile %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% capture heading_link_text_default %}{% t "See more products" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% assign first_permalink = blank %}
+
+{% if component.options.heading_link and component.options.category_list != blank %}
+  {% assign first_permalink = component.options.category_list[0].url %}
+{% endif %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ options.pb_columns_desktop }}" sw-columns-mobile="{{ options.pb_columns_mobile }}"{% endcapture -%}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<theme-tabs
+  data-id="{{ component.id }}"
+  {{ component.attributes }}
+>
+  <section id="{{ section_id }}" class="container-fluid theme-section" data-bundle-color="{{ component.options.bundle_color }}">
+    <div class="container container--adjust theme-section__container">
+      {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: first_permalink, link_text: heading_link_text %}
+      <div class="theme-tabs{% if align_desktop == "center" %} justify-content-md-center{% else %} justify-content-md-start{% endif %}{% if align_mobile == "center" %} justify-content-center{% else %} justify-content-start{% endif %}">
+        {%- for tab in component.options.category_list %}
+          {% capture sw_content %}
+            {% for prod in tab.products limit: component.options.limit %}
+              {% render 'product_block', prod: prod, display_option: display_option, section_width: section_width, block_index: forloop.index %}
+            {% else %}
+              {% render 'component_placeholder_product', display_option: display_option %}
+            {% endfor %}
+          {% endcapture %}
+          <details
+            class="theme-tabs__item"
+            id="{{ tab.id }}"
+            name="tab-{{ component.id }}"
+          >
+            <summary class="theme-tabs__tab button button--style button--main button--bordered" data-permalink="{{ tab.permalink }}">{{ tab.name }}</summary>
+            <div class="theme-tabs__content">
+              <div class="row theme-section__content">
+                {% if display_option == 'carousel' %}
+                  {% render 'component_swiper', sw_layout: 'products', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+                {% else %}
+                  {{ sw_content }}
+                {% endif %}
+              </div>
+            </div>
+          </details>
+        {% else %}
+          {% capture sw_content %}
+            {% for prod in store.all_products_category.products limit: component.options.limit %}
+              {% render 'product_block', prod: prod, display_option: display_option, section_width: section_width, block_index: forloop.index %}
+            {% else %}
+              {% render 'component_placeholder_product', display_option: display_option %}
+            {% endfor %}
+          {% endcapture %}
+          {% for i in (1..3) %}
+            <details
+              class="theme-tabs__item"
+              id="placeholder_{{ i }}"
+              name="tab-{{ component.id }}"
+            >
+              <summary class="theme-tabs__tab button button--style button--main button--bordered">{% t 'Tab category' %} #{{ i }}</summary>
+              <div class="theme-tabs__content">
+                <div class="row theme-section__content">
+                  {% if display_option == 'carousel' %}
+                    {% render 'component_swiper', sw_layout: 'products', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+                  {% else %}
+                    {{ sw_content }}
+                  {% endif %}
+                </div>
+              </div>
+            </details>
+          {% endfor %}
+        {% endfor -%}
+      </div>
+    </div>
+  </section>
+</theme-tabs>

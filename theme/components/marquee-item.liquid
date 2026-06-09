@@ -1,0 +1,108 @@
+{% assign item_id = 'block_' | append: marquee-item.id %}
+
+{% assign title = marquee-item.options.title %}
+
+{% assign link = marquee-item.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = marquee-item.options.link_text | default: link_text_default %}
+{% assign link_external = marquee-item.options.link_external %}
+{% assign link_image = link.image %}
+{% assign link_image_display = marquee-item.options.link_image_display %}
+
+{% case component.options.image_ratio %}
+  {% when 'landscape' %}
+    {% assign image_dimension = 9.0 | divided_by: 16.0 %}
+  {% when 'portrait' %}
+    {% assign image_dimension = 4.0 | divided_by: 3.0 %}
+  {% when 'rectangular' %}
+    {% assign image_dimension = 3.0 | divided_by: 4.0 %}
+  {% when 'square' %}
+    {% assign image_dimension = 1.0 | divided_by: 1.0 %}
+{% endcase %}
+
+{% case image_size %}
+  {% when 'small' %}
+    {% assign image_width_desktop = 50 %}
+    {% assign image_width_mobile = 40 %}
+  {% when 'medium' %}
+    {% assign image_width_desktop = 75 %}
+    {% assign image_width_mobile = 65 %}
+  {% when 'large' %}
+    {% assign image_width_desktop = 100 %}
+    {% assign image_width_mobile = 90 %}
+  {% when 'extra-large' %}
+    {% assign image_width_desktop = 125 %}
+    {% assign image_width_mobile = 115 %}
+  {% when 'custom' %}
+    {% assign image_width_desktop = component.options.image_size_desktop | round %}
+    {% assign image_width_mobile = component.options.image_size_mobile | round %}
+{% endcase %}
+
+{% assign image_height_desktop = image_width_desktop | times: image_dimension | round %}
+{% assign image_height_mobile = image_width_mobile | times: image_dimension | round %}
+
+{% assign image_format_desktop = 'x' | prepend: image_width_desktop | append: image_height_desktop %}
+{% assign image_format_mobile = 'x' | prepend: image_width_mobile | append: image_height_mobile %}
+
+{% if marquee-item.options.image_desktop.url != blank %}
+  {% assign image_desktop = marquee-item.options.image_desktop.url | transform: component.options.image_display, image_format_desktop %}
+  {% assign image_mobile = marquee-item.options.image_mobile.url | default: image_desktop | transform: component.options.image_display, image_format_mobile %}
+{% elsif link != blank and link_image_display and link_image != blank %}
+  {% assign image_desktop = link_image | transform: component.options.image_display, image_format_desktop %}
+  {% assign image_mobile = link_image | transform: component.options.image_display, image_format_mobile %}
+{% endif %}
+{% assign image_alt = marquee-item.options.image_mobile.alt | default: marquee-item.options.image_desktop.alt | default: title | default: options.theme_store_name | default: store.name %}
+
+{% assign item_class = 'theme-marquee__item' %}
+
+{% case align_desktop %}
+  {% when 'center' %}
+    {% assign item_class = item_class | append: ' flex-sm-column align-items-sm-center justify-content-sm-start text-sm-center' %}
+  {% when 'start' %}
+    {% assign item_class = item_class | append: ' flex-sm-row align-items-sm-center justify-content-sm-start text-sm-start' %}
+  {% when 'end' %}
+    {% assign item_class = item_class | append: ' flex-sm-row-reverse align-items-sm-center justify-content-sm-end text-sm-end' %}
+{% endcase %}
+
+{% case align_mobile %}
+  {% when 'center' %}
+    {% assign item_class = item_class | append: ' flex-column align-items-center justify-content-start text-center' %}
+  {% when 'start' %}
+    {% assign item_class = item_class | append: ' flex-row align-items-center justify-content-start text-start' %}
+  {% when 'end' %}
+    {% assign item_class = item_class | append: ' flex-row-reverse align-items-center justify-content-end text-end' %}
+{% endcase %}
+
+<div
+  id="{{ item_id }}"
+  class="{{ item_class }}"
+  {{ marquee-item.attributes }}
+>
+  {% render 'theme_hover_link', link: link, link_text: link_text, link_external: link_external %}
+
+  {% if image_desktop != blank %}
+    <picture class="theme-marquee__picture">
+      <source media="screen and (min-width: 576px)" srcset="{{ image_desktop }}">
+      <source media="screen and (max-width: 575px)" srcset="{{ image_mobile }}">
+      <img
+        src="{{ image_desktop }}"
+        alt="{{ image_alt }}"
+        class="theme-marquee__image theme-marquee__image--{{ component.options.image_shape }}"
+        width="{{ image_width_desktop }}"
+        height="{{ image_height_desktop }}"
+        loading="lazy"
+        fetchpriority="auto"
+      >
+    </picture>
+  {% endif %}
+
+  {% if show_titles %}
+    <div class="theme-marquee__title check-empty">
+      {{- title -}}
+    </div>
+  {% endif %}
+
+  {% if show_titles == false and image_desktop == blank %}
+    <div class="theme-marquee__title">{% t "Add an image or enable titles" %}</div>
+  {% endif %}
+</div>

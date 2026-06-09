@@ -1,0 +1,33 @@
+{% capture t_from_default %}{% t "from" %}{% endcapture %}
+{% assign t_from = options.t_from | default: t_from_default %}
+{% capture t_new_default %}{% t "New" %}{% endcapture %}
+{% assign t_new = options.t_new | default: t_new_default %}
+
+{% if options.pb_show_color_options %}
+  {% assign show_color_options = true %}
+{% else %}
+  {% assign show_color_options = false %}
+{% endif %}
+
+{% capture prod_colors %}
+  <div class="product-block__options" data-colors-position="{{ options.pb_color_options_position }}">
+    {% for _ in (1..5) %}
+      <button
+        type="button"
+        class="button product-block__color{% if forloop.first %} product-block__color--active{% endif %}"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-title="{% cycle 'prod_color_name': 'Black', 'White', 'Blue', 'Pink', 'Red' %}"
+        data-bs-custom-class="product-block__tooltip"
+        aria-label="{% cycle 'prod_color_name': 'Black', 'White', 'Blue', 'Pink', 'Red' %}"
+      >
+        <div class="w-100 h-100 d-block" style="background: {% cycle 'prod_color_code': 'black', 'white', 'blue', 'pink', 'red' %};"></div>
+      </button>
+    {% endfor %}
+    <div class="product-block__color product-block__color--remaining">+2</div>
+  </div>
+{% endcapture %}
+
+{% for placeholder in (1..component.options.limit) %}
+  {% render 'component_placeholder_product_block', display_option: display_option, show_color_options: show_color_options, prod_colors: prod_colors, block_index: forloop.index, placeholder: placeholder, t_from: t_from, t_new: t_new %}
+{% endfor %}

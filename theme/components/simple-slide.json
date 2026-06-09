@@ -1,0 +1,22 @@
+{
+  "name": "Slide",
+  "icon": "image",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "image_desktop": {
+      "name": "Image",
+      "type": "image"
+    },
+    "image_mobile": {
+      "name": "Image (mobile)",
+      "type": "image",
+      "visible_if": "{{ block.options.image_desktop.url != blank }}"
+    }
+  },
+  "mode": "subcomponents",
+  "blocks": []
+}

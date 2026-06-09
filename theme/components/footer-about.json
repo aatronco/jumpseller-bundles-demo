@@ -1,0 +1,104 @@
+{
+  "name": "About",
+  "icon": "info-circle",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/theme-customization/#footer-about).",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "column_width": {
+      "name": "Column width",
+      "type": "select",
+      "default": "auto",
+      "options": [
+        {
+          "label": "Auto",
+          "value": "auto"
+        },
+        {
+          "label": "Half width",
+          "value": "half"
+        },
+        {
+          "label": "Full width",
+          "value": "full"
+        }
+      ]
+    },
+    "logo": {
+      "name": "Logo",
+      "type": "image"
+    },
+    "logo_mobile": {
+      "name": "Logo (mobile)",
+      "type": "image",
+      "visible_if": "{{ block.options.logo.url != blank }}"
+    },
+    "logo_height": {
+      "name": "Height (desktop)",
+      "type": "slider",
+      "default": 50,
+      "min": 10,
+      "max": 120,
+      "step": 1,
+      "unit": "px"
+    },
+    "logo_height_mobile": {
+      "name": "Height (mobile)",
+      "type": "slider",
+      "default": 50,
+      "min": 10,
+      "max": 120,
+      "step": 1,
+      "unit": "px"
+    },
+    "description_origin": {
+      "name": "Description",
+      "type": "select",
+      "help": "Define the origin of the footer description, it can be a customized text or the description from the admin panel. You can define or edit your store's description in `General > Preferences`.",
+      "default": "custom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        },
+        {
+          "label": "Admin",
+          "value": "admin"
+        }
+      ]
+    },
+    "description": {
+      "name": "Custom description",
+      "type": "text",
+      "default": "",
+      "placeholder": "Add a short description about your store",
+      "visible_if": "{{ block.options.description_origin == 'custom' }}"
+    },
+    "social": {
+      "name": "Social media links",
+      "type": "checkbox",
+      "default": true
+    }
+  },
+  "presentation": [
+    {
+      "name": "Logo options",
+      "type": "heading",
+      "before": "logo"
+    },
+    {
+      "name": "Content options",
+      "type": "heading",
+      "before": "description_origin"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

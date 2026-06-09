@@ -1,0 +1,41 @@
+{% assign color_swatch_limit = 5 %}
+{% assign color_swatch_limit_mobile = 3 %}
+
+{% for option in prod.options %}
+  {% if option.type == 'color' %}
+    <product-block-swatch class="product-block__options" data-colors-position="{{ options.pb_color_options_position }}">
+      {% for value in option.values limit: color_swatch_limit %}
+        <button
+          id="{{ value.id }}"
+          type="button"
+          class="button product-block__color{% if forloop.first %} product-block__color--active{% endif %}"
+          aria-label="{{ value.name }}"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          data-bs-title="{{ value.name }}"
+          data-bs-custom-class="product-block__tooltip"
+          {% if value.image != blank %}
+            data-image="{{ value.image | resize: width: 480 | strip }}"
+          {% endif %}
+        >
+          {% if options.pb_color_options_image and value.image != blank %}
+            {% assign value_background = value.image | thumb: '100x100' | prepend: "background-image: url('" | append: "')" %}
+          {% else %}
+            {% assign value_background = 'background-color: ' | append: value.custom %}
+          {% endif %}
+
+          <div class="w-100 h-100 d-block" style="{{ value_background }};"></div>
+        </button>
+      {% endfor %}
+
+      {% if option.values.size > color_swatch_limit %}
+        <a href="{{ prod.url }}" class="product-block__color product-block__color--remaining">+{{ option.values.size | minus: color_swatch_limit }}</a>
+      {% endif %}
+
+      {% if option.values.size > color_swatch_limit_mobile %}
+        <a href="{{ prod.url }}" class="product-block__color product-block__color--remaining product-block__color--remaining-mobile">+{{ option.values.size | minus: color_swatch_limit_mobile }}</a>
+      {% endif %}
+    </product-block-swatch>
+    {% break %}
+  {% endif %}
+{% endfor %}

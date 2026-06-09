@@ -1,0 +1,161 @@
+{% assign menu_event = header-menu.options.event %}
+{% assign submenu_columns = header-menu.options.submenu_columns %}
+{% assign submenu_columns_width = header-menu.options.submenu_columns_width %}
+{% assign submenu_image = header-menu.options.submenu_image %}
+{% assign submenu_image_ratio = header-menu.options.submenu_image_ratio %}
+{% assign submenu_image_position = header-menu.options.submenu_image_position %}
+{% assign submenu_image_width = header-menu.options.submenu_image_width %}
+{% assign menu_buttons = component.options.menu_buttons %}
+{% assign menu_buttons_type = component.options.menu_buttons_type %}
+
+{% if component.options.categories %}
+  {% case component.options.categories_display %}
+    {% when 'desktop' %}
+      {% assign nav_visibility = 'd-none d-lg-block' %}
+    {% when 'mobile' %}
+      {% assign nav_visibility = 'd-block' %}
+    {% when 'both' %}
+      {% assign nav_visibility = 'd-block' %}
+  {% endcase %}
+{% else %}
+  {% assign nav_visibility = 'd-none d-lg-block' %}
+{% endif %}
+
+{% case header-menu.options.content_alignment_x %}
+  {% when 'start' %}
+    {% assign nav_alignment = 'justify-content-between' %}
+    {% assign social_alignment = 'justify-content-end' %}
+  {% when 'center' %}
+    {% assign nav_alignment = 'justify-content-center' %}
+    {% assign social_alignment = 'justify-content-center' %}
+  {% when 'end' %}
+    {% assign nav_alignment = 'justify-content-between flex-row-reverse' %}
+    {% assign social_alignment = 'justify-content-start' %}
+{% endcase %}
+
+{% if header-menu.options.width == 'full' %}
+  <style>
+    .header-navigation {
+      --theme-max-width: 100%;
+    }
+  </style>
+{% endif %}
+
+<div
+  class="{{ nav_visibility }} header-navigation{% if header-menu.options.spacing == false %} header-navigation--no-spacing{% endif %}{% if header_version == 'v5' %} w-100{% endif %}"
+  {% if header-menu.options.custom_bundle_color %}
+    data-bundle-color="{{ header-menu.options.bundle_color }}"
+  {% endif %}
+  {{ header-menu.attributes }}
+>
+  <nav
+    class="container d-flex align-items-start {{ nav_alignment }} header-nav"
+    data-border="{{ header-menu.options.border }}"
+    data-uppercase="{{ component.options.menu_uppercase }}"
+    {% if component.options.categories %}
+      data-categories-menu="{{ component.options.categories_display }}"
+    {% endif %}
+  >
+    <ul class="no-bullet justify-content-{{ header-menu.options.content_alignment_x }} header-nav__menu{% if menu_buttons %} header-nav__menu--buttons{% endif %} header-nav__menu--{{ header-menu.options.content_alignment_x }}">
+      {% if component.options.categories %}
+        {% render 'header_menu_categories',
+          categories_display: component.options.categories_display,
+          categories_title: component.options.categories_title,
+          categories_icon: component.options.categories_icon,
+          submenu_type: header-menu.options.submenu,
+          submenu_columns: submenu_columns,
+          submenu_columns_width: submenu_columns_width,
+          submenu_image: submenu_image,
+          submenu_image_ratio: submenu_image_ratio,
+          submenu_image_position: submenu_image_position,
+          submenu_image_width: submenu_image_width,
+          submenu_view_all: submenu_view_all,
+          t_view_all: t_view_all,
+          menu_event: menu_event,
+          header_version: header_version,
+          header_items_text: header_items_text,
+          t_go_to: t_go_to
+        %}
+      {% endif %}
+
+      {% for item in menu.main.items %}
+        <li class="header-nav__item{% if item.dropdown %} dropdown{% if menu_event == 'hover' %} header-nav__item--hover{% endif %}{% if header-menu.options.submenu == 'megamenu' %} header-nav__item--inherit{% endif %}{% endif %}">
+          {% if item.dropdown %}
+            {% case menu_event %}
+              {% when 'click' %}
+                <a
+                  role="button"
+                  class="button dropdown-toggle header-nav__anchor{% if item.active and item.type != 'no_url' %} header-nav__anchor--active{% endif %}{% if menu_buttons %}button button--small button--style button--{{ menu_buttons_type }} theme-section__button header__button header__button--menu{% endif %}"
+                  data-bs-toggle="dropdown"
+                  data-bs-auto-close="outside"
+                  aria-expanded="false"
+                  aria-label="{{ item.name }}"
+                  data-event="click"
+                >
+                  <span>{{- item.name -}}</span>
+                  <i class="ph ph-caret-down header-nav__caret"></i>
+                </a>
+              {% when 'hover' %}
+                <a
+                  {%- if item.type == 'no_url' %}
+                    role="button"
+                  {% else %}
+                    href="{{ item.url }}"
+                  {% endif -%}
+                  class="button{% if menu_buttons %} button--small button--style button--{{ menu_buttons_type }} theme-section__button header__button header__button--menu{% else %} header-nav__anchor{% endif %}{% if item.active and item.type != 'no_url' %} header-nav__anchor--active{% endif %}"
+                  title="{{ t_go_to }} {{ item.name }}"
+                  data-event="hover"
+                  {% if item.external %}
+                    target="_blank"
+                  {% endif %}
+                >
+                  <span>{{- item.name -}}</span>
+                  <i class="ph ph-caret-down header-nav__caret"></i>
+                </a>
+            {% endcase %}
+
+            {% if header-menu.options.submenu == 'flyout' %}
+              {% render 'header_flyout', item: item, menu_event: menu_event, submenu_view_all: submenu_view_all, t_view_all: t_view_all, t_go_to: t_go_to %}
+            {% elsif header-menu.options.submenu == 'megamenu' %}
+              {% render 'header_megamenu',
+                item: item,
+                submenu_columns: submenu_columns,
+                submenu_columns_width: submenu_columns_width,
+                submenu_image: submenu_image,
+                submenu_image_ratio: submenu_image_ratio,
+                submenu_image_position: submenu_image_position,
+                submenu_image_width: submenu_image_width,
+                submenu_view_all: submenu_view_all,
+                t_view_all: t_view_all,
+                t_go_to: t_go_to
+              %}
+            {% endif %}
+          {% else %}
+            <a
+              {% if item.type == 'no_url' %}
+                role="button"
+              {% else %}
+                href="{{ item.url }}"
+              {% endif %}
+              class="button{% if menu_buttons %} button--small button--style button--{{ menu_buttons_type }} theme-section__button header__button header__button--menu{% else %} header-nav__anchor{% endif %}{% if item.active and item.type != 'no_url' %} header-nav__anchor--active{% endif %}"
+              title="{{ t_go_to }} {{ item.name }}"
+              {% if item.external %}
+                target="_blank"
+              {% endif %}
+            >
+              <span>{{- item.name -}}</span>
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% unless header_version == 'v3' or header_version == 'v4' or header_version == 'v5' %}
+      {% if component.options.show_social %}
+        <ul class="no-bullet d-none d-lg-flex {{ social_alignment }} header-nav__menu header-nav__menu--social{% if menu_buttons %} header-nav__menu--social-buttons{% endif %}">
+          {%- render 'store_social', position: 'header-menu' -%}
+        </ul>
+      {%- endif -%}
+    {%- endunless -%}
+  </nav>
+</div>

@@ -1,0 +1,76 @@
+{% assign store_name = options.theme_store_name | default: store.name %}
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% case component.options.columns %}
+  {% when 'left' %}
+    {% assign order_login = 'order-1' %}
+    {% assign order_registration = 'order-2 offset-md-1' %}
+  {% when 'right' %}
+    {% if component.options.columns_mobile %}
+      {% assign order_login = 'order-2 offset-md-1' %}
+      {% assign order_registration = 'order-1' %}
+    {% else %}
+      {% assign order_login = 'order-1 order-md-2 offset-md-1' %}
+      {% assign order_registration = 'order-2 order-md-1' %}
+    {% endif %}
+{% endcase %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container container--adjust theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="row align-items-center justify-content-center theme-section__content">
+    {% if current_url contains '?target=wishlist' %}
+      <div class="col-12 text-center">
+        <div class="alert alert-warning theme-section__alert">
+          {%- t "You need to log in or create an account to Wishlist products." -%}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="col-12 col-md-5 col-lg-4 {{ order_login }} customer-form customer-form--center">
+      <div class="customer-form__wrapper">
+        <div class="w-100 text-center">
+          <div class="theme-section__subtitle">
+            {%- t "Log in to" -%}
+          </div>
+          <h1 class="theme-section__title">
+            {{- store_name -}}
+          </h1>
+        </div>
+
+        {{ login_form }}
+      </div>
+    </div>
+    <!-- end .customer-form -->
+
+    <div class="col-12 col-md-5 col-lg-4 {{ order_registration }} theme-section__column text-center">
+      <h2 class="theme-section__title theme-section__title--medium" {{ component.attributes.textfield.register_title }}>
+        {%- capture register_title_default %}{% t "Are you new at %{store}?", store: store_name %}{% endcapture %}
+        {{- component.options.register_title | default: register_title_default -}}
+      </h2>
+
+      <div class="theme-section__description check-empty" {{ component.attributes.textfield.register_text }}>
+        {{ component.options.register_text }}
+      </div>
+
+      <a
+        href="{{ customer_registration_url }}"
+        class="button button--style button--secondary theme-section__button"
+        title="{% t 'Create your account' %}"
+      >
+        <span>{%- t "Create account" -%}</span>
+      </a>
+    </div>
+  </div>
+</section>

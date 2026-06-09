@@ -1,0 +1,32 @@
+<div
+  class="theme-notification__product"
+  {{ product-notification.attributes }}
+>
+  <div class="alert alert-{{ product-notification.options.type }} alert-dismissible fade show theme-notification__alert" role="alert">
+    {% if product-notification.options.icon != blank %}
+      <i class="ph {{ product-notification.options.icon }} theme-notification__icon--{{ product-notification.options.icon_size }}"></i>
+    {% endif %}
+    <div class="theme-notification__container">
+      <div class="theme-notification__title check-empty" {{ product-notification.attributes.textfield.title }}>{{ product-notification.options.title }}</div>
+      <div class="theme-notification__content">
+        <div class="theme-notification__text check-empty" {{ product-notification.attributes.textfield.text }}>{{ product-notification.options.text | newline_to_br }}</div>
+        {% if product-notification.options.link != blank and product-notification.options.link_text != blank %}
+          <a
+            href="{{ product-notification.options.link }}"
+            class="theme-notification__link"
+            title="{{ product-notification.options.link_text }}"
+            {% if product-notification.options.link_external %}
+              target="_blank"
+            {% endif %}
+            {{ product-notification.attributes.textfield.link_text }}
+          >
+            {{- product-notification.options.link_text -}}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    {% if product-notification.options.close %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% t "Close" %}"><i class="ph ph-x"></i></button>
+    {% endif %}
+  </div>
+</div>

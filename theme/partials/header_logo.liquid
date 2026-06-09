@@ -1,0 +1,58 @@
+{% assign store_name = options.theme_store_name | default: store.name %}
+
+{% assign logo_desktop = component.options.logo.url | default: store.logo %}
+{% assign logo_mobile = component.options.logo_mobile.url | default: logo_desktop %}
+{% assign logo_width_and_height = component.options.logo.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+{% assign logo_alt = component.options.logo_mobile.alt | default: component.options.logo.alt | default: store_name | escape %}
+
+{% if logo_position == 'desktop' %}
+  {% assign logo_class = 'header' %}
+{% else %}
+  {% assign logo_class = 'sidebar-header' %}
+{% endif %}
+
+{% capture logo %}
+  {%- if logo_desktop != blank %}
+    <picture class="{{ logo_class }}__picture">
+      <source media="screen and (min-width: 576px)" srcset="{{ logo_desktop }}">
+      <source media="screen and (max-width: 575px)" srcset="{{ logo_mobile }}">
+      <img
+        src="{{ logo_desktop }}"
+        alt="{{ logo_alt }}"
+        class="{{ logo_class }}__logo"
+        {{ logo_width_and_height }}
+        loading="eager"
+        decoding="auto"
+        fetchpriority="high"
+      >
+    </picture>
+  {% else %}
+    {% case logo_position %}
+      {% when 'desktop' %}
+        {{- store_name -}}
+      {% else %}
+        <h5 class="offcanvas-title sidebar-header__title theme-store-name" id="mobile-menu-label">
+          {{- store_name -}}
+        </h5>
+    {% endcase %}
+  {% endif -%}
+{% endcapture %}
+
+{% if logo_position == 'desktop' %}
+  {% case template %}
+    {% when 'home' %}
+      <h1 class="theme-store-name">
+        <a href="{{ store.url }}" class="header__brand" title="{% t 'Go to Home page' %}">
+          {{- logo -}}
+        </a>
+      </h1>
+    {% else %}
+      <div class="theme-store-name">
+        <a href="{{ store.url }}" class="header__brand" title="{% t 'Go to Home page' %}">
+          {{- logo -}}
+        </a>
+      </div>
+  {% endcase %}
+{% else %}
+  {{- logo -}}
+{% endif %}

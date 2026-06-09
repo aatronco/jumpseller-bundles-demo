@@ -1,0 +1,147 @@
+{
+  "name": "Block",
+  "icon": "square",
+  "max_usage": 7,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Block title",
+      "visible_if": "{{ component.options.show_titles }}"
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": null
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "help": "This text will only be visible when users hover over the block image.",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_arrow": {
+      "name": "Arrow in title",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "image_desktop": {
+      "name": "Custom image",
+      "type": "image"
+    },
+    "image_mobile": {
+      "name": "Custom image (mobile)",
+      "type": "image",
+      "visible_if": "{{ block.options.image_desktop.url != blank }}"
+    },
+    "content_alignment_x_image_desktop": {
+      "name": "Horizontal",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    "content_alignment_y_image_desktop": {
+      "name": "Vertical",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Top",
+          "value": "top"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Bottom",
+          "value": "bottom"
+        }
+      ]
+    },
+    "content_alignment_x_image_mobile": {
+      "name": "Horizontal",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    "content_alignment_y_image_mobile": {
+      "name": "Vertical",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Top",
+          "value": "top"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Bottom",
+          "value": "bottom"
+        }
+      ]
+    }
+  },
+  "presentation": [
+    {
+      "name": "Image options",
+      "type": "heading",
+      "before": "image_desktop"
+    },
+    {
+      "help": "Allows to define the image position for desktop devices.",
+      "name": "Desktop",
+      "type": "heading",
+      "before": "content_alignment_x_image_desktop"
+    },
+    {
+      "help": "Allows to define the image position for mobile devices.",
+      "name": "Mobile",
+      "type": "heading",
+      "before": "content_alignment_x_image_mobile"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

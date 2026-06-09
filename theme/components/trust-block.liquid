@@ -1,0 +1,84 @@
+{% assign link = trust-block.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = trust-block.options.link_text | default: link_text_default %}
+
+{% case align_mobile %}
+  {% when 'center' %}
+    {% assign block_direction_mobile = 'flex-column' %}
+  {% when 'end' %}
+    {% assign block_direction_mobile = 'flex-row-reverse' %}
+  {% when 'start' %}
+    {% assign block_direction_mobile = 'flex-row' %}
+{% endcase %}
+
+{% case align_desktop %}
+  {% when 'center' %}
+    {% assign block_direction_desktop = 'flex-md-column' %}
+  {% when 'end' %}
+    {% assign block_direction_desktop = 'flex-md-row-reverse' %}
+  {% when 'start' %}
+    {% assign block_direction_desktop = 'flex-md-row' %}
+{% endcase %}
+
+{% if options.theme_spacing == 'none' and component.options.card %}
+  {% assign data_spacing = false %}
+{% elsif options.theme_spacing != 'none' and component.options.card and component.options.card_spacing == false %}
+  {% assign data_spacing = false %}
+{% else %}
+  {% assign data_spacing = true %}
+{% endif %}
+
+<div
+  class="theme-block trustbar-block{% if display_option == 'carousel' %} swiper-slide{% endif %}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-spacing="{{ data_spacing }}"
+  {% if component.options.card %}
+    data-card="true"
+    data-card-border="{{ component.options.card_border }}"
+    data-card-border-inner="{{ component.options.card_border_inner }}"
+    data-bundle-color="{{ trust-block.options.bundle_color }}"
+  {% endif %}
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {{ trust-block.attributes }}
+>
+  <div class="d-flex text-{{ align_mobile }} text-md-{{ align_desktop }} {{ block_direction_mobile }} {{ block_direction_desktop }} theme-block__wrapper trustbar-block__wrapper">
+    {% if link != blank %}
+      {% render 'theme_hover_link', link: link, link_text: link_text, link_external: trust-block.options.link_external %}
+    {% endif %}
+
+    {% if component.options.card and component.options.card_border_inner %}
+      <div class="theme-section__inner-border"></div>
+    {% endif %}
+
+    {% if has_icons %}
+      <div class="trustbar-block__icon trustbar-block__icon--{{ component.options.icon_size }}">
+        <i class="theme-icon ph {{ trust-block.options.icon }}"></i>
+      </div>
+    {% endif %}
+
+    <div class="d-flex flex-column trustbar-block__info">
+      <div class="w-100 trustbar-block__title check-empty" {{ trust-block.attributes.textfield.title }}>{{ trust-block.options.title }}</div>
+
+      <div class="w-100 trustbar-block__text check-empty" {{ trust-block.attributes.textfield.text }}>{{ trust-block.options.text | newline_to_br }}</div>
+
+      {% if link != blank %}
+        <a
+          href="{{ link }}"
+          class="trustbar-block__link"
+          title="{{ link_text }}"
+          {% if trust-block.options.link_external %}
+            target="_blank"
+          {% endif %}
+        >
+          <span {{ trust-block.attributes.textfield.link_text }}>{{ link_text }}</span>
+          {% if trust-block.options.link_arrow %} <i class="theme-icon ph ph-arrow-right"></i>{% endif %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

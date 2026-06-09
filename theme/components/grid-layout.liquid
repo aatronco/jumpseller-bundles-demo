@@ -1,0 +1,89 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% if component.subcomponents.blocks.size == 0 %}
+  {% assign blocks_size = 5 | plus: 0 %}
+{% else %}
+  {% assign blocks_size = component.subcomponents.blocks.size %}
+{% endif %}
+
+{% assign show_titles = component.options.show_titles %}
+{% assign title_overlap = component.options.title_overlap %}
+{% assign title_overlay = component.options.title_overlay %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% assign align_desktop = component.options.content_alignment_desktop %}
+{% assign align_mobile = component.options.content_alignment_mobile %}
+{% assign justify_desktop = align_desktop | replace: 'text-md-', 'justify-content-md-' %}
+{% assign justify_mobile = align_mobile | replace: 'text-', 'justify-content-' %}
+
+<link rel="stylesheet" href="{{ 'component-grid-layout.css' | asset }}">
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    {% if show_titles %}
+      --grid-layout-title-weight: {{ component.options.title_weight }};
+      --grid-layout-title-spacing: {{ component.options.title_spacing }}px;
+      --grid-layout-title-text-transform: {% if component.options.title_uppercase %}uppercase{% else %}initial{% endif %};
+    {% endif %}
+    {% if component.options.title_overlap and component.options.title_overlay %}
+      --theme-overlay-opacity: {{ component.options.title_overlay_opacity | divided_by: 100.00 }};
+    {% endif %}
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div
+      class="row theme-section__content grid-layout"
+      data-layout-size="{{ blocks_size }}"
+      data-layout-featured="{{ component.options.featured }}"
+    >
+      {% for grid-block in component.subcomponents.blocks %}
+        {% render 'components/grid-block',
+          grid-block: grid-block,
+          blocks_size: blocks_size,
+          show_titles: show_titles,
+          image_transition: component.options.image_transition,
+          align_mobile: align_mobile,
+          align_desktop: align_desktop,
+          justify_mobile: justify_mobile,
+          justify_desktop: justify_desktop,
+          block_index: forloop.index,
+          title_overlap: title_overlap,
+          title_alignment_y: component.options.content_alignment_y,
+          title_overlay: title_overlay,
+          title_bundle_color: component.options.title_bundle_color
+        %}
+      {% else %}
+        {% render 'component_placeholder_grid_block',
+          show_titles: show_titles,
+          align_mobile: align_mobile,
+          align_desktop: align_desktop,
+          justify_mobile: justify_mobile,
+          justify_desktop: justify_desktop,
+          block_index: forloop.index,
+          title_overlap: title_overlap,
+          title_alignment_y: component.options.content_alignment_y,
+          title_overlay: title_overlay,
+          title_bundle_color: component.options.title_bundle_color
+        %}
+      {% endfor %}
+    </div>
+  </div>
+</section>

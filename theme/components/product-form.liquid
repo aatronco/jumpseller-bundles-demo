@@ -1,0 +1,265 @@
+{% assign first_variant = prod.variants.first | default: prod %}
+{% capture t_add_to_cart_default %}{% t "Add to Cart" %}{% endcapture %}
+{% assign t_add_to_cart = options.t_add_to_cart | default: t_add_to_cart_default %}
+{% capture t_quantity_default %}{% t "Quantity" %}{% endcapture %}
+{% assign t_quantity = options.t_quantity | default: t_quantity_default %}
+{% capture t_request_quotation_default %}{% t "Request Quotation" %}{% endcapture %}
+{% assign t_request_quotation = options.t_request_quotation | default: t_request_quotation_default %}
+{% assign has_buy_now = options.pf_buy_now_button %}
+
+{% comment %} ── CART DISCOUNT BAR ────────────────────────────────────────
+  Muestra cuántos productos hay en el carro y cuánto falta para
+  cada tramo de descuento. Se actualiza en tiempo real.
+  Configurar TIERS en el bloque <script> más abajo.
+{% endcomment %}
+<div id="cart-discount-bar" class="cart-discount-bar" style="display:none">
+  <i class="ph ph-shopping-cart-simple"></i>
+  <span id="cart-discount-message"></span>
+</div>
+<script>
+(function () {
+  // ── CONFIGURACIÓN: define aquí tus tramos qty → % descuento ──
+  var TIERS = [
+    { qty: 5,  pct: 10 },
+    { qty: 10, pct: 20 },
+    { qty: 20, pct: 30 },
+  ];
+  // ─────────────────────────────────────────────────────────────
+
+  function getCount() {
+    var el = document.querySelector('.theme-cart-counter');
+    return el ? (parseInt(el.getAttribute('data-products-count')) || 0) : 0;
+  }
+
+  function update() {
+    var bar = document.getElementById('cart-discount-bar');
+    var msg = document.getElementById('cart-discount-message');
+    if (!bar || !msg) return;
+
+    var n = getCount();
+    var active = null, next = null;
+    for (var i = 0; i < TIERS.length; i++) {
+      if (n >= TIERS[i].qty) { active = TIERS[i]; }
+      else { next = TIERS[i]; break; }
+    }
+
+    var html;
+    if (n === 0) {
+      if (!next) { bar.style.display = 'none'; return; }
+      html = 'Agrega <strong>' + next.qty + ' productos</strong> al carro para obtener <strong>' + next.pct + '% de descuento</strong>.';
+    } else {
+      var word = n === 1 ? 'producto' : 'productos';
+      var base = 'Tienes <strong>' + n + ' ' + word + '</strong> en el carro.';
+      if (active && next) {
+        html = base + ' ¡Descuento activo: <strong>' + active.pct + '%</strong>! Agrega <strong>' + (next.qty - n) + ' más</strong> para llegar a <strong>' + next.pct + '%</strong>.';
+      } else if (active) {
+        html = base + ' ¡Tienes el máximo descuento: <strong>' + active.pct + '%</strong>!';
+      } else {
+        html = base + ' Agrega <strong>' + (next.qty - n) + ' más</strong> para obtener <strong>' + next.pct + '% de descuento</strong>.';
+      }
+    }
+
+    msg.innerHTML = html;
+    bar.style.display = '';
+  }
+
+  // Render inicial
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', update);
+  } else {
+    update();
+  }
+
+  // Se actualiza automáticamente cada vez que cambia el carro
+  new MutationObserver(update).observe(document.body, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['data-products-count'],
+  });
+}());
+</script>
+
+<product-form class="product-form product-form-{{ component.id }}" {{ product-form.attributes }}>
+  <script type="application/json" class="product-form-json">
+        {
+          "options": {
+            "disableShoppingCart": {{ options.disable_shopping_cart | json }},
+        "disableShoppingCartTitle": {{ options.disable_shopping_cart_title | json }},
+        "disableShoppingCartText": {{ options.disable_shopping_cart_text | json }},
+        "disableShoppingCartContact": {{ options.disable_shopping_cart_contact | json }},
+        "disableShoppingCartWhatsapp": {{ options.disable_shopping_cart_whatsapp | json }}
+        },
+        "info": {
+          "product": {
+           "id": {{ prod.id | json }},
+          "sku":  {{ prod.sku | json }},
+          "type": {{ prod.type | json }},
+          "name": {{ prod.name | json }},
+          "url": {{ prod.url | json }},
+          "add_to_cart_url": {{ prod.add_to_cart_url | json }},
+          "back_in_stock_url": {{ prod.back_in_stock_url | json }},
+          "back_in_stock_enabled": {{ prod.back_in_stock_enabled | json }},
+          "stock": {{ prod.stock | json }},
+          "stock_notification": {{ prod.stock_notification | json }},
+          "stock_threshold": {{ prod.stock_threshold | json }},
+          "stock_unlimited": {{ prod.stock_unlimited | json }},
+          "status": {{ prod.status | json }},
+          "options": {{ prod.options | json }},
+          "option_types": {{ prod.options | map: 'type' | json }},
+          "minimum_quantity": {{ prod.minimum_quantity | json }},
+          "maximum_quantity": {{ prod.maximum_quantity | json }},
+          "share_url": {{ store.base_url | append: prod.url | json }},
+          "quotable": {{ prod.quotable | json }},
+          "request_quote_url": {{ prod.request_quote_url | json }}
+        },
+        "variant": {
+          "id": {{ first_variant.id | json }},
+          "stock": {{ first_variant.stock | json }},
+          "stock_notification": {{ first_variant.stock_notification | json }},
+          "stock_threshold": {{ first_variant.stock_threshold | json }},
+          "stock_unlimited": {{ first_variant.stock_unlimited | json }},
+          "status": {{ first_variant.status | json }},
+          "price": {{ first_variant.price | json }},
+          "price_with_discount": {{ first_variant.price | minus: first_variant.discount | json }},
+          "minimum_quantity": {{ prod.minimum_quantity | json }},
+          "maximum_quantity": {{ prod.maximum_quantity | json }}
+        },
+        "contact": {
+          "url": {{ contact.url | json }}
+        },
+        "social": {
+          "whatsapp": {
+            "url": {{ social.whatsapp.url | json }}
+        }
+      },
+      "status": {
+        "outOfStockTitle": {{ options.t_out_of_stock_pf | json }},
+          "outOfStockText": {{ options.t_out_of_stock_pf_text | json }},
+          "notAvailableTitle": {{ options.t_not_available_pf | json }},
+          "notAvailableText": {{ options.t_not_available_pf_text | json }},
+          "buttonContact": {{ options.pf_status_button_contact | json }},
+          "buttonWhatsapp": {{ options.pf_status_button_whatsapp | json }}
+        }
+      }
+    }
+  </script>
+  <form action="{{ prod.add_to_cart_url }}" method="post" enctype="multipart/form-data" name="buy">
+    {% if prod.type == 'appointment' %}
+      {% render 'product_appointments', prod: prod %}
+    {% endif %}
+
+    {% if prod.options != blank %}
+      {% render 'product_options', prod: prod, options_display: options.pf_options_display %}
+    {% endif %}
+
+    {% if prod.product_subscription_delivery_frequencies != blank %}
+      {% render 'product_subscription_frequencies', prod: prod, options_display: options.pf_options_display %}
+    {% endif %}
+    <div class="product-form__actions" data-nosnippet>
+      <div class="product-form__wrapper">
+        <div class="product-form__quantity order-1{% unless options.pf_qty_select %} hidden{% endunless %}{% if prod.status == 'not-available' or prod.stock == 0 and prod.stock_unlimited == false %} hidden{% endif %}">
+          <button
+            type="button"
+            class="button product-form__handler quantity-down"
+            aria-label="{% t 'Decrease quantity' %}"
+            onclick="updateProductFormCounter(this, -1)"
+          >
+            <i class="ph ph-minus-circle"></i>
+          </button>
+          <label for="input-qty" class="sr-only">{{ t_quantity }}</label>
+          <input
+            type="number"
+            id="input-qty"
+            name="qty"
+            min="1"
+            value="1"
+            onchange="checkMaxQuantityReached()"
+            class="text text--qty product-form__input"
+          >
+          <button
+            type="button"
+            class="button product-form__handler quantity-up"
+            aria-label="{% t 'Increase quantity' %}"
+            onclick="updateProductFormCounter(this, 1)"
+          >
+            <i class="ph ph-plus-circle"></i>
+          </button>
+        </div>
+
+        {% assign option_types = prod.options | map: 'type' -%}
+        {% if options.display_cart_notification == false or option_types contains 'file' %}
+          <button
+            type="submit"
+            class="button button--style button--main{% if options.pf_buy_now_button_main %} order-3 button--bordered{% else %} order-2{% endif %} button--main product-form__button{% if prod.status == 'not-available' or prod.stock == 0 and prod.stock_unlimited == false %} hidden{% endif %}"
+            id="add-to-cart"
+          >
+            {% if options.theme_icon_cart_button %}<i class="theme-icon ph {{ options.theme_icon_cart }}"></i>{% endif -%}
+            <span>{{ t_add_to_cart }}</span>
+          </button>
+        {% else %}
+          <button
+            type="button"
+            class="button button--style button--main{% if options.pf_buy_now_button_main %} order-3 button--bordered{% else %} order-2{% endif %} product-form__button{% if prod.status == 'not-available' or prod.stock == 0 and prod.stock_unlimited == false %} hidden{% endif %}"
+            id="add-to-cart"
+          >
+            {% if options.theme_icon_cart_button %}<i class="theme-icon ph {{ options.theme_icon_cart }}"></i>{% endif -%}
+            <span>{{ t_add_to_cart }}</span>
+          </button>
+        {% endif %}
+
+        {% if options.pf_buy_now_button %}
+          <button
+            id="buy-now-button"
+            type="submit"
+            onclick="updateFormAction(this, '{{ prod.buy_now_url }}')"
+            class="button button--style button--main{% if options.pf_buy_now_button_main %} order-2{% else %} order-3 button--bordered{% endif %} product-form__button px-1{% if prod.status == 'not-available' or prod.stock == 0 and prod.stock_unlimited == false %} hidden{% endif %}"
+          >
+            <span>{%- t "Buy now" -%}</span>
+          </button>
+        {% endif %}
+
+        {% if prod.quotable %}
+          <input type="hidden" name="product[id]" value="{{ prod.id }}">
+          <button
+            id="request-quote"
+            type="submit"
+            onclick="updateFormAction(this, '{{ prod.request_quote_url }}')"
+            class="button{% if has_buy_now %} product-form__quote-link{% else %} button--style button--main button--bordered product-form__button{% endif %} order-3 px-1"
+          >
+            <span>{{ t_request_quotation }}</span>
+          </button>
+        {% endif %}
+      </div>
+      <!-- end .product-form__wrapper -->
+
+      {% if template != 'product' %}
+        <a href="{{ prod.url }}" class="product-form__link{% if prod.status == 'not-available' or prod.stock == 0 and prod.stock_unlimited == false %} hidden{% endif %}" title="{% t 'Go to' %} {{ prod.name }}">
+          {%- t "See more details" %}
+          <i class="ph ph-arrow-right"></i>
+        </a>
+      {% endif %}
+
+      <!-- Maximum Stock Reached -->
+      <div class="product-form__text product-form__text--max-stock-disclaimer hidden">
+        {%- t "You have reached the maximum amount available." -%}
+      </div>
+    </div>
+
+    <div
+      id="product-purchase-conditions"
+      class="{% unless prod.minimum_quantity >= 1 or prod.maximum_quantity >= 1 %}hidden{% endunless %}"
+      data-nosnippet
+    >
+      <i class="ph ph-info"></i>
+      <p class="mb-0">
+        {%- if prod.minimum_quantity >= 1 and prod.maximum_quantity >= 1 %}
+          {%- t "You must purchase a minimum of %{min} and a maximum of %{max} units", min: prod.minimum_quantity, max: prod.maximum_quantity -%}
+        {% elsif prod.minimum_quantity >= 1 %}
+          {%- t "You must purchase a minimum of %{min} units", min: prod.minimum_quantity -%}
+        {% elsif prod.maximum_quantity >= 1 %}
+          {%- t "You can only purchase a maximum of %{max} units", max: prod.maximum_quantity -%}
+        {% endif -%}
+      </p>
+    </div>
+  </form>
+</product-form>

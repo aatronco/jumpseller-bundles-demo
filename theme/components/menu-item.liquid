@@ -1,0 +1,42 @@
+{% assign menu_id = 'menu-item-' | append: menu-item.id %}
+{% assign badge_text = menu-item.options.badge_text | default: 'New' %}
+{% assign badge_text_trimmed = badge_text | truncate: 15, '…' %}
+
+{% capture badge %}
+  {% if menu-item.options.badge %}
+    <span class="theme-menu__badge{% if menu-item.options.position != 'left' %} theme-menu__badge-{{ menu-item.options.position }}{% endif %}">
+      {{- badge_text_trimmed -}}
+    </span>
+  {% endif %}
+{% endcapture %}
+
+<style>
+  #{{ menu_id }} {
+    --badge-color-background: {{ menu-item.options.background }};
+    --badge-color-text: {{ menu-item.options.background | color_contrast: "#FFFFFF", "#222222" }};
+  }
+</style>
+
+<li class="theme-menu__item" id="{{ menu_id }}" {{ menu-item.attributes }}>
+  <a
+    href="{{ menu-item.options.link }}"
+    class="button{% if component.options.items_buttons %} button--style button--{{ component.options.items_buttons_type }}{% else %} theme-menu__link{% endif %}"
+    {% if menu-item.options.link_external %}
+      target="_blank"
+    {% endif %}
+    title="{{ menu-item.options.text | default: 'Add item' }}"
+  >
+    {% if menu-item.options.position == 'left' %}
+      {{- badge -}}
+    {% endif %}
+    {% if menu-item.options.icon != blank %}
+      <i class="theme-icon ph {{ menu-item.options.icon }}"></i>
+    {% endif %}
+    <span>
+      {{- menu-item.options.text | default: 'Add item' -}}
+    </span>
+    {% if menu-item.options.position != 'left' %}
+      {{- badge -}}
+    {% endif %}
+  </a>
+</li>

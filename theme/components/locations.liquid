@@ -1,0 +1,164 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% if options.theme_spacing == 'none' and component.options.card %}
+  {% assign data_spacing = false %}
+{% elsif options.theme_spacing != 'none' and component.options.card and component.options.card_spacing == false %}
+  {% assign data_spacing = false %}
+{% else %}
+  {% assign data_spacing = true %}
+{% endif %}
+
+{% if component.options.display == 'all' %}
+  {% assign filtered_locations = locations.all %}
+{% else %}
+  {% assign filtered_locations = locations.pickups %}
+{% endif %}
+
+{% assign column_amount = component.options.columns_desktop %}
+
+{% assign align_desktop = component.options.text_alignment_desktop %}
+{% assign align_mobile = component.options.text_alignment_mobile %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --contact-location-alignment-desktop: {{ align_desktop }};
+    --contact-location-alignment-mobile: {{ align_mobile }};
+    {% if component.options.card and component.options.card_border %}
+      --color-border-opacity: {{ component.options.card_border_opacity | divided_by: 100.00 }};
+    {% endif %}
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section theme-contact"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% for location in filtered_locations %}
+        {% if location.email != blank and component.options.show_email %}
+          {% assign location_email = true %}
+        {% else %}
+          {% assign location_email = false %}
+        {% endif %}
+
+        {% if location.phone != blank and component.options.show_phone %}
+          {% assign location_phone = true %}
+        {% else %}
+          {% assign location_phone = false %}
+        {% endif %}
+
+        {% if location.address_with_street_number != blank and component.options.show_address %}
+          {% assign location_address = true %}
+        {% else %}
+          {% assign location_address = false %}
+        {% endif %}
+
+        {% assign location_map = component.options.show_map %}
+
+        {% capture print_email %}
+          <a href="mailto:{{ location.email }}" class="contact-location__link" title="{% t 'Send an email' %}">
+            <i class="theme-icon ph ph-envelope-simple"></i>
+            {{- location.email -}}
+          </a>
+        {% endcapture %}
+
+        {% capture print_phone %}
+          <a href="tel:{{ location.phone }}" class="contact-location__link" title="{% t 'Call number' %}">
+            <i class="theme-icon ph ph-phone"></i>
+            {{- location.phone -}}
+          </a>
+        {% endcapture %}
+
+        {% assign location_address_full = location.address_with_street_number %}
+        {% capture location_address_params -%}
+          {%- if location.complement != blank %}, {{ location.complement }}{% endif -%}
+          {%- if location.postal != blank %}, {{ location.postal }}{% endif %}, {{ location.municipality }}, {{ location.city }}, {{ location.region }}, {{ location.country -}}
+        {%- endcapture %}
+        {% capture location_address_url -%}
+          https://maps.google.com/maps?q={{ location_address_full | append: ' ' | append: location_address_params | remove: location.complement | replace: '#', '' | url_encode -}}
+        {%- endcapture %}
+
+        {% capture print_address %}
+          <a href="{{ location_address_url }}" class="contact-location__link" title="{% t 'See on Google Maps' %}" target="_blank">
+            <i class="theme-icon ph ph-map-pin"></i>
+            {{ location.formatted }}
+          </a>
+        {% endcapture %}
+
+        <div
+          class="theme-block contact-location"
+          data-columns-mobile="1"
+          data-columns-desktop="{{ column_amount }}"
+          data-spacing="{{ data_spacing }}"
+          data-align-mobile="{{ align_mobile }}"
+          data-align-desktop="{{ align_desktop }}"
+          {% if component.options.card %}
+            data-card="true"
+            data-card-border="{{ component.options.card_border }}"
+            data-bundle-color="{{ component.options.card_bundle_color }}"
+          {% endif %}
+          {% if options.theme_animate %}
+            data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+            data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+            data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+          {% endif %}
+        >
+          <div class="theme-block__wrapper contact-location__wrapper">
+            <h3 class="contact-location__title">
+              {{ location.name -}}
+              {%- if location.pickup_point %}
+                <span class="contact-location__badge">{% t "Pickup point" %}</span>
+              {%- endif %}
+            </h3>
+            {% if location_email %}
+              {{ print_email }}
+            {% endif %}
+            {% if location_phone %}
+              {{ print_phone }}
+            {% endif %}
+            {% if location_address %}
+              {{ print_address }}
+            {% endif %}
+
+            {% if component.options.show_details %}
+              {% assign location_id = 'location-modal-' | append: forloop.index %}
+              {% capture details_link_text_default %}{% t "View more details" %}{% endcapture %}
+              {% assign details_link_text = component.options.show_details_text | default: details_link_text_default %}
+              <a
+                role="button"
+                class="contact-location__link"
+                title="{{ details_link_text }}"
+                data-bs-toggle="modal"
+                data-bs-target="#{{ location_id }}"
+              >
+                <i class="theme-icon ph ph-info"></i> {{ details_link_text -}}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if component.options.show_details %}
+          {% render 'location_modal', location: location, location_id: location_id, location_email: location_email, location_phone: location_phone, location_address: location_address, location_map: location_map %}
+        {% endif %}
+
+      {% else %}
+        {% render 'component_placeholder_location', column_amount: column_amount, data_spacing: data_spacing, align_mobile: align_mobile, align_desktop: align_desktop, block_index: forloop.index %}
+      {% endfor %}
+    </div>
+  </div>
+</section>

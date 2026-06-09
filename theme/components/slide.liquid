@@ -1,0 +1,182 @@
+{% assign subtitle = slide.options.subtitle %}
+{% assign title = slide.options.title %}
+{% assign description = slide.options.description %}
+
+{% assign link = slide.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = slide.options.link_text | default: link_text_default %}
+{% assign link_external = slide.options.link_external %}
+{% assign link_image = link.image %}
+{% assign has_image = false %}
+{%- capture media_placeholder -%}
+  <div class="theme-image-placeholder{% if has_content == false %} theme-image-placeholder--landscape{% endif %}"></div>
+{%- endcapture -%}
+
+{% capture slide_image %}
+  {% case slide.options.media_type %}
+    {% when 'image' %}
+      {% if slide.options.image_desktop.url != blank %}
+        {% assign image_desktop = slide.options.image_desktop.url %}
+        {% assign image_mobile = slide.options.image_mobile.url | default: image_desktop %}
+      {% elsif link != blank and link_image %}
+        {% assign image_desktop = link_image %}
+        {% assign image_mobile = image_desktop %}
+      {% endif %}
+      {% assign image_class = 'w-100 d-block theme-slider__image' %}
+      {% if has_content %}
+        {% assign image_class = image_class | append: ' h-100 theme-slider__image--trsn' %}
+      {% endif %}
+      {% assign image_alt = slide.options.image_mobile.alt | default: slide.options.image_desktop.alt | default: title | default: options.theme_store_name | default: store.name | escape %}
+      {% assign image_width_and_height = slide.options.image_desktop.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+      {% if image_desktop != blank %}
+        <picture class="theme-slider__picture{% if has_content %} h-100{% endif %}">
+          <source media="screen and (min-width: 576px)" srcset="{{ image_desktop }}">
+          <source media="screen and (max-width: 575px)" srcset="{{ image_mobile }}">
+          <img
+            src="{{ image_desktop }}"
+            alt="{{ image_alt }}"
+            class="{{ image_class }}"
+            {{ image_width_and_height }}
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          >
+        </picture>
+      {% else %}
+        {{ media_placeholder }}
+      {% endif %}
+    {% when 'video' %}
+      {% if slide.options.video_desktop != blank %}
+        <video-background
+          class="theme-bg-video{% if has_content %} theme-bg-video--has-content{% endif %}"
+          data-video-title="{{ title | default: subtitle | escape }}"
+          data-desktop="{{ slide.options.video_desktop }}"
+          {% if slide.options.video_mobile != blank %}
+            data-mobile="{{ slide.options.video_mobile }}"
+          {% endif %}
+        >
+        </video-background>
+      {% else %}
+        {{ media_placeholder }}
+      {% endif %}
+  {% endcase %}
+{% endcapture -%}
+
+{% capture slide_content_image %}
+  {% assign content_image_desktop = slide.options.content_image_desktop.url %}
+  {% assign content_image_desktop_alt = slide.options.content_image_desktop.alt %}
+  {% assign content_image_desktop_width_and_height = slide.options.content_image_desktop.attributes.width_and_height %}
+  {% assign content_image_mobile = slide.options.content_image_mobile.url %}
+  {% assign content_image_mobile_alt = slide.options.content_image_mobile.alt %}
+  {% assign image_class = 'd-block theme-slider__image--content' %}
+  {% if content_image_desktop != blank %}
+    {% assign has_image = true %}
+  {% endif %}
+
+  {% assign image_alt = content_image_desktop_alt | default: content_image_mobile_alt | default: title | escape %}
+
+  {% if content_image_desktop != blank and content_image_mobile != blank %}
+    <picture class="theme-slider__picture">
+      <source media="screen and (min-width: 576px)" srcset="{{ content_image_desktop }}">
+      <source media="screen and (max-width: 575px)" srcset="{{ content_image_mobile }}">
+      <img class="{{ image_class }}" src="{{ content_image_desktop }}" alt="{{ image_alt }}" {{ content_image_desktop_width_and_height }} loading="eager" decoding="auto" fetchpriority="auto">
+    </picture>
+  {% elsif content_image_desktop != blank and content_image_mobile == blank %}
+    <img class="{{ image_class }}" src="{{ content_image_desktop }}" alt="{{ image_alt }}" {{ content_image_desktop_width_and_height }} loading="eager" decoding="auto" fetchpriority="auto">
+  {% endif %}
+{% endcapture -%}
+
+{% assign align_y_desktop = 'align-items-md-' | append: slide.options.content_alignment_y_desktop %}
+{% assign align_y_mobile = 'align-items-' | append: slide.options.content_alignment_y_mobile %}
+{% assign justify_x_desktop = 'justify-content-md-' | append: slide.options.content_alignment_x_desktop %}
+{% assign justify_x_mobile = 'justify-content-' | append: slide.options.content_alignment_x_mobile %}
+
+{% case slide.options.columns %}
+  {% when 'media-content' %}
+    {% if slide.options.columns_mobile %}
+      {% assign class_media = ' order-1' %}
+      {% assign class_content = ' order-2' %}
+    {% else %}
+      {% assign class_media = ' order-2 order-md-1' %}
+      {% assign class_content = ' order-1 order-md-2' %}
+    {% endif %}
+  {% else %}
+    {% assign class_media = ' order-2' %}
+    {% assign class_content = ' order-1' %}
+{% endcase %}
+
+{% if has_content %}
+  <style>
+    #slide-{{ slide.id }} {
+      --theme-slide-content-max-width-desktop: {{ slide.options.content_width }}%;
+      --theme-slide-content-max-width-tablet: {% if slide.options.content_width != 100 %}{{ slide.options.content_width | plus: 10 }}%{% else %}{{ slide.options.content_width }}%{% endif %};
+      --theme-slide-content-align-desktop: {{ slide.options.align_desktop | remove: 'text-md-' }};
+      --theme-slide-content-align-mobile: {{ slide.options.align_mobile | remove: 'text-' }};
+      --theme-image-position-desktop: {{ slide.options.content_alignment_x_image_desktop }} {{ slide.options.content_alignment_y_image_desktop }};
+      --theme-image-position-mobile: {{ slide.options.content_alignment_x_image_mobile }} {{ slide.options.content_alignment_y_image_mobile }};
+      --theme-overlay-opacity: {{ slide.options.image_overlay | divided_by: 100.0 }};
+      --content-image-size: {{ slide.options.content_image_desktop_size }}%;
+    }
+  </style>
+{% endif %}
+
+<div
+  id="slide-{{ slide.id }}"
+  class="swiper-slide h-auto position-relative theme-slider__block{% if has_content and has_zoom %} theme-slider__block--has-zoom{% endif %}{% if has_image %} theme-slider__block--has-image{% endif %}"
+  data-bundle-color="{{ slide.options.bundle_color }}"
+  {{ slide.attributes }}
+>
+  {% render 'theme_hover_link', link: link, link_text: link_text, link_external: link_external %}
+
+  {% if has_content %}
+    <div class="theme-slider__container theme-slider__container--flex">
+      <div class="{{ align_y_desktop }} {{ align_y_mobile }} {{ justify_x_desktop }} {{ justify_x_mobile }} theme-slider__row {{ class_content }}">
+        <div class="theme-slider__content {{ slide.options.align_mobile }} {{ slide.options.align_desktop }}">
+          {% if has_icons %}
+            <div class="theme-slider__icon theme-slider__icon--{{ component.options.icon_size }}">
+              <i class="theme-icon ph {{ slide.options.icon }}"></i>
+            </div>
+          {% endif %}
+
+          <div class="theme-section__subtitle check-empty" {{ slide.attributes.textfield.subtitle }}>{{ subtitle }}</div>
+
+          <h2 class="theme-section__title check-empty" {{ slide.attributes.textfield.title }}>{{ title }}</h2>
+
+          <div class="theme-section__description theme-section__description--push-top check-empty" {{ slide.attributes.textfield.description }}>{{- description | newline_to_br -}}</div>
+
+          {% if link != blank and slide.options.link_button %}
+            <a
+              href="{{ link }}"
+              class="button button--style button--main{% if slide.options.link_outline %} button--bordered{% endif %} theme-section__button"
+              title="{{ link_text }}"
+              {% if link_external %}
+                target="_blank"
+              {% endif %}
+            >
+              <span {{ slide.attributes.textfield.link_text }}>
+                {{- link_text -}}
+              </span>
+              {% if slide.options.link_arrow %} <i class="ph ph-arrow-right"></i>{% endif %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      {% if slide_content_image %}
+        <div class="theme-slider__image-container {{ class_media }}">
+          {{ slide_content_image }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if has_content %}
+    <div class="w-100 h-100 position-absolute z-1 overflow-hidden theme-slider__gallery">
+      <div class="theme-section__overlay"></div>
+
+      {{ slide_image }}
+    </div>
+  {% else %}
+    {{ slide_image }}
+  {% endif %}
+</div>

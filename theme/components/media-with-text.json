@@ -1,0 +1,550 @@
+{
+  "name": "Media with text",
+  "icon": "photo-film",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-media-with-text/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "customer__account",
+    "customer__login"
+  ],
+  "options": {
+    "columns": {
+      "name": "Media position",
+      "type": "select",
+      "help": "Allows to define the order for the **Media** column.",
+      "default": "media-content",
+      "options": [
+        {
+          "label": "Left",
+          "value": "media-content"
+        },
+        {
+          "label": "Right",
+          "value": "content-media"
+        }
+      ]
+    },
+    "columns_mobile": {
+      "name": "Respect order on mobile",
+      "type": "checkbox",
+      "help": "If enabled, the **Media** column will always be displayed after the **Content** on mobile devices.",
+      "default": false,
+      "visible_if": "{{ block.options.columns == 'content-media' }}"
+    },
+    "corners": {
+      "name": "Rounded corners",
+      "type": "select",
+      "default": "all",
+      "options": [
+        {
+          "label": "All",
+          "value": "all"
+        },
+        {
+          "label": "Inner",
+          "value": "inner"
+        },
+        {
+          "label": "None",
+          "value": "none"
+        }
+      ],
+      "visible_if": "{{ options.theme_spacing == 'none' and options.theme_corners_style != 'rectangular' }}"
+    },
+    "media_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "image",
+      "options": [
+        {
+          "label": "Image",
+          "value": "image"
+        },
+        {
+          "label": "Embed video",
+          "value": "video"
+        },
+        {
+          "label": "Video URL",
+          "value": "src"
+        }
+      ]
+    },
+    "image_desktop": {
+      "name": "Image",
+      "type": "image",
+      "help": "Minimum recommended width: 715px.",
+      "visible_if": "{{ block.options.media_type == 'image' }}"
+    },
+    "image_mobile": {
+      "name": "Image (mobile)",
+      "type": "image",
+      "help": "Minimum recommended width: 527px.",
+      "visible_if": "{{ block.options.media_type == 'image' and block.options.image_desktop.url != blank }}"
+    },
+    "video": {
+      "name": "Embed code",
+      "type": "video",
+      "help": "Allows to add a 'YouTube' or 'Vimeo' video. If added, there's no need to upload any of the images above.",
+      "default": "",
+      "visible_if": "{{ block.options.media_type == 'video' }}"
+    },
+    "src": {
+      "name": "Source URL",
+      "type": "input",
+      "help": "Paste a URL to a video file or a YouTube link.",
+      "default": "",
+      "visible_if": "{{ block.options.media_type == 'src' }}"
+    },
+    "ratio": {
+      "name": "Video ratio",
+      "type": "select",
+      "help": "Allows to define the dimension for the video.",
+      "default": "landscape",
+      "options": [
+        {
+          "label": "Landscape",
+          "value": "landscape"
+        },
+        {
+          "label": "Portrait",
+          "value": "portrait"
+        },
+        {
+          "label": "Rectangular",
+          "value": "rectangular"
+        },
+        {
+          "label": "Square",
+          "value": "square"
+        }
+      ],
+      "visible_if": "{{ 'video src' contains block.options.media_type }}"
+    },
+    "controls": {
+      "name": "Controls",
+      "type": "checkbox",
+      "help": "Whether video controls should be displayed.",
+      "default": true,
+      "visible_if": "{{ block.options.media_type == 'src' and block.options.src != blank }}"
+    },
+    "autoplay": {
+      "name": "Autoplay",
+      "type": "checkbox",
+      "help": "Whether video should start playing automatically. If enabled, the video will also start muted.",
+      "default": true,
+      "visible_if": "{{ block.options.media_type == 'src' and block.options.src != blank }}"
+    },
+    "muted": {
+      "name": "Muted",
+      "type": "checkbox",
+      "help": "Whether video should start with no audio.",
+      "default": false,
+      "visible_if": "{{ block.options.media_type == 'src' and block.options.src != blank and block.options.autoplay == false }}"
+    },
+    "loop": {
+      "name": "Loop",
+      "type": "checkbox",
+      "help": "Whether video should loop.",
+      "default": true,
+      "visible_if": "{{ block.options.media_type == 'src' and block.options.src != blank }}"
+    },
+    "align_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "text-md-start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-md-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-md-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-md-end"
+        }
+      ]
+    },
+    "align_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "text-start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-end"
+        }
+      ]
+    },
+    "content_alignment_y": {
+      "name": "Vertical position (desktop)",
+      "type": "select",
+      "help": "Allows to define the vertical position between the component Media and Content on desktop devices.",
+      "default": "center",
+      "options": [
+        {
+          "label": "Top",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Bottom",
+          "value": "end"
+        }
+      ]
+    },
+    "subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "placeholder": "Add a subtitle to your content"
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Section title"
+    },
+    "text": {
+      "name": "Text",
+      "type": "text",
+      "default": "You can use this section to describe a store feature, an article or a product."
+    },
+    "link": {
+      "name": "Link button",
+      "type": "link",
+      "default": null
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_outline": {
+      "name": "Outline style",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "title_size": {
+      "name": "Size",
+      "type": "select",
+      "default": "large",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Extra Large",
+          "value": "extra-large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ]
+    },
+    "title_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 40,
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' }}"
+    },
+    "title_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 28,
+      "min": 8,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' }}"
+    },
+    "title_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": ""
+    },
+    "title_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px"
+    },
+    "title_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false
+    },
+    "subtitle_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 16,
+      "min": 5,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' }}"
+    },
+    "subtitle_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 10,
+      "min": 5,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.title_size == 'custom' }}"
+    },
+    "subtitle_weight": {
+      "name": "Weight",
+      "type": "slider",
+      "default": 400,
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "unit": ""
+    },
+    "subtitle_spacing": {
+      "name": "Letter spacing",
+      "type": "slider",
+      "help": "Allows to define the space between letters for all Subtitles in the component.",
+      "default": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px"
+    },
+    "subtitle_uppercase": {
+      "name": "All caps",
+      "type": "checkbox",
+      "default": false
+    },
+    "description_size": {
+      "name": "Size",
+      "type": "select",
+      "help": "Size of the description that shows after a title in the component.",
+      "default": "medium",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ]
+    },
+    "description_size_desktop": {
+      "name": "Size (desktop)",
+      "type": "slider",
+      "default": 16,
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.description_size == 'custom' }}"
+    },
+    "description_size_mobile": {
+      "name": "Size (mobile)",
+      "type": "slider",
+      "default": 14,
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "visible_if": "{{ block.options.description_size == 'custom' }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Media options",
+      "type": "heading",
+      "before": "media_type"
+    },
+    {
+      "name": "Content options",
+      "type": "heading",
+      "before": "align_desktop"
+    },
+    {
+      "name": "Titles",
+      "type": "heading",
+      "before": "title_size"
+    },
+    {
+      "name": "Subtitles",
+      "type": "heading",
+      "before": "subtitle_size_desktop"
+    },
+    {
+      "name": "Description options",
+      "type": "heading",
+      "before": "description_size"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Media with text",
+      "category": "Content"
+    }
+  ]
+}

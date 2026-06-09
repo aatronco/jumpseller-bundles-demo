@@ -1,0 +1,97 @@
+{% assign store_name = options.theme_store_name | default: store.name %}
+
+{% capture t_cart_default %}{% t "Cart" %}{% endcapture %}
+{% assign t_cart = options.t_cart | default: t_cart_default %}
+{% capture t_order_confirmation_default %}{% t "Order confirmation" -%}{% endcapture %}
+{% assign t_order_confirmation = options.t_order_confirmation | default: t_order_confirmation_default %}
+{% capture t_order_review_default %}{% t "Order review" -%}{% endcapture %}
+{% assign t_order_review = options.t_order_review | default: t_order_review_default %}
+
+{% assign logo_desktop = options.cart_logo.url | default: store.logo %}
+{% assign logo_mobile = options.cart_logo_mobile.url | default: logo_desktop %}
+{% assign logo_alt = options.cart_logo_mobile.alt | default: options.cart_logo.alt | default: store_name | escape %}
+{% assign logo_width_and_height = options.cart_logo.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+<header class="cart-header{% if template == 'success' %} cart-header--success{% endif %}">
+  <a href="{{ store.url }}" class="cart-header__brand" title="{% t 'Go back to Home page' %}">
+    {% if logo_desktop != blank %}
+      <picture class="cart-header__picture">
+        <source media="screen and (min-width: 576px)" srcset="{{ logo_desktop }}">
+        <source media="screen and (max-width: 575px)" srcset="{{ logo_mobile }}">
+        <img
+          src="{{ logo_desktop }}"
+          alt="{{ logo_alt }}"
+          class="cart-header__logo"
+          {{ logo_width_and_height }}
+          loading="eager"
+          decoding="auto"
+          fetchpriority="auto"
+        >
+      </picture>
+    {% else %}
+      <h1 class="theme-store-name">
+        {{- store_name -}}
+      </h1>
+    {% endif %}
+  </a>
+
+  {% unless template == 'success' %}
+    <ul class="no-bullet cart-header__menu">
+      <li
+        class="cart-header__item"
+        {% if template == 'cart' %}
+          data-current="true"
+        {% endif %}
+      >
+        {% if template == 'cart' %}
+          <div class="cart-header__text">1. {{ t_cart }}</div>
+        {% else %}
+          <a href="{{ order.url }}" class="cart-header__link" title="{% t 'back to Cart' %}"> 1. {{ t_cart }}</a>
+        {% endif %}
+      </li>
+
+      <li class="cart-header__item"><i class="ph ph-caret-right cart-header__caret"></i></li>
+
+      <li
+        class="cart-header__item"
+        {% if template == 'checkout' %}
+          data-current="true"
+        {% endif %}
+      >
+        {% if template == 'cart' or template == 'checkout' %}
+          <div class="cart-header__text">
+            2. {% if order.shipping_required %}{% t "Payment & Shipping" -%}{% else %}{% t "Payment" %}{% endif %}
+          </div>
+        {% else %}
+          <a href="{{ order.checkout_url }}" class="cart-header__link" title="{% t 'Back to Checkout' %}">
+            2. {% if order.shipping_required %}{% t "Payment & Shipping" -%}{% else %}{% t "Payment" %}{% endif -%}
+          </a>
+        {% endif %}
+      </li>
+
+      <li class="cart-header__item"><i class="ph ph-caret-right cart-header__caret"></i></li>
+
+      <li
+        class="cart-header__item"
+        {% if template == 'revieworder' %}
+          data-current="true"
+        {% endif %}
+      >
+        <div class="cart-header__text">3. {{ t_order_review }}</div>
+      </li>
+
+      <li class="cart-header__item"><i class="ph ph-caret-right cart-header__caret"></i></li>
+
+      <li class="cart-header__item">
+        <div class="cart-header__text">4. {{ t_order_confirmation }}</div>
+      </li>
+    </ul>
+  {% endunless %}
+
+  <div class="alert alert-warning alert-dismissible w-100 d-flex align-items-center justify-content-between fade hidden" role="alert">
+    <span id="alert-message"></span>
+    <button type="button" class="btn-close d-flex align-items-center" data-bs-dismiss="alert" aria-label="{% t 'Close' %}">
+      <i class="ph ph-x"></i>
+    </button>
+  </div>
+</header>

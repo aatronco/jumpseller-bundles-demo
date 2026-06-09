@@ -1,0 +1,1287 @@
+msgid "+ impuestos"
+msgstr "+ tax"
+
+msgid "+ tax"
+msgstr "+ tax"
+
+msgid "+100 profesionales certificados"
+msgstr "+100 certified professionals"
+
+msgid "Abierto 24 horas"
+msgstr "Open 24 Hours"
+
+msgid "Acceso"
+msgstr "Login"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Add to Cart"
+msgstr "Add to Cart"
+
+msgid "Add to Wishlist"
+msgstr "Add to Wishlist"
+
+msgid "Additional information"
+msgstr "Additional information"
+
+msgid "Adjuntos del Producto"
+msgstr "Product Attachments"
+
+msgid "Agotado"
+msgstr "Out of stock"
+
+msgid "Agrega tus banners"
+msgstr "Add your banners"
+
+msgid "Agrega un texto sobre tu tienda aquí"
+msgstr "Add some text about your store here"
+
+msgid "Agrega un título aquí"
+msgstr "Add some Title here"
+
+msgid "Agregar"
+msgstr "Add"
+
+msgid "Agregar a la lista de favoritos"
+msgstr "Add to Wishlist"
+
+msgid "Agregar al Carro"
+msgstr "Add to Cart"
+
+msgid "Agregue aquí algún texto que crea que será útil para sus clientes"
+msgstr "Add some text you think it will be useful for your clients here"
+
+msgid "Al crear una cuenta, puede acelerar su proceso de compra, revisar su historial de pedidos, hacer un seguimiento de los pedidos y mucho más."
+msgstr "By creating an account you can make your shopping process faster, review your order history, follow up on orders and much more."
+
+msgid "Al registrarse en nuestra tienda, acelera el proceso de pago, puede agregar varias direcciones de envío, ver y rastrear sus pedidos y mucho más."
+msgstr "By registering at our shop, you can enjoy a faster checkout process, as well as the convenience of adding multiple shipping addresses, tracking your orders, and more."
+
+msgid "Al registrarse en nuestra tienda, agilizará el proceso de pago, podrá agregar varias direcciones de envío, ver y rastrear sus pedidos y más."
+msgstr "By registering at our shop, you will make more expedite the checkout process, you can add multiple shipping addresses, view and track your orders, and more."
+
+msgid "Al registrarte, podrás agilizar tu proceso de compra. Edita tus datos, añade varias direcciones, revisa y realiza un seguimiento de tus pedidos, y mucho más."
+msgstr "By registering you can make your process shopping faster. Edit your details, add multiple addresses, review and track your orders, and more."
+
+msgid "Alivio del dolor"
+msgstr "Pain Relief"
+
+msgid "Already have an account? Log in here"
+msgstr "Already have an account? Log in here"
+
+msgid "Aquí puedes agregar el testimonio que cada cliente entregó sobre tu tienda para aumentar el reconocimiento de tu marca."
+msgstr "Here you can add the testimony that each customer has given about your store to increase your brand awareness."
+
+msgid "Aquí puedes agregar un texto o descripción para entregar mayor contexto sobre qué trata la sección."
+msgstr "Here you can add a text or description to provide more context on what the section is about."
+
+msgid "Aquí puedes agregar una descripción para el banner."
+msgstr "Here you can add some description for the banner."
+
+msgid "Aquí puedes encontrar todos los canales disponibles mediante los cuales nos puedes contactar."
+msgstr "Here you can find all the available channels in which you can reach at us."
+
+msgid "Archivos"
+msgstr "Attachments"
+
+msgid "Are you 21 or older?"
+msgstr "Are you 21 or older?"
+
+msgid "Artículos relacionados"
+msgstr "Related articles"
+
+msgid "Artículos seleccionados"
+msgstr "Handpicked articles"
+
+msgid "Atención personalizada y directa"
+msgstr "Personalized and direct attention"
+
+msgid "Attachments"
+msgstr "Attachments"
+
+msgid "Audio Pro"
+msgstr "Audio Pro"
+
+msgid "Available for Quotation"
+msgstr "Available for Quotation"
+
+msgid "Available in stock"
+msgstr "Available in stock"
+
+msgid "Ayudan a recordar tus preferencias y proporcionar contenido adaptado a ti."
+msgstr "They help remember your preferences and provide content tailored to you."
+
+msgid "Añadido al carro exitosamente"
+msgstr "Successfully added to cart"
+
+msgid "Añadido exitosamente a tu lista de favoritos"
+msgstr "Successfully added to your Wishlist"
+
+msgid "Back to top"
+msgstr "Back to top"
+
+msgid "Bienestar diario"
+msgstr "Daily Wellness"
+
+msgid "Bienestar y Cuidado"
+msgstr "Wellness & Care"
+
+msgid "Bienvenidos"
+msgstr "Welcome"
+
+msgid "Billing information"
+msgstr "Billing information"
+
+msgid "Buscar"
+msgstr "Search"
+
+msgid "Busque productos aquí..."
+msgstr "Search for products here..."
+
+msgid "Buy"
+msgstr "Buy"
+
+msgid "Buy now"
+msgstr "Buy now"
+
+msgid "By registering you can make your process shopping faster. Edit your details, add multiple addresses, review and track your orders, and more."
+msgstr "By registering you can make your process shopping faster. Edit your details, add multiple addresses, review and track your orders, and more."
+
+msgid "Calcular los gastos de envío"
+msgstr "Estimate shipping costs"
+
+msgid "Calidad de productos garantizada"
+msgstr "Guaranteed quality products"
+
+msgid "Cantidad"
+msgstr "Quantity"
+
+msgid "Carro"
+msgstr "Cart"
+
+msgid "Cart"
+msgstr "Cart"
+
+msgid "Casa inteligente"
+msgstr "Smart house"
+
+msgid "Categories"
+msgstr "Categories"
+
+msgid "Categorías"
+msgstr "Categories"
+
+msgid "Cerrar sesión"
+msgstr "Log out"
+
+msgid "Check this out:"
+msgstr "Check this out:"
+
+msgid "Comparte este artículo"
+msgstr "Share this article"
+
+msgid "Compartir"
+msgstr "Share"
+
+msgid "Compartir este producto"
+msgstr "Share this product"
+
+msgid "Compra por categoría"
+msgstr "Shop by Category"
+
+msgid "Compra sudaderas ahora"
+msgstr "Shop Hoodies Now"
+
+msgid "Comprados juntos frecuentemente"
+msgstr "Frequently Bought Together"
+
+msgid "Comprar"
+msgstr "Buy"
+
+msgid "Comprar Blazers ahora"
+msgstr "Shop Blazers Now"
+
+msgid "Comprar ahora"
+msgstr "Buy now"
+
+msgid "Comprar bufandas"
+msgstr "Shop Scarfs"
+
+msgid "Confirmación del pedido"
+msgstr "Order confirmation"
+
+msgid "Consulta nuestros productos añadidos recientemente"
+msgstr "Check our recently added products"
+
+msgid "Contact information"
+msgstr "Contact information"
+
+msgid "Contact us"
+msgstr "Contact us"
+
+msgid "Contacto"
+msgstr "Contact"
+
+msgid "Contamos con un equipo especializado que te atenderá ante cualquier duda o ayuda que necesites."
+msgstr "We have a specialized team that will assist you with any doubt or help you might need."
+
+msgid "Contamos con una red de expertos validados y comprometidos con tu salud y bienestar."
+msgstr "We have a network of validated experts committed to your health and well-being."
+
+msgid "Continue shopping"
+msgstr "Continue shopping"
+
+msgid "Contáctanos"
+msgstr "Contact us"
+
+msgid "Cotizar"
+msgstr "Request Quotation"
+
+msgid "Crear cuenta"
+msgstr "Create account"
+
+msgid "Create account"
+msgstr "Create account"
+
+msgid "Currency"
+msgstr "Currency"
+
+msgid "Debes ser mayor de edad para ver nuestro sitio web. Debido a requisitos legales debes verificar tu edad."
+msgstr "You must be of legal age to view our website. Due to legal requirements you must verify your age."
+
+msgid "Descargar"
+msgstr "Download"
+
+msgid "Descripción"
+msgstr "Description"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Descubra el futuro del entretenimiento"
+msgstr "Discover the Future of Entertainment"
+
+msgid "Descubre Más"
+msgstr "Discover More"
+
+msgid ""
+"Descubre un sonido de alta calidad con nuestra selección de productos de audio.\n"
+"Desde auriculares inalámbricos hasta potentes altavoces Bluetooth.\n"
+"Encuentra la solución perfecta para música, podcasts y videojuegos."
+msgstr ""
+"Discover high-quality sound with our selection of audio products.\n"
+"From wireless headphones to powerful Bluetooth speakers.\n"
+"Find the perfect solution for music, podcasts, and gaming."
+
+msgid "Descuento (%)"
+msgstr "Discount off"
+
+msgid "Desde"
+msgstr "From"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Detalles"
+msgstr "Details"
+
+msgid "Detalles del producto"
+msgstr "Product details"
+
+msgid "Discount off"
+msgstr "Discount off"
+
+msgid "Disponible en stock"
+msgstr "Available in stock"
+
+msgid "Disponible para cotización"
+msgstr "Available for Quotation"
+
+msgid "Dispositivos para el cuidado del hogar"
+msgstr "Home Care Devices"
+
+msgid "Dónde estamos"
+msgstr "Where we are"
+
+msgid "Edit my details"
+msgstr "Edit my details"
+
+msgid "Editar mis detalles"
+msgstr "Edit my details"
+
+msgid "El contador termina en"
+msgstr "Counter ends in"
+
+msgid "Electrónica innovadora"
+msgstr "Innovative Electronics"
+
+msgid "Elija un horario"
+msgstr "Choose a time slot"
+
+msgid "Eliminado exitosamente de tu lista de favoritos"
+msgstr "Successfully removed from your Wishlist"
+
+msgid "Eliminar de la lista de favoritos"
+msgstr "Remove from Wishlist"
+
+msgid "En tu lista de favoritos"
+msgstr "In your Wishlist"
+
+msgid "Encuentra tu tienda preferida"
+msgstr "Find your preferred store"
+
+msgid "Encuéntranos"
+msgstr "Find us"
+
+msgid "Enlace a cualquier página"
+msgstr "LINK TO ANY PAGE"
+
+msgid "Enlace a la página"
+msgstr "Link to page"
+
+msgid "Enlace a la página con flecha"
+msgstr "Link to page with arrow"
+
+msgid "Enter your email here..."
+msgstr "Enter your email here..."
+
+msgid "Envíanos un mensaje de WhatsApp"
+msgstr "Send us a WhatsApp message"
+
+msgid "Envíanos un mensaje y te responderemos lo antes posible."
+msgstr "Send us a message and we will reply as soon as possible."
+
+msgid "Envío gratis"
+msgstr "Free Shipping"
+
+msgid "Envío gratuito para compras superiores a $50"
+msgstr "Free shipping for orders above $50"
+
+msgid "Envío gratuito para compras superiores a <b>$50</b>"
+msgstr "Free shipping for purchases over <b>$50</b>"
+
+msgid "Equipo de audio premium"
+msgstr "Equipamento Áudio Premium"
+
+msgid "Esenciales de Farmacia"
+msgstr "Pharmacy Essentials"
+
+msgid "Esta descripción ha sido escrita y agregada en el campo de descripción del componente. Este slide está posicionado y alineado con el centro. Muestra un botón sin flecha al lado del texto."
+msgstr "This description has been written and added in the component description field. This slide is positioned and aligned to the centre. Displays a button without an arrow next to the text."
+
+msgid "Esta descripción ha sido escrita y añadida en el campo de descripción del componente. Esta diapositiva está posicionada y alineada a la izquierda. Muestra un botón con una flecha al lado del texto."
+msgstr "This description has been written and added in the component description field. This slide is positioned and aligned to the left. Displays a button with an arrow next to the text."
+
+msgid "Esta descripción ha sido escrita y añadida en el campo de descripción del componente. Esta diapositiva se coloca a la derecha y alineada a la izquierda. No muestra un botón, pero se puede hacer clic en toda la diapositiva."
+msgstr "This description has been written and added in the component description field. This slide is positioned on the right and left-aligned. Does not display a button, but the whole Slide is clickable."
+
+msgid "Esta es la descripción del banner"
+msgstr "This is the Banner Description"
+
+msgid "Esta es la descripción, intenta ser breve."
+msgstr "This is the description, try to be very brief."
+
+msgid "Esta es una descripción del cuarto elemento del bloque de la barra de confianza."
+msgstr "This is a description of the fourth trust bar block item."
+
+msgid "Esta es una descripción del primer elemento del bloque de la barra de confianza."
+msgstr "This is a description of the first trust bar block item."
+
+msgid "Esta es una descripción del segundo elemento del bloque de la trust bar."
+msgstr "This is a description of the second trust bar block item."
+
+msgid "Esta es una descripción del tercer elemento del bloque de la barra de confianza."
+msgstr "This is a description of the third trust bar block item."
+
+msgid "Estas cookies son esenciales para que el sitio web funcione y no se pueden desactivar."
+msgstr "These cookies are essential for the website to function and cannot be disabled."
+
+msgid "Este es el texto del Slide Informativo"
+msgstr "This is the text for Informative Slide"
+
+msgid "Este es el texto del Slider Superior"
+msgstr "This is the text for Top Bar Slider"
+
+msgid "Este es el texto del slide"
+msgstr "This is the slide text"
+
+msgid "Este es el título de un Banner"
+msgstr "This is the title of a Banner"
+
+msgid "Este es el título del Contador"
+msgstr "This is the title of the Counter"
+
+msgid "Este es el título del Slide #1"
+msgstr "This is the title for Slide #1"
+
+msgid "Este es el título del Slide #2"
+msgstr "This is the title for Slide #2"
+
+msgid "Este es el título del Slide #3"
+msgstr "This is the title for Slide #3"
+
+msgid "Este es el título del cuerto bloque"
+msgstr "This is the fourth block title"
+
+msgid "Este es el título del primer bloque"
+msgstr "This is the first block title"
+
+msgid "Este es el título del segundo bloque"
+msgstr "This is the second block title"
+
+msgid "Este es el título del tercer bloque"
+msgstr "This is the third block title"
+
+msgid "Este es un subtítulo opcional del Slide"
+msgstr "This is an optional slide subtitle"
+
+msgid "Este producto está agotado. Puedes enviarnos una solicitud al respecto."
+msgstr "This product has run out of stock. You may send us an inquiry about it."
+
+msgid "Este producto no está disponible. Puedes consultarnos al respecto."
+msgstr "This product is currently unavailable. You may send us an inquiry about it."
+
+msgid "Este sitio web utiliza cookies para garantizar que obtengas la mejor experiencia."
+msgstr "This website uses cookies to ensure you get the best experience."
+
+msgid "Estimate shipping costs"
+msgstr "Estimate shipping costs"
+
+msgid ""
+"Explora nuestra gama de productos electrónicos, incluyendo televisores inteligentes, cámaras digitales y consolas de videojuegos.\n"
+"Actualiza tu cine en casa, captura los momentos de la vida y disfruta de entretenimiento superior con las mejores marcas."
+msgstr ""
+"Explore our range of electronics, including smart TVs, digital cameras, and gaming consoles.\n"
+"Upgrade your home theater, capture life's moments, and enjoy superior entertainment with top brands."
+
+msgid "FOTO Y VIDEO"
+msgstr "PHOTO & VIDEO"
+
+msgid "Featured Products"
+msgstr "Featured Products"
+
+msgid "Fill all the fields and send your message. We will reply as soon as possible."
+msgstr "Fill all the fields and send your message. We will reply as soon as possible."
+
+msgid "Filter by price"
+msgstr "Filter by price"
+
+msgid "Filtrar por precio"
+msgstr "Filter by price"
+
+msgid "Find your preferred store"
+msgstr "Find your preferred store"
+
+msgid "Follow us"
+msgstr "Follow us"
+
+msgid "Follow us in"
+msgstr "Follow us in"
+
+msgid "Fortalece tu sistema inmunológico"
+msgstr "Boost Your Immune System"
+
+msgid "From"
+msgstr "From"
+
+msgid "Go to"
+msgstr "Go to"
+
+msgid "Go to Cart"
+msgstr "Go to Cart"
+
+msgid "Go to my account"
+msgstr "Go to my account"
+
+msgid "Gracias por tu orden"
+msgstr "Thank you for your order"
+
+msgid "Guantes médicos"
+msgstr "Medical Gloves"
+
+msgid "Handpicked articles"
+msgstr "Handpicked articles"
+
+msgid "Hasta"
+msgstr "To"
+
+msgid "Have a discount code?"
+msgstr "Have a discount code?"
+
+msgid "Have a discount or gift card code?"
+msgstr "Have a discount or gift card code?"
+
+msgid "Have a gift card code?"
+msgstr "Have a gift card code?"
+
+msgid "Hazlo inteligente"
+msgstr "Make it smart"
+
+msgid "Hello, I want more information"
+msgstr "Hello, I want more information"
+
+msgid "Here you can find all the available channels in which you can reach at us."
+msgstr "Here you can find all the available channels in which you can reach at us."
+
+msgid "Historias reales. Resultados reales."
+msgstr "Real stories. Real results."
+
+msgid "Hola, quiero mas información"
+msgstr "Hello, I want more information"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "I am over 21"
+msgstr "I am over 21"
+
+msgid "I am under 21"
+msgstr "I am under 21"
+
+msgid "I would like to know more about this product"
+msgstr "I would like to know more about this product"
+
+msgid "Idiomas"
+msgstr "Languages"
+
+msgid "If you have any question about it or need help, send us an email:"
+msgstr "If you have any question about it or need help, send us an email:"
+
+msgid "In your Wishlist"
+msgstr "In your Wishlist"
+
+msgid "Información"
+msgstr "Information"
+
+msgid "Información adicional"
+msgstr "Additional information"
+
+msgid "Información de Envío"
+msgstr "Shipping information"
+
+msgid "Información de Facturación"
+msgstr "Billing information"
+
+msgid "Información de contacto"
+msgstr "Contact Information"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Ingresa tu Email"
+msgstr "Enter your email"
+
+msgid "Ingresa tu correo aquí..."
+msgstr "Enter your email here..."
+
+msgid "Ingresa tu correo electrónico y recibe nuestras últimas actualizaciones de publicaciones del blog."
+msgstr "Enter your email and receive our latest blog posts updates."
+
+msgid "Ingresa tu correo electrónico y recibe nuestras últimas actualizaciones del blog."
+msgstr "Enter your email and receive our latest blog updates."
+
+msgid "Ingresar"
+msgstr "Log in"
+
+msgid "Inicia sesión en tu cuenta y revise tu historial de pedidos, realiza seguimiento de tus pedidos y edite toda su información."
+msgstr "Login to your account and review your order history, keep track of your orders and edit all your information."
+
+msgid "Inicio"
+msgstr "Home"
+
+msgid "Intenta buscar con otras palabras clave o vuelve a la página de inicio."
+msgstr "Try searching with other keywords or go back to the Home page."
+
+msgid "Intenta eliminar o utilizar filtros diferentes."
+msgstr "Try removing or using different filters."
+
+msgid "Ir a"
+msgstr "Go to"
+
+msgid "Ir a Mi cuenta"
+msgstr "Go to my account"
+
+msgid "Ir a la colección"
+msgstr "Go to collection"
+
+msgid "Ir al carro"
+msgstr "Go to Cart"
+
+msgid "It's not possible to purchase products at the moment. If you need more information please contact us through our different channels."
+msgstr "It's not possible to purchase products at the moment. If you need more information please contact us through our different channels."
+
+msgid "Languages"
+msgstr "Languages"
+
+msgid "Leer más"
+msgstr "Read more"
+
+msgid "Lista de favoritos"
+msgstr "Wishlist"
+
+msgid "Llena todos los campos y envía tu mensaje. Te responderemos a la brevedad posible."
+msgstr "Fill all the fields and send your message. We will reply as soon as possible."
+
+msgid "Log in"
+msgstr "Log in"
+
+msgid "Log out"
+msgstr "Log out"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Los costos de envío serán calculados al momento de pagar."
+msgstr "Shipping costs will be calculated at Checkout."
+
+msgid "Luces, cámara, acción."
+msgstr "Lights, camera, action"
+
+msgid "Manténgase conectado y productivo con nuestra selección de computadoras portátiles, teléfonos inteligentes, dispositivos domésticos inteligentes y tecnología portátil.<br>Descubra los últimos avances y mejore su experiencia digital."
+msgstr "Stay connected and productive with our selection of laptops, smartphones, smart home devices, and wearable tech.<br>Discover the latest advancements and enhance your digital experience."
+
+msgid "Me gustaría saber más sobre este producto."
+msgstr "I would like to know more about this product"
+
+msgid "Mejora tu Salud Diaria"
+msgstr "Support Your Daily Health"
+
+msgid "Mejora tu experiencia auditiva"
+msgstr "Elevate Your Listening Experience"
+
+msgid "Menú"
+msgstr "Menu"
+
+msgid "Menú 1"
+msgstr "Menu 1"
+
+msgid "Menú 2"
+msgstr "Menu 2"
+
+msgid "Mi cuenta"
+msgstr "My account"
+
+msgid "Mira esto:"
+msgstr "Check this out:"
+
+msgid "Mira nuestros últimos productos"
+msgstr "See our latest products"
+
+msgid "Moneda"
+msgstr "Currency"
+
+msgid "Monitores de presión arterial"
+msgstr "Blood Pressure Monitors"
+
+msgid "Mostrar stock de ubicaciones"
+msgstr "Show stock from locations"
+
+msgid "My account"
+msgstr "My account"
+
+msgid "Mándanos un mensaje"
+msgstr "Send us a message"
+
+msgid "Más rápido"
+msgstr "FASTEST"
+
+msgid "Máscaras"
+msgstr "Masks"
+
+msgid "Métodos de pago aceptados"
+msgstr "Accepted payments methods"
+
+msgid "New"
+msgstr "New"
+
+msgid "New Arrivals"
+msgstr "New Arrivals"
+
+msgid "No disponible"
+msgstr "Not available"
+
+msgid "No es posible comprar productos en este momento. Si necesitas más información por favor contáctanos a través de nuestros distintos canales."
+msgstr "It's not possible to purchase products at the moment. If you need more information please contact us through our different channels."
+
+msgid "No está disponible por el momento"
+msgstr "Not available at the moment"
+
+msgid "No hay disponibilidad para esta fecha"
+msgstr "No timeslots available for this date."
+
+msgid "No hay productos que coincidan con los filtros seleccionados"
+msgstr "No products matched the selected filters"
+
+msgid "No hay resultados disponibles"
+msgstr "There are no results available"
+
+msgid "No hemos encontrado productos que coincidan con tu búsqueda de"
+msgstr "We haven't found any products that match your search for"
+
+msgid "No products matched the selected filters"
+msgstr "No products matched the selected filters"
+
+msgid "Nombre del autor"
+msgstr "Author name"
+
+msgid "Nos ayudan a comprender cómo interactúan los usuarios con el sitio y mejorar su rendimiento."
+msgstr "They help us understand how users interact with the site and improve its performance."
+
+msgid "Not available"
+msgstr "Not available"
+
+msgid "Not available at the moment"
+msgstr "Not available at the moment"
+
+msgid "Notificarme cuando esté disponible"
+msgstr "Notify me when available"
+
+msgid "Notify me when available"
+msgstr "Notify me when available"
+
+msgid "Nuestra tienda está abierta las 24 horas y los 7 días de la semana"
+msgstr "Our store is open 24 hours and 7 days a week"
+
+msgid "Nuestras Marcas"
+msgstr "Our Brands"
+
+msgid "Nuestras marcas"
+msgstr "Our brands"
+
+msgid "Nuevo"
+msgstr "New"
+
+msgid "Nuevo diseño"
+msgstr "New Design"
+
+msgid "OFF"
+msgstr "OFF"
+
+msgid "Obtener oferta"
+msgstr "Get Offer"
+
+msgid "Oferta"
+msgstr "Sale"
+
+msgid "Ofrecemos servicio presencial en nuestros centros y gestionamos reservas online a nivel nacional."
+msgstr "We offer in-person service at our centers and manage online reservations nationwide."
+
+msgid "Ordenar por"
+msgstr "Sort by"
+
+msgid "Order confirmation"
+msgstr "Order confirmation"
+
+msgid "Order review"
+msgstr "Order review"
+
+msgid "Order summary"
+msgstr "Order summary"
+
+msgid "Other clients bought these products together"
+msgstr "Other clients bought these products together"
+
+msgid "Otros clientes compraron estos productos en conjunto"
+msgstr "Other clients bought these products together"
+
+msgid "Out of stock"
+msgstr "Out of stock"
+
+msgid "Paga mediante pasarelas certificadas y encriptadas con tarjeta de crédito y transferencia bancaria."
+msgstr "Pay through certified and encrypted gateways with credit card and bank transfer."
+
+msgid "Pagos Seguros"
+msgstr "Secure Payments"
+
+msgid "Pagos seguros y protegidos"
+msgstr "Safe and secure payments"
+
+msgid "Pedidos"
+msgstr "Orders"
+
+msgid "Política de Privacidad"
+msgstr "privacy policy"
+
+msgid "Potencia tu vida digital"
+msgstr "Empower Your Digital Life"
+
+msgid "Precio sin impuestos:"
+msgstr "Price without tax:"
+
+msgid "Price without tax:"
+msgstr "Price without tax:"
+
+msgid "Proceder al Pago"
+msgstr "Proceed to Checkout"
+
+msgid "Proceed to Checkout"
+msgstr "Proceed to Checkout"
+
+msgid "Product Reviews"
+msgstr "Product Reviews"
+
+msgid "Productos Destacados"
+msgstr "Featured Products"
+
+msgid "Productos Seleccionados"
+msgstr "Handpicked products"
+
+msgid "Productos de salud para uso diario"
+msgstr "Everyday Health Products"
+
+msgid "Productos recomendados"
+msgstr "Recommended products"
+
+msgid "Programación online con confirmación inmediata y total seguridad de datos."
+msgstr "Online scheduling with immediate confirmation and complete data security."
+
+msgid "Programar una cita"
+msgstr "Schedule an appointment "
+
+msgid "Publicado el"
+msgstr "Published on"
+
+msgid "Published on"
+msgstr "Published on"
+
+msgid "Puede agregar algunos detalles de información de envío específicos aquí, para que sus clientes los vean."
+msgstr "You can add some specific shipping information details here, for your clients to see."
+
+msgid "Puede que te interesen estos"
+msgstr "You might be interested in these"
+
+msgid "Puede que te interesen otros productos de"
+msgstr "You might be interested in other products from"
+
+msgid "Puedes agregar un texto o una descripción para incentivar a los clientes a suscribirse."
+msgstr "You can add a text or description to encourage customers to subscribe."
+
+msgid "Puedes probar a buscar en otras categorías o utilizar la barra de búsqueda para encontrar otros productos."
+msgstr "You can try looking at other categories or use the search bar to find other products."
+
+msgid "Quantity"
+msgstr "Quantity"
+
+msgid "Read more"
+msgstr "Read more"
+
+msgid "Recién Llegados"
+msgstr "New Arrivals"
+
+msgid "Recién llegado"
+msgstr "Just Arrived"
+
+msgid "Related articles"
+msgstr "Related articles"
+
+msgid "Remove from Wishlist"
+msgstr "Remove from Wishlist"
+
+msgid "Request Quotation"
+msgstr "Request Quotation"
+
+msgid "Reservas rápidas y seguras"
+msgstr "Fast and secure reservations"
+
+msgid "Reseñas de Productos"
+msgstr "Product Reviews"
+
+msgid "Reseñas destacadas"
+msgstr "Featured Reviews"
+
+msgid "Resumen del pedido"
+msgstr "Order summary"
+
+msgid "Revisa estos productos que los clientes"
+msgstr "Check these products that customers"
+
+msgid "Revisión del pedido"
+msgstr "Order review"
+
+msgid "Rápido y ligero"
+msgstr "Fast and Lightweight"
+
+msgid "Salir"
+msgstr "Exit"
+
+msgid "Sano y salvo"
+msgstr "Safe and sound"
+
+msgid "Se utilizan para ofrecer anuncios relevantes y medir la eficacia de nuestras campañas publicitarias."
+msgstr "They are used to deliver relevant ads and measure the effectiveness of our advertising campaigns."
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Section title"
+msgstr "Section title"
+
+msgid "See availability"
+msgstr "See availability"
+
+msgid "See more"
+msgstr "See more"
+
+msgid "See more articles"
+msgstr "See more articles"
+
+msgid "See more posts"
+msgstr "See more posts"
+
+msgid "See more products"
+msgstr "See more products"
+
+msgid "See my Wishlist"
+msgstr "See my Wishlist"
+
+msgid "Seguir comprando"
+msgstr "Continue shopping"
+
+msgid "Selecciona Productos de Salud"
+msgstr "Select Health Products"
+
+msgid "Send us a WhatsApp message"
+msgstr "Send us a WhatsApp message"
+
+msgid "Send us a message"
+msgstr "Send us a message"
+
+msgid "Servicio al Cliente"
+msgstr "Customer Service"
+
+msgid "Share this article"
+msgstr "Share this article"
+
+msgid "Share this product"
+msgstr "Share this product"
+
+msgid "Shipping costs will be calculated at Checkout."
+msgstr "Shipping costs will be calculated at Checkout."
+
+msgid "Shipping information"
+msgstr "Shipping information"
+
+msgid "Show stock from locations"
+msgstr "Show stock from locations"
+
+msgid "Si tienes preguntas sobre él o necesitas ayuda, envíanos un correo:"
+msgstr "If you have any question about it or need help, send us an email:"
+
+msgid "Slide title"
+msgstr "Slide title"
+
+msgid "Sobre Nosotros"
+msgstr "About us"
+
+msgid "Soluciones tecnológicas avanzadas"
+msgstr "Advanced Technology Solutions"
+
+msgid "Soporte al cliente"
+msgstr "Customer support"
+
+msgid "Sort by"
+msgstr "Sort by"
+
+msgid "Soy mayor de 21 años"
+msgstr "I am over 21"
+
+msgid "Subscribe"
+msgstr "Subscribe"
+
+msgid "Subtítulo de banner opcional"
+msgstr "Optional banner subtitle"
+
+msgid "Subtítulo de la sección"
+msgstr "Section subtitle"
+
+msgid "Subtítulo del Slide"
+msgstr "Slide Subtitle"
+
+msgid "Subtítulo del banner"
+msgstr "Banner Subtitle"
+
+msgid "Successfully added to cart"
+msgstr "Successfully added to cart"
+
+msgid "Successfully added to your Wishlist"
+msgstr "Successfully added to your Wishlist"
+
+msgid "Successfully removed from your Wishlist"
+msgstr "Successfully removed from your Wishlist"
+
+msgid "Suplementos"
+msgstr "Supplements"
+
+msgid "Suplementos para el cuidado personal"
+msgstr "Personal Care Suppliements"
+
+msgid "Suscríbete"
+msgstr "Subscribe"
+
+msgid "Suscríbete a Nuestro Newsletter"
+msgstr "Subscribe to Our Newsletter!"
+
+msgid "Suscríbete a nuestro Newsletter"
+msgstr "Subscribe to our Newsletter"
+
+msgid "Suscríbete para recibir <b>nuevas publicaciones</b>"
+msgstr "Subscribe to receive <b>new posts</b>"
+
+msgid "Síguenos"
+msgstr "Follow us"
+
+msgid "Síguenos en"
+msgstr "Follow us in"
+
+msgid "Síguenos en Instagram"
+msgstr "Follow us on Instagram"
+
+msgid "También podría interesarte uno de estos"
+msgstr "You might also be interested in one of these"
+
+msgid "También te puede interesar"
+msgstr "You might also be interested in"
+
+msgid "Tema Starter"
+msgstr "STARTER THEME"
+
+msgid "Tengo menos de 21 años"
+msgstr "I am under 21"
+
+msgid "Termómetros"
+msgstr "Thermometers"
+
+msgid "Testimonios"
+msgstr "Testimonials"
+
+msgid "Texto del botón"
+msgstr "Button Text"
+
+msgid "Thank you for your order"
+msgstr "Thank you for your order"
+
+msgid "There are no results available"
+msgstr "There are no results available"
+
+msgid "There are still no products available here"
+msgstr "There are still no products available here"
+
+msgid "These cookies are essential for the website to function and cannot be disabled."
+msgstr "These cookies are essential for the website to function and cannot be disabled."
+
+msgid "They are used to deliver relevant ads and measure the effectiveness of our advertising campaigns."
+msgstr "They are used to deliver relevant ads and measure the effectiveness of our advertising campaigns."
+
+msgid "They help remember your preferences and provide content tailored to you."
+msgstr "They help remember your preferences and provide content tailored to you."
+
+msgid "They help us understand how users interact with the site and improve its performance."
+msgstr "They help us understand how users interact with the site and improve its performance."
+
+msgid "This is the slide text"
+msgstr "This is the slide text"
+
+msgid "This product has run out of stock. You may send us an inquiry about it."
+msgstr "This product has run out of stock. You may send us an inquiry about it."
+
+msgid "This product is currently unavailable. You may send us an inquiry about it."
+msgstr "This product is currently unavailable. You may send us an inquiry about it."
+
+msgid "This website uses cookies to ensure you get the best experience."
+msgstr "This website uses cookies to ensure you get the best experience."
+
+msgid "To"
+msgstr "To"
+
+msgid "Todavía no hay productos disponibles aquí"
+msgstr "There are still no products available here"
+
+msgid "Todos nuestros productos han sido testeados y certificados con altos estándares de calidad."
+msgstr "All of our products have been tested and certified with high quality standards."
+
+msgid "Tratamientos adaptados a tus necesidades, con un trato humano y amable."
+msgstr "Treatments tailored to your needs, with a human and friendly approach."
+
+msgid "Try removing or using different filters."
+msgstr "Try removing or using different filters."
+
+msgid "Try searching with other keywords or go back to the Home page."
+msgstr "Try searching with other keywords or go back to the Home page."
+
+msgid "Tu Información de Facturación es igual a tu Información de Envío."
+msgstr "Your Billing Information is the same as your Shipping Information."
+
+msgid "Tu carrito de compras está vacío "
+msgstr "Your shopping cart is empty."
+
+msgid "Tu carro de compras está vacío "
+msgstr "Your shopping cart is empty."
+
+msgid "Tu carro está vacío."
+msgstr "Your cart is currently empty."
+
+msgid "Tu correo electrónico aquí"
+msgstr "Your email here"
+
+msgid "Tus productos"
+msgstr "Your products"
+
+msgid "Título de la Sección"
+msgstr "Section title"
+
+msgid "Título de la slide"
+msgstr "Slide Title"
+
+msgid "Título del Slide"
+msgstr "Slide title"
+
+msgid "Título del Slide 1"
+msgstr "Slide 1 title"
+
+msgid "Título del Slide 2"
+msgstr "Slide 2 title"
+
+msgid "Título del Slide 3"
+msgstr "Slide 3 title"
+
+msgid "Título del banner"
+msgstr "Banner title"
+
+msgid "Título del bloque"
+msgstr "Block title"
+
+msgid "Ver disponibilidad"
+msgstr "See availability"
+
+msgid "Ver especialidades"
+msgstr "See specialties"
+
+msgid "Ver mas artículos"
+msgstr "See more articles"
+
+msgid "Ver mi lista de favoritos"
+msgstr "See my Wishlist"
+
+msgid "Ver más"
+msgstr "See more"
+
+msgid "Ver más artículos"
+msgstr "See more posts"
+
+msgid "Ver más productos"
+msgstr "See more products"
+
+msgid "Ver más reseñas"
+msgstr "See more reviews"
+
+msgid "Ver más testimonios"
+msgstr "See more testimonies"
+
+msgid "Ver productos"
+msgstr "See products"
+
+msgid "Ver servicios"
+msgstr "See servicies"
+
+msgid "Ver todo"
+msgstr "View all"
+
+msgid "Ver todos los productos"
+msgstr "See all products"
+
+msgid "View all"
+msgstr "View all"
+
+msgid "Visit us"
+msgstr "Visit us"
+
+msgid "Vista rápida"
+msgstr "Quick view"
+
+msgid "Visítanos"
+msgstr "Visit us"
+
+msgid "Volver arriba"
+msgstr "Back to top"
+
+msgid "We haven't found any products that match your search for"
+msgstr "We haven't found any products that match your search for"
+
+msgid "You can try looking at other categories or use the search bar to find other products."
+msgstr "You can try looking at other categories or use the search bar to find other products."
+
+msgid "You might also be interested in one of these"
+msgstr "You might also be interested in one of these"
+
+msgid "You must be of legal age to view our website. Due to legal requirements you must verify your age."
+msgstr "You must be of legal age to view our website. Due to legal requirements you must verify your age."
+
+msgid "Your Billing Information is the same as your Shipping Information."
+msgstr "Your Billing Information is the same as your Shipping Information."
+
+msgid "Your cart is currently empty."
+msgstr "Your cart is currently empty."
+
+msgid "Your products"
+msgstr "Your products"
+
+msgid "Your shopping cart is empty."
+msgstr "Your shopping cart is empty."
+
+msgid "added to the cart"
+msgstr "added to the cart"
+
+msgid "agregado al carro"
+msgstr "added to the cart"
+
+msgid "desde"
+msgstr "from"
+
+msgid "from"
+msgstr "from"
+
+msgid "hasta"
+msgstr "until"
+
+msgid "ir a la colección"
+msgstr "Go to collection"
+
+msgid "privacy policy"
+msgstr "privacy policy"
+
+msgid "until"
+msgstr "until"
+
+msgid "¡Alta satisfacción y bajo tiempo de respuesta!"
+msgstr "High satisfaction and low response time!"
+
+msgid "¡Obtén tus productos despachados completamente GRATIS al comprar sobre $50!"
+msgstr "Get your products delivered completely FREE when purchasing over $50!"
+
+msgid "¡Síguenos!"
+msgstr "Follow us!"
+
+msgid "¿Tiene un código de descuento o gift card?"
+msgstr "Have a discount or gift card code?"
+
+msgid "¿Tienes 21 años o más?"
+msgstr "Are you 21 or older?"
+
+msgid "¿Tienes preguntas?"
+msgstr "Have Questions?"
+
+msgid "¿Tienes un código de descuento?"
+msgstr "Have a discount code?"
+
+msgid "¿Tienes un código de gift card?"
+msgstr "Have a gift card code?"
+
+msgid "¿Ya tienes una cuenta? Puedes ingresar aquí."
+msgstr "Already have an account? Log in here"
+
+msgid "Últimos Productos"
+msgstr "Latest Products"
+
+msgid "Únase a nuestra newsletter"
+msgstr "Join our Newsletter"

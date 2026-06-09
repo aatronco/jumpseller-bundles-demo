@@ -1,0 +1,43 @@
+{% if options.pb_quickview_display == 'offcanvas' %}
+  <div
+    tabindex="-1"
+    id="product-quick-view"
+    aria-labelledby=""
+    class="offcanvas offcanvas-end sidebar"
+    data-display="{{ options.pb_quickview_display }}"
+    data-bundle-color="{{ options.pb_quickview_color }}"
+  >
+    <div class="offcanvas-header sidebar-header product-quick-view__header">
+      <a href="" class="button button--small button--style button--main sidebar-header__link">
+        {%- t "View full details" %}
+        <i class="ph ph-arrow-right"></i>
+      </a>
+      <button type="button" class="button sidebar-header__close" data-bs-dismiss="offcanvas" aria-label="{% t "Close" %}">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="offcanvas-body sidebar-body">
+      <div class="product-quick-view__container"></div>
+    </div>
+  </div>
+{% else %}
+  <div class="modal fade theme-modal" id="product-quick-view" tabindex="-1" aria-labelledby="" aria-hidden="true" data-display="{{ options.pb_quickview_display }}" data-bundle-color="{{ options.pb_quickview_color }}">
+    <div class="modal-dialog modal-xl modal-dialog-centered theme-modal__dialog">
+      <div class="modal-content theme-modal__content">
+        <div class="modal-header theme-modal__header product-quick-view__header">
+          <a href="" class="button button--small button--style button--main sidebar-header__link">
+            {%- t "View full details" %}
+            <i class="ph ph-arrow-right"></i>
+          </a>
+          <button type="button" class="button theme-modal__close" data-bs-dismiss="modal" aria-label="{% t 'Close' %}">
+            <i class="ph ph-x-circle"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="product-quick-view__container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

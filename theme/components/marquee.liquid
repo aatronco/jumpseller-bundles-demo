@@ -1,0 +1,83 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign equal_width = component.options.equal_width %}
+
+{% assign marquee_item_count = component.subcomponents.items.size %}
+{% if marquee_item_count == 0 %}
+  {% assign marquee_item_count = 1 %}
+{% endif %}
+{% assign marquee_item_width = 100 | divided_by: marquee_item_count | round %}
+
+{% assign show_titles = component.options.show_titles %}
+
+{% assign align_desktop = component.options.content_alignment_x_desktop %}
+{% assign align_mobile = component.options.content_alignment_x_mobile %}
+
+<theme-marquee>
+  <style>
+    #{{ section_id }} {
+      --theme-max-width: {{ section_width }};
+      --marquee-direction: {% if component.options.content_alignment_x_direction == 'right' %}reverse{% else %}normal{% endif %};
+      --marquee-duration: {{ component.options.speed | divided_by: 1000.00 }}s;
+      --marquee-item-width-desktop: {% if equal_width %}{{ marquee_item_width }}%{% else %}max-content{% endif %};
+      {% assign image_size = component.options.image_size %}
+      {% if image_size == 'custom' %}
+        --marquee-image-size-desktop: {{ component.options.image_size_desktop }}px;
+        --marquee-image-size-mobile: {{ component.options.image_size_mobile }}px;
+      {% else %}
+        --marquee-image-size-desktop: var(--marquee-image-size-{{ image_size }}-desktop);
+        --marquee-image-size-mobile: var(--marquee-image-size-{{ image_size }}-mobile);
+      {% endif %}
+      {% if show_titles %}
+        --marquee-title-font: var(--font-{{ component.options.title_font }});
+        {% assign title_size = component.options.title_size %}
+        {% if title_size == 'custom' %}
+          --marquee-title-size-desktop: {{ component.options.title_size_desktop }}px;
+          --marquee-title-size-mobile: {{ component.options.title_size_mobile }}px;
+        {% else %}
+          --marquee-title-size-desktop: var(--marquee-title-size-{{ title_size }}-desktop);
+          --marquee-title-size-mobile: var(--marquee-title-size-{{ title_size }}-mobile);
+        {% endif %}
+        --marquee-title-weight: {{ component.options.title_weight }};
+        --marquee-title-letter-spacing: {{ component.options.title_spacing }}px;
+        --marquee-title-text-transform: {{ component.options.title_uppercase | replace: 'true', 'uppercase' | replace: 'false', 'initial' }};
+      {% endif %}
+      --section-margin-top: {{ component.options.margin_top }}px;
+      --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    }
+  </style>
+
+  <section
+    id="{{ section_id }}"
+    class="container-fluid theme-section"
+    data-bundle-color="{{ component.options.bundle_color }}"
+    {% if options.theme_animate %}
+      data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+      data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+      data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+    {% endif %}
+    {{ component.attributes }}
+  >
+    <div class="container container--adjust theme-section__container">
+      <div
+        class="theme-marquee"
+        data-clones-size="{{ component.options.clones_size }}"
+        data-equal-width="{{ equal_width }}"
+        data-pause-hover="{{ component.options.stop_hover }}"
+        data-show-mask="{{ component.options.show_mask }}"
+        {% if options.theme_spacing != 'none' %}
+          data-spacing="{{ component.options.spacing }}"
+        {% endif %}
+      >
+        <div class="theme-marquee__wrapper theme-marquee__wrapper--reverse">
+          <div class="theme-marquee__group">
+            {% for marquee-item in component.subcomponents.items %}
+              {% render 'components/marquee-item', marquee-item: marquee-item, image_size: component.options.image_size, show_titles: show_titles, align_mobile: align_mobile, align_desktop: align_desktop %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</theme-marquee>

@@ -1,0 +1,110 @@
+{% assign data_spacing = options.pb_spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+<article
+  class="theme-block product-block{% if display_option == 'carousel' %} swiper-slide{% endif %}"
+  data-columns-mobile="{{ options.pb_columns_mobile }}"
+  data-columns-desktop="{{ options.pb_columns_desktop }}"
+  data-spacing="{{ data_spacing }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {% if options.theme_button_hover %}
+    data-button-hover="{{ options.theme_button_hover_style }}"
+  {% endif %}
+  {% if options.pb_card %}
+    data-card="true"
+    data-card-border="{{ options.pb_card_border }}"
+    data-card-image-padding="{{ options.pb_card_image_padding }}"
+    data-card-shadow="{{ options.pb_card_shadow }}"
+    data-bundle-color="{{ options.pb_card_bundle_color }}"
+  {% endif %}
+>
+  <div class="theme-block__wrapper product-block__wrapper">
+    <div class="product-block__gallery">
+      <a href="#" class="product-block__anchor" title="{% t 'Go to product' %}">
+        <div class="product-block__labels">
+          <div class="d-flex flex-column">
+            {% if block_index == 1 %}
+              <div class="product-block__label product-block__label--discount">
+                <span class="product-block__discount-percentage">-25%</span>
+                <span class="product-block__discount-text">{{ options.t_label_discount | escape }}</span>
+              </div>
+            {% endif %}
+            <div class="product-block__label product-block__label--new">{{ t_new }}</div>
+          </div>
+          {% if block_index == 3 %}
+            <div class="product-block__label">{% t "Out of Stock" %}</div>
+          {% endif %}
+        </div>
+      </a>
+
+      {% if show_color_options and options.pb_color_options_position == 'top' and block_index == 2 %}
+        {{ prod_colors }}
+      {% endif %}
+
+      <div class="product-block__canvas">
+        <div class="theme-image-placeholder"></div>
+      </div>
+    </div>
+    <!-- end .product-block__gallery -->
+
+    <div class="theme-block__content product-block__content">
+      {% for pb_content in options.pb_content_order %}
+        {% case pb_content %}
+          {% when 'attributes' %}
+            <div class="product-block__attributes check-empty">
+              <span class="product-block__sku">SKU: 1234</span>
+              <span>|</span>
+              <span class="product-block__brand">{% t "Brand name" %}</span>
+            </div>
+          {% when 'name' %}
+            <a href="#" class="product-block__name">
+              {%- if block_index == 2 %}
+                {%- t "This is the name for a product with color options" %} #{{ block_index }}
+              {% elsif block_index == 4 %}
+                {%- t "This is a very very long name for product" %} #{{ block_index }}
+              {% else %}
+                {%- t "This is the name for product" %} #{{ block_index }}
+              {% endif -%}
+            </a>
+          {% when 'price' %}
+            <div class="product-block__pricing product-block__pricing--horizontal">
+              {% if block_index == 1 %}
+                <div class="product-block__price product-block__price--new">{{ 25 | price }}</div>
+                <div class="product-block__price product-block__price--old">{{ 50 | price }}</div>
+              {% elsif block_index == 4 %}
+                <div class="product-block__price product-block__price--new">
+                  {% if options.pb_price_from_until -%}
+                    <small class="product-block__price product-block__price--text">{{ t_from }}</small>
+                  {% endif -%}
+                  {{- 25 | price }}
+                </div>
+                <div class="product-block__price product-block__price--old align-content-end">{{ 50 | price }}</div>
+              {% else %}
+                <div class="product-block__price">
+                  {% if block_index == 2 and options.pb_price_from_until -%}
+                    <small class="product-block__price product-block__price--text">{{ t_from }}</small>
+                  {%- endif %}
+                  {{- placeholder | times: 1337 | modulo: 300 | plus: 15 | price -}}
+                </div>
+              {% endif %}
+            </div>
+          {% when 'colors' %}
+            {% if show_color_options and options.pb_color_options_position == 'bottom' and block_index == 2 %}
+              {{ prod_colors }}
+            {% endif %}
+          {% when 'rating' %}
+            {% if options.pb_show_ratings %}
+              <div class="product-ratings"></div>
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+    <!-- end .product-block__content -->
+  </div>
+</article>

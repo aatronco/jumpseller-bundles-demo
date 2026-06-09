@@ -1,0 +1,69 @@
+{% case header_version -%}
+  {%- when 'v1', 'v5' -%}
+    {% if has_desktop_menu %}
+      {% assign version_class = 'd-flex d-lg-none' %}
+    {% else %}
+      {% assign version_class = 'd-flex' %}
+    {% endif %}
+  {%- else -%}
+    {% assign version_class = 'd-flex' %}
+{%- endcase %}
+
+{% capture mobile_button %}
+  <li class="header__item {{ version_class }}">
+    <button type="button" class="button header__link" data-bs-toggle="offcanvas" data-bs-target="#mobile-menu" aria-controls="mobile-menu" aria-label="{% t 'Menu' %}">
+      {% if component.options.items_buttons %}
+        <span class="button button--small button--{{ component.options.items_buttons_type }} button--style theme-section__button header__button">
+          <i class="theme-icon ph ph-list header__icon"></i>
+        </span>
+      {% else %}
+        <i class="theme-icon ph ph-list header__icon"></i>
+      {% endif %}
+      {% if header_items_text %}
+        <div class="d-none {% if header_version == 'v6' %}d-sm-block{% else %}d-md-block{% endif %} header__text">
+          {% t "Menu" %}
+        </div>
+      {% endif %}
+    </button>
+  </li>
+{% endcapture %}
+
+{% if header_version == 'v5' %}
+  {{ mobile_button }}
+  {% if has_desktop_menu %}
+    <li class="header__item w-100{% if component.options.categories == false %} d-none d-lg-flex{% endif %}">
+      {%- render 'components/header-menu', header-menu: component.subcomponents['header-menu'], header_version: header_version, header_items_text: header_items_text, submenu_view_all: submenu_view_all, t_view_all: t_view_all, t_go_to: t_go_to -%}
+    </li>
+  {% endif %}
+{% else %}
+  {{ mobile_button }}
+{% endif %}
+
+{% if header_version == 'v3' or header_version == 'v4' or header_version == 'v6' %}
+  {% unless component.options.categories == false %}
+    {% render 'header_menu_categories',
+      categories_display: component.options.categories_display,
+      categories_title: component.options.categories_title,
+      categories_icon: component.options.categories_icon,
+      submenu_type: component.subcomponents['header-menu'].options.submenu,
+      submenu_columns: component.subcomponents['header-menu'].options.submenu_columns,
+      submenu_columns_width: component.subcomponents['header-menu'].options.submenu_columns_width,
+      submenu_image: component.subcomponents['header-menu'].options.submenu_image,
+      submenu_image_ratio: component.subcomponents['header-menu'].options.submenu_image_ratio,
+      submenu_image_position: component.subcomponents['header-menu'].options.submenu_image_position,
+      submenu_image_width: component.subcomponents['header-menu'].options.submenu_image_width,
+      submenu_view_all: submenu_view_all,
+      t_view_all: t_view_all,
+      menu_event: component.subcomponents['header-menu'].options.event,
+      header_version: header_version,
+      header_items_text: header_items_text,
+      t_go_to: t_go_to
+    %}
+  {% endunless %}
+{% endif %}
+
+{% unless header_version == 'v2' or header_version == 'v6' %}
+  {% if has_search %}
+    {% render 'header_menu_search_item', header_version: header_version, header_items_text: header_items_text %}
+  {% endif %}
+{% endunless %}

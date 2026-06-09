@@ -1,0 +1,70 @@
+{
+  "name": "Card",
+  "icon": "box",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "icon": {
+      "name": "Icon",
+      "type": "ph_icon",
+      "help": "Choose an icon to be displayed on the card.",
+      "default": "ph ph-storefront",
+      "visible_if": "{{ component.options.icon }}"
+    },
+    "title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Card Title"
+    },
+    "front_text": {
+      "name": "Front text",
+      "type": "text",
+      "default": "Information Card Front Text"
+    },
+    "back_text": {
+      "name": "Back text",
+      "type": "text",
+      "default": "Information Card Back Text"
+    },
+    "link": {
+      "name": "Link",
+      "type": "link",
+      "default": null
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Read more",
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_external": {
+      "name": "External link",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_button": {
+      "name": "Link as button",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank }}"
+    },
+    "link_outline": {
+      "name": "Outline style",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link != blank and block.options.link_button }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link != blank and block.options.link_button }}"
+    }
+  },
+  "mode": "subcomponents",
+  "blocks": []
+}

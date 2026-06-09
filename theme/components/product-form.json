@@ -1,0 +1,13 @@
+{
+  "name": "Form",
+  "icon": "basket-shopping",
+  "help": "This subcomponent allows to display the **Form** with which users can add the product to the cart. You can customize its behavior in [Theme settings > Product Form](/general/product-form). For more details, visit [this article](/admin/landing?url=/support/theme-customization/#product-form).",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {},
+  "mode": "subcomponents",
+  "blocks": []
+}

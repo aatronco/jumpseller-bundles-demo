@@ -1,0 +1,115 @@
+{% assign item_id = 'image-accordion-block-' | append: image-accordion-item.id %}
+
+{% assign link = image-accordion-item.options.link %}
+{% assign link_image = link.image %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = image-accordion-item.options.link_text | default: link_text_default %}
+{% assign link_external = image-accordion-item.options.link_external %}
+{% assign image_alt = image-accordion-item.options.image_mobile.alt | default: image-accordion-item.options.image_desktop.alt | default: image-accordion-item.options.title | default: options.theme_store_name | default: store.name | escape %}
+{% assign image_width_and_height = image-accordion-item.options.image_desktop.attributes.width_and_height | default: link_image.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+{% if image-accordion-item.options.image_desktop.url != blank %}
+  {% assign image_desktop = image-accordion-item.options.image_desktop.url %}
+  {% assign image_mobile = image-accordion-item.options.image_mobile.url | default: image_desktop %}
+{% elsif link != blank and link_image != blank %}
+  {% assign image_desktop = link_image %}
+  {% assign image_mobile = image_desktop %}
+{% endif %}
+
+{% assign align_y_desktop = 'justify-content-md-' | append: image-accordion-item.options.content_alignment_y_desktop %}
+{% assign align_y_mobile = 'justify-content-' | append: image-accordion-item.options.content_alignment_y_mobile %}
+{% assign align_x_desktop = 'align-items-md-' | append: image-accordion-item.options.content_alignment_x_desktop %}
+{% assign align_x_mobile = 'align-items-' | append: image-accordion-item.options.content_alignment_x_mobile %}
+
+<style>
+  #{{ item_id }} {
+    --theme-image-accordion-content-max-width-desktop: {{ image-accordion-item.options.content_width }}%;
+    --theme-image-accordion-content-max-width-tablet: {% if image-accordion-item.options.content_width != 100 %}{{ image-accordion-item.options.content_width | plus: 10 }}%{% else %}{{ image-accordion-item.options.content_width }}%{% endif %};
+    --theme-image-accordion-content-align-desktop: {{ image-accordion-item.options.text_alignment_desktop }};
+    --theme-image-accordion-content-align-mobile: {{ image-accordion-item.options.text_alignment_mobile }};
+    --theme-overlay-opacity: {{ image-accordion-item.options.image_overlay | divided_by: 100.00 }};
+    --theme-image-position-desktop: {{ image-accordion-item.options.content_alignment_x_image_desktop }} {{ image-accordion-item.options.content_alignment_y_image_desktop }};
+    --theme-image-position-mobile: {{ image-accordion-item.options.content_alignment_x_image_mobile }} {{ image-accordion-item.options.content_alignment_y_image_mobile }};
+  }
+</style>
+
+{%- capture final_image -%}
+  {% if image_desktop != blank %}
+    <picture class="image-accordion__picture">
+      <source media="screen and (min-width: 576px)" srcset="{{ image_desktop }}">
+      <source media="screen and (max-width: 575px)" srcset="{{ image_mobile }}">
+      <img
+        src="{{ image_desktop }}"
+        alt="{{ image_alt }}"
+        class="image-accordion__object"
+        {{ image_width_and_height }}
+        loading="lazy"
+        decoding="auto"
+        fetchpriority="auto"
+      >
+    </picture>
+  {% elsif link != blank and link_image != blank %}
+    <img
+      src="{{ link_image.url }}"
+      alt="{{ image_alt }}"
+      class="image-accordion__object"
+      {{ link_image.attributes.width_and_height }}
+      loading="lazy"
+      decoding="auto"
+      fetchpriority="auto"
+    >
+  {% else %}
+    <div class="theme-image-placeholder"></div>
+  {% endif %}
+{%- endcapture -%}
+
+<div
+  id="{{ item_id }}"
+  class="theme-block image-accordion__item{% if block_index == 1 and first_open %} image-accordion__item--active{% endif %}"
+  data-mode="{{ event }}"
+  data-bundle-color="{{ image-accordion-item.options.bundle_color }}"
+  data-spacing="{{ data_inner_spacing }}"
+  data-corners="{{ data_corners }}"
+  {{ image-accordion-item.attributes }}
+>
+  <div class="theme-block__wrapper image-accordion-block__wrapper {{ align_y_desktop }} {{ align_y_mobile }} {{ align_x_desktop }} {{ align_x_mobile }}">
+    <div class="image-accordion__media">
+      <div class="theme-section__overlay"></div>
+      {{ final_image }}
+    </div>
+
+    <div class="image-accordion__content theme-image-accordion__content">
+      {% if component.options.show_content %}
+        {% if image-accordion-item.options.title != blank %}
+          <h3 class="image-accordion__title" {{ image-accordion-item.attributes.textfield.title }}>
+            {{- image-accordion-item.options.title -}}
+          </h3>
+        {% endif %}
+
+        {% if image-accordion-item.options.text != blank %}
+          <p class="image-accordion__text" {{ image-accordion-item.attributes.textfield.text }}>
+            {{- image-accordion-item.options.text -}}
+          </p>
+        {% endif %}
+      {% endif %}
+
+      {% if link != blank %}
+        <a
+          href="{{ link }}"
+          class="button{% if image-accordion-item.options.link_button_as_text %} button--text{% else %} button--style button--main{% endif %}{% if image-accordion-item.options.link_outline %} button--bordered{% endif %}"
+          title="{{ link_text }}"
+          {% if link_external %}
+            target="_blank" rel="noopener noreferrer"
+          {% endif %}
+        >
+          <span {{ image-accordion-item.attributes.textfield.link_text }}>
+            {{- link_text -}}
+          </span>
+          {% if image-accordion-item.options.link_arrow %}
+            <i class="ph ph-arrow-right"></i>
+          {% endif %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

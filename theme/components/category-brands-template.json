@@ -1,0 +1,293 @@
+{
+  "name": "Brands content",
+  "icon": "list-tree",
+  "help": "This component allows to display the subcategories from a given category, with their respective title and image.",
+  "max_usage": 1,
+  "required": true,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "category"
+  ],
+  "options": {
+    "columns_desktop": {
+      "name": "Columns on desktop",
+      "type": "select",
+      "help": "How many subcategories per horizontal row will be displayed on desktop devices.",
+      "default": "4",
+      "options": [
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        },
+        {
+          "label": "5",
+          "value": "5"
+        }
+      ]
+    },
+    "columns_mobile": {
+      "name": "Columns on mobile",
+      "type": "select",
+      "help": "How many subcategories per horizontal row will be displayed on mobile devices.",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        }
+      ]
+    },
+    "spacing": {
+      "name": "Space between",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' }}"
+    },
+    "corners": {
+      "name": "Rounded corners",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_corners_style != 'rectangular' }}"
+    },
+    "show_image": {
+      "name": "Show",
+      "type": "checkbox",
+      "default": true
+    },
+    "image_dimension": {
+      "name": "Dimension",
+      "type": "select",
+      "default": "square",
+      "options": [
+        {
+          "label": "Landscape",
+          "value": "landscape"
+        },
+        {
+          "label": "Portrait",
+          "value": "portrait"
+        },
+        {
+          "label": "Rectangular",
+          "value": "rectangular"
+        },
+        {
+          "label": "Square",
+          "value": "square"
+        }
+      ],
+      "visible_if": "{{ block.options.show_image }}"
+    },
+    "image_display": {
+      "name": "Display",
+      "type": "select",
+      "default": "thumb",
+      "options": [
+        {
+          "label": "Resize",
+          "value": "resize"
+        },
+        {
+          "label": "Crop",
+          "value": "thumb"
+        }
+      ],
+      "visible_if": "{{ block.options.show_image }}"
+    },
+    "show_titles": {
+      "name": "Show titles",
+      "type": "checkbox",
+      "default": true
+    },
+    "link_button": {
+      "name": "Link as button",
+      "type": "checkbox",
+      "default": false
+    },
+    "link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "Go to",
+      "visible_if": "{{ block.options.link_button }}"
+    },
+    "link_text_name": {
+      "name": "Include category name at the end",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link_button }}"
+    },
+    "link_outline": {
+      "name": "Outline style",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.link_button }}"
+    },
+    "link_arrow": {
+      "name": "Show arrow",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.link_button }}"
+    },
+    "align_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "text-md-start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-md-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-md-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-md-end"
+        }
+      ]
+    },
+    "align_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "text-start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "text-start"
+        },
+        {
+          "label": "Center",
+          "value": "text-center"
+        },
+        {
+          "label": "Right",
+          "value": "text-end"
+        }
+      ]
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 24,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Image",
+      "type": "heading",
+      "before": "show_image"
+    },
+    {
+      "name": "Content",
+      "type": "heading",
+      "before": "show_titles"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "align_desktop"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Brands content",
+      "category": "Core"
+    }
+  ]
+}

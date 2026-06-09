@@ -1,0 +1,849 @@
+msgid "+ impuestos"
+msgstr "另加税费"
+
+msgid "+100 profesionales certificados"
+msgstr "100多名认证专业人士"
+
+msgid "100% Satisfaction Guaranteed. Our vintage shoe collection is crafted with care and attention to detail."
+msgstr "100% 满意保证。我们的复古鞋履系列精心打造，注重每一个细节。"
+
+msgid "A Slice Above"
+msgstr "上层切片"
+
+msgid "A curated selection of our top picks, combining the elegance of the past with the finesse of the present."
+msgstr "精心挑选的精选佳品，融合了古典的优雅与现代的精致。"
+
+msgid "A quick glimpse into our pizza artistry"
+msgstr "快速了解一下我们的披萨艺术"
+
+msgid "A showcase of our esteemed brands, known for their excellence and reliability."
+msgstr "展示我们备受推崇的品牌，这些品牌以其卓越品质和可靠性而闻名。"
+
+msgid "Abierto 24 horas"
+msgstr "24小时营业"
+
+msgid "About Our Pharmacy"
+msgstr "关于我们的药房"
+
+msgid "About Us"
+msgstr "关于我们"
+
+msgid "Acceso"
+msgstr "使用权"
+
+msgid "Accesorios de crossfit"
+msgstr "CrossFit配件"
+
+msgid "Accesorios deportivos"
+msgstr "运动配件"
+
+msgid "Adjuntos del Producto"
+msgstr "产品附件"
+
+msgid "Agotado"
+msgstr "筋疲力尽的"
+
+msgid "Agrega tus banners"
+msgstr "添加您的横幅广告"
+
+msgid "Agrega un texto sobre tu tienda aquí"
+msgstr "在这里添加关于您店铺的文字"
+
+msgid "Agrega un título aquí"
+msgstr "在此处添加标题"
+
+msgid "Agregar"
+msgstr "添加"
+
+msgid "Agregar a la lista de favoritos"
+msgstr "添加到收藏列表"
+
+msgid "Agregar al Carro"
+msgstr "添加到购物车"
+
+msgid "Agregar al carrito"
+msgstr "添加到购物车"
+
+msgid "Agregue aquí algún texto que crea que será útil para sus clientes"
+msgstr "请在此处添加您认为对客户有用的任何文字。"
+
+msgid "Al crear una cuenta, puede acelerar su proceso de compra, revisar su historial de pedidos, hacer un seguimiento de los pedidos y mucho más."
+msgstr "创建账户后，您可以加快结账流程、查看订单历史记录、跟踪订单等等。"
+
+msgid "Al registrarse en nuestra tienda, acelera el proceso de pago, puede agregar varias direcciones de envío, ver y rastrear sus pedidos y mucho más."
+msgstr "通过在我们的商店注册，您可以加快结账流程，添加多个收货地址，查看和跟踪您的订单等等。"
+
+msgid "Al registrarse en nuestra tienda, agilizará el proceso de pago, podrá agregar varias direcciones de envío, ver y rastrear sus pedidos y más."
+msgstr "通过在我们的商店注册，您将简化结账流程，能够添加多个收货地址，查看和跟踪您的订单等等。"
+
+msgid "Al registrarte, podrás agilizar tu proceso de compra. Edita tus datos, añade varias direcciones, revisa y realiza un seguimiento de tus pedidos, y mucho más."
+msgstr "注册后，您可以简化购买流程。您可以编辑个人信息、添加多个地址、查看和跟踪订单等等。"
+
+msgid "Aquí puedes agregar el testimonio que cada cliente entregó sobre tu tienda para aumentar el reconocimiento de tu marca."
+msgstr "您可以在这里添加每位顾客对您店铺的评价，以提高您的品牌知名度。"
+
+msgid "Aquí puedes agregar un texto o descripción para entregar mayor contexto sobre qué trata la sección."
+msgstr "您可以在此处添加文本或描述，以提供更多关于该部分内容的背景信息。"
+
+msgid "Aquí puedes encontrar todos los canales disponibles mediante los cuales nos puedes contactar."
+msgstr "您可以在这里找到所有可用的联系我们的渠道。"
+
+msgid "Archivos"
+msgstr "档案"
+
+msgid "Artisan Banner"
+msgstr "工匠旗帜"
+
+msgid "Artisanal Pizza"
+msgstr "手工披萨"
+
+msgid "Artículos relacionados"
+msgstr "相关文章"
+
+msgid "Artículos seleccionados"
+msgstr "精选文章"
+
+msgid "Atención personalizada y directa"
+msgstr "个性化和直接关注"
+
+msgid "Audio Pro"
+msgstr "音频专业人士"
+
+msgid "Añadido al carro exitosamente"
+msgstr "已成功加入购物车"
+
+msgid "Añadido exitosamente a tu lista de favoritos"
+msgstr "已成功添加到您的收藏夹列表"
+
+msgid "Back to top"
+msgstr "返回顶部"
+
+msgid "Banner Showcase"
+msgstr "横幅展示"
+
+msgid "Banner especial"
+msgstr "特别横幅"
+
+msgid "Best Sellers"
+msgstr "畅销书"
+
+msgid "Bienvenido a Nuestra Tienda Deportiva"
+msgstr "欢迎光临我们的体育用品商店"
+
+msgid "Bienvenidos"
+msgstr "欢迎"
+
+msgid "Blog"
+msgstr "博客"
+
+msgid "Bloque de Calidad"
+msgstr "质量块"
+
+msgid "Bloque de Compromiso"
+msgstr "承诺块"
+
+msgid "Bloque de Confianza"
+msgstr "信任块"
+
+msgid "Bloque de Seguridad"
+msgstr "安全块"
+
+msgid "Brief insights into our offerings"
+msgstr "简要介绍我们的产品和服务"
+
+msgid "Browse Categories"
+msgstr "浏览类别"
+
+msgid "Browse through our diverse range of products tailored to meet your needs."
+msgstr "浏览我们种类繁多的产品，总有一款适合您。"
+
+msgid "Buscar"
+msgstr "寻找"
+
+msgid "Busque productos aquí..."
+msgstr "浏览此处产品……"
+
+msgid "Calcular los gastos de envío"
+msgstr "计算运费"
+
+msgid "Calidad de productos garantizada"
+msgstr "产品质量保证"
+
+msgid "Cantidad"
+msgstr "数量"
+
+msgid "Carlos Martínez"
+msgstr "卡洛斯·马丁内斯"
+
+msgid "Carro"
+msgstr "车"
+
+msgid "Casa inteligente"
+msgstr "智能家居"
+
+msgid "Categories"
+msgstr "类别"
+
+msgid "Categorías"
+msgstr "类别"
+
+msgid "Cerrar sesión"
+msgstr "退出登录"
+
+msgid "Check out our latest arrivals in CrossFit equipment and accessories."
+msgstr "来看看我们最新到货的 CrossFit 器材和配件吧！"
+
+msgid "Choose a time slot"
+msgstr "选择时间段"
+
+msgid "Classic Styles"
+msgstr "经典款式"
+
+msgid "Commitment"
+msgstr "承诺"
+
+msgid "Committed to Your Wellbeing"
+msgstr "致力于您的健康"
+
+msgid "Committed to providing exceptional service and quality that you can rely on."
+msgstr "我们致力于提供您可信赖的卓越服务和品质。"
+
+msgid "Committed to your CrossFit journey."
+msgstr "全力支持你的 CrossFit 之旅。"
+
+msgid "Community"
+msgstr "社区"
+
+msgid "Comparte este artículo"
+msgstr "分享这篇文章"
+
+msgid "Compartir"
+msgstr "分享"
+
+msgid "Compartir este producto"
+msgstr "分享此产品"
+
+msgid "Compra por categoría"
+msgstr "按类别选购"
+
+msgid "Compra sudaderas ahora"
+msgstr "现在就购买卫衣"
+
+msgid "Comprados juntos frecuentemente"
+msgstr "经常一起购买"
+
+msgid "Comprar"
+msgstr "买"
+
+msgid "Comprar Blazers ahora"
+msgstr "现在就购买开拓者队外套"
+
+msgid "Comprar ahora"
+msgstr "立即购买"
+
+msgid "Comprar bufandas"
+msgstr "买围巾"
+
+msgid "Compromiso con el cliente."
+msgstr "对客户的承诺。"
+
+msgid "Confianza en cada producto"
+msgstr "对每款产品都充满信心"
+
+msgid "Confianza en cada producto que ofrecemos."
+msgstr "我们对所提供的每一款产品都充满信心。"
+
+msgid "Confirmación del pedido"
+msgstr "订单确认"
+
+msgid "Conoce lo que dicen nuestros clientes sobre la tienda y los productos."
+msgstr "看看我们的顾客对商店和产品的评价。"
+
+msgid "Conoce nuestras marcas y su compromiso con el rendimiento deportivo."
+msgstr "探索我们的品牌及其对运动表现的承诺。"
+
+msgid "Contact Us"
+msgstr "联系我们"
+
+msgid "Contacto"
+msgstr "接触"
+
+msgid "Contamos con un equipo especializado que te atenderá ante cualquier duda o ayuda que necesites."
+msgstr "我们有专门的团队可以协助您解答任何疑问或提供您需要的帮助。"
+
+msgid "Contamos con una red de expertos validados y comprometidos con tu salud y bienestar."
+msgstr "我们拥有一个由经过认证的专家组成的网络，他们致力于您的健康和福祉。"
+
+msgid "Contáctanos"
+msgstr "联系我们"
+
+msgid "Cotizar"
+msgstr "引用"
+
+msgid "Count on Farmacia Española for expert recommendations and authentic products."
+msgstr "信赖Farmacia Española，获取专家建议和正宗产品。"
+
+msgid "Countdown to Launch"
+msgstr "发射倒计时"
+
+msgid "Crafted Stories"
+msgstr "精心打造的故事"
+
+msgid "Crafted for You"
+msgstr "为您精心打造"
+
+msgid "Crafted with passion"
+msgstr "倾注热情精心打造"
+
+msgid "Crear cuenta"
+msgstr "创建账户"
+
+msgid "Creative Banners"
+msgstr "创意横幅"
+
+msgid "Creative Block"
+msgstr "创作瓶颈"
+
+msgid "Creative Pizza Specials"
+msgstr "创意披萨特餐"
+
+msgid "CrossFit Categories"
+msgstr "CrossFit 分类"
+
+msgid "CrossFit Subscription"
+msgstr "CrossFit订阅"
+
+msgid "Crossfit Profesional"
+msgstr "专业 CrossFit"
+
+msgid "Curated Collections"
+msgstr "精选系列"
+
+msgid "Curated for Your Lifestyle"
+msgstr "专为您的生活方式精心打造"
+
+msgid "Curated for you"
+msgstr "为您精心挑选"
+
+msgid "Custom Banner"
+msgstr "自定义横幅"
+
+msgid "Customer Care"
+msgstr "客户服务"
+
+msgid "Customer Information"
+msgstr "客户信息"
+
+msgid "Customer Support"
+msgstr "客户支持"
+
+msgid "Customer Support. Our team is here to assist you with any inquiries."
+msgstr "客户支持。我们的团队随时为您解答任何疑问。"
+
+msgid "Debes ser mayor de edad para ver nuestro sitio web. Debido a requisitos legales debes verificar tu edad."
+msgstr "您必须达到法定年龄才能浏览我们的网站。根据法律规定，您必须验证您的年龄。"
+
+msgid "Delicious Banner"
+msgstr "美味横幅"
+
+msgid "Delivery Information"
+msgstr "配送信息"
+
+msgid "Delve into the charm of bygone eras with our elegant vintage selections."
+msgstr "透过我们优雅的复古精选，领略昔日时代的魅力。"
+
+msgid "Deportes"
+msgstr "运动的"
+
+msgid "Descargar"
+msgstr "释放"
+
+msgid "Descripción"
+msgstr "描述"
+
+msgid "Descripción adicional para este slide."
+msgstr "此幻灯片的补充说明。"
+
+msgid "Descripción de calidad y servicio."
+msgstr "质量和服务描述。"
+
+msgid "Descripción detallada para este slide."
+msgstr "此幻灯片的详细描述。"
+
+msgid "Descubra el futuro del entretenimiento"
+msgstr "探索娱乐的未来"
+
+msgid "Descubre Más"
+msgstr "了解更多"
+
+msgid "Descubre las nuevas llegadas en negro para tu equipo deportivo."
+msgstr "探索我们新推出的黑色运动装备。"
+
+msgid "Descubre más"
+msgstr "了解更多"
+
+msgid "Descubre nuestra línea de accesorios que elevan tu entrenamiento."
+msgstr "探索我们提升训练体验的系列配件。"
+
+msgid "Descubre promociones exclusivas para miembros de nuestra comunidad."
+msgstr "发现我们社区成员可享受的专属优惠。"
+
+msgid ""
+"Descubre un sonido de alta calidad con nuestra selección de productos de audio.\n"
+"Desde auriculares inalámbricos hasta potentes altavoces Bluetooth.\n"
+"Encuentra la solución perfecta para música, podcasts y videojuegos."
+msgstr ""
+"探索我们精选的音频产品，体验高品质音效。\n"
+"\n"
+"从无线耳机到强劲的蓝牙音箱，应有尽有。\n"
+"\n"
+"找到适合音乐、播客和视频游戏的完美解决方案。"
+
+msgid "Descuento (%)"
+msgstr "折扣 （％）"
+
+msgid "Desde"
+msgstr "从"
+
+msgid "Detalles"
+msgstr "细节"
+
+msgid "Detalles del producto"
+msgstr "产品详情"
+
+msgid "Detalles sobre este exclusivo slide de productos."
+msgstr "本次独家产品展示的详细信息。"
+
+msgid "Dining at Creative"
+msgstr "在创意餐厅用餐"
+
+msgid "Discover"
+msgstr "发现"
+
+msgid "Discover More"
+msgstr "了解更多"
+
+msgid "Discover Vintage"
+msgstr "探索复古"
+
+msgid "Discover high-quality pharmaceuticals and personal care items, carefully chosen by our professional team."
+msgstr "探索我们专业团队精心挑选的高品质药品和个人护理用品。"
+
+msgid "Discover our latest offers on wellness and pharmacy essentials."
+msgstr "探索我们最新的健康和药品必需品优惠。"
+
+msgid "Discover our unique banners showcasing the best of our vintage-inspired collections."
+msgstr "探索我们独具特色的横幅，欣赏我们最优质的复古风格系列产品。"
+
+msgid "Discover our unique range of CrossFit gear designed for peak performance."
+msgstr "探索我们专为巅峰表现而设计的独特 CrossFit 装备系列。"
+
+msgid "Discover the best CrossFit gear and services for your fitness journey."
+msgstr "探索最适合您健身之旅的 CrossFit 装备和服务。"
+
+msgid "Discover the flavor-packed options we offer."
+msgstr "探索我们提供的各种美味选择。"
+
+msgid "Discover the most recent additions to our catalog, featuring top trends and new favorites."
+msgstr "探索我们产品目录中的最新产品，包括热门潮流和新晋热门单品。"
+
+msgid "Discover the story behind each pizza"
+msgstr "探索每张披萨背后的故事"
+
+msgid "Diseño y rendimiento"
+msgstr "设计与性能"
+
+msgid "Disponible en stock"
+msgstr "现货供应"
+
+msgid "Don't miss out on this exclusive offer."
+msgstr "千万不要错过这项独家优惠。"
+
+msgid "Dr. Elena García"
+msgstr "埃琳娜·加西亚博士"
+
+msgid "Dónde estamos"
+msgstr "我们在哪里？"
+
+msgid "Editar mis detalles"
+msgstr "编辑我的信息"
+
+msgid "Editor's Choice"
+msgstr "编辑推荐"
+
+msgid "El contador termina en"
+msgstr "计数器结束于"
+
+msgid "Electrónica innovadora"
+msgstr "创新电子"
+
+msgid "Elegance in Display"
+msgstr "优雅的展示"
+
+msgid "Elevate Your Senses"
+msgstr "提升你的感官体验"
+
+msgid "Elevate your performance with our top-rated CrossFit products."
+msgstr "使用我们顶级的 CrossFit 产品，提升您的运动表现。"
+
+msgid "Elija un horario"
+msgstr "选择时间"
+
+msgid "Eliminado exitosamente de tu lista de favoritos"
+msgstr "已成功从您的收藏列表中移除"
+
+msgid "En tu lista de favoritos"
+msgstr "添加到您的收藏夹列表"
+
+msgid "Encuentra el mejor equipamiento deportivo con un diseño moderno y profesional."
+msgstr "寻找设计时尚专业的优质运动器材。"
+
+msgid "Encuentra productos de alta calidad para mejorar cada entrenamiento."
+msgstr "寻找优质产品，提升每次锻炼效果。"
+
+msgid "Encuentra tu tienda preferida"
+msgstr "找到你最喜欢的商店"
+
+msgid "Encuéntranos"
+msgstr "找到我们"
+
+msgid "Enhance Your Experience"
+msgstr "提升您的体验"
+
+msgid "Enhance Your Living"
+msgstr "提升您的生活品质"
+
+msgid "Enlace a cualquier página"
+msgstr "链接到任何页面"
+
+msgid "Enlace a la página"
+msgstr "页面链接"
+
+msgid "Enlace a la página con flecha"
+msgstr "链接到带箭头的页面"
+
+msgid "Enter your email and receive our latest blog updates."
+msgstr "输入您的电子邮件地址，即可接收我们最新的博客更新。"
+
+msgid "Enter your email here..."
+msgstr "请在此处输入您的电子邮件地址……"
+
+msgid "Entrena con estilo y resistencia"
+msgstr "训练要有格调和耐力"
+
+msgid "Entrena más fuerte"
+msgstr "训练更加刻苦"
+
+msgid "Envíanos un mensaje de WhatsApp"
+msgstr "请给我们发送 WhatsApp 消息"
+
+msgid "Envíanos un mensaje y te responderemos lo antes posible."
+msgstr "请给我们留言，我们会尽快回复您。"
+
+msgid "Envío Gratis para casi todas las comunas "
+msgstr "几乎所有城市都免运费"
+
+msgid "Envío Gratis por compras mayor de tanto a RM"
+msgstr "订单满RM即可享受免运费"
+
+msgid "Envío gratis"
+msgstr "免运费"
+
+msgid "Envío gratuito para compras superiores a $50"
+msgstr "订单满50美元免运费"
+
+msgid "Envío gratuito para compras superiores a <b>$50</b>"
+msgstr "订单满50美元免运费"
+
+msgid "Equilibrio entre diseño y funcionalidad para tus entrenamientos."
+msgstr "兼顾健身设计与功能性。"
+
+msgid "Equipamiento destacado"
+msgstr "特色设备"
+
+msgid "Equipamiento esencial"
+msgstr "必备设备"
+
+msgid "Equipo de audio premium"
+msgstr "高级音响设备"
+
+msgid "Equípate con ropa deportiva pensada para la máxima comodidad."
+msgstr "选择舒适度极佳的运动服。"
+
+msgid "Essential Picks"
+msgstr "必备单品"
+
+msgid "Esta descripción ha sido escrita y agregada en el campo de descripción del componente. Este slide está posicionado y alineado con el centro. Muestra un botón sin flecha al lado del texto."
+msgstr "此描述已编写并添加到组件的描述字段中。此幻灯片已居中对齐。文本旁边显示一个没有箭头的按钮。"
+
+msgid "Esta descripción ha sido escrita y añadida en el campo de descripción del componente. Esta diapositiva está posicionada y alineada a la izquierda. Muestra un botón con una flecha al lado del texto."
+msgstr "此描述已编写并添加到组件描述字段。此幻灯片位于左侧并左对齐。文本旁边显示一个带箭头的按钮。"
+
+msgid "Esta descripción ha sido escrita y añadida en el campo de descripción del componente. Esta diapositiva se coloca a la derecha y alineada a la izquierda. No muestra un botón, pero se puede hacer clic en toda la diapositiva."
+msgstr "此描述已编写并添加到组件描述字段。此幻灯片位于右侧，左对齐。它不显示按钮，但整个幻灯片均可点击。"
+
+msgid "Esta es la descripción del banner"
+msgstr "这是横幅描述"
+
+msgid "Esta es la descripción, intenta ser breve."
+msgstr "这是描述，请尽量简洁。"
+
+msgid "Esta es una descripción del cuarto elemento del bloque de la barra de confianza."
+msgstr "这是对信任栏模块第四个元素的描述。"
+
+msgid "Esta es una descripción del primer elemento del bloque de la barra de confianza."
+msgstr "这是对信任栏模块第一个元素的描述。"
+
+msgid "Esta es una descripción del segundo elemento del bloque de la trust bar."
+msgstr "这是对信任栏模块第二个元素的描述。"
+
+msgid "Esta es una descripción del tercer elemento del bloque de la barra de confianza."
+msgstr "这是对信任栏模块第三个元素的描述。"
+
+msgid "Este es el texto del Slide Informativo"
+msgstr "这是信息幻灯片中的文本。"
+
+msgid "Este es el texto del Slider Superior"
+msgstr "这是顶部滑块中的文本"
+
+msgid "Este es el texto del slide"
+msgstr "这是幻灯片上的文字。"
+
+msgid "Este es el título de un Banner"
+msgstr "这是横幅的标题"
+
+msgid "Este es el título del Contador"
+msgstr "这是会计师的职称"
+
+msgid "Este es el título del Slide #1"
+msgstr "这是第一张幻灯片的标题。"
+
+msgid "Este es el título del Slide #2"
+msgstr "这是第二张幻灯片的标题。"
+
+msgid "Este es el título del Slide #3"
+msgstr "这是幻灯片#3的标题。"
+
+msgid "Este es el título del cuerto bloque"
+msgstr "这是第四部分的标题"
+
+msgid "Este es el título del primer bloque"
+msgstr "这是第一部分标题"
+
+msgid "Este es el título del segundo bloque"
+msgstr "这是第二个模块的标题。"
+
+msgid "Este es el título del tercer bloque"
+msgstr "这是第三部分的标题"
+
+msgid "Este es un subtítulo opcional del Slide"
+msgstr "这是幻灯片的可选副标题。"
+
+msgid "Este producto está agotado. Puedes enviarnos una solicitud al respecto."
+msgstr "此产品已售罄。您可以向我们发送询价。"
+
+msgid "Este producto no está disponible. Puedes consultarnos al respecto."
+msgstr "此产品已售罄。您可以联系我们了解更多信息。"
+
+msgid "Events"
+msgstr "活动"
+
+msgid "Every pair tells a story of craftsmanship, inspired by the beauty of the past."
+msgstr "每一双鞋都讲述着精湛的工艺故事，其灵感源自过往的美好。"
+
+msgid "Everyday Essentials"
+msgstr "日常必需品"
+
+msgid "Excellence in CrossFit gear and support."
+msgstr "卓越的 CrossFit 装备和支持。"
+
+msgid "Excellent service and quality products every time I visit."
+msgstr "每次光顾都能享受到优质的服务和产品。"
+
+msgid "Exclusive Block"
+msgstr "独家区块"
+
+msgid "Exclusive Offers"
+msgstr "独家优惠"
+
+msgid "Experience Excellence"
+msgstr "卓越体验"
+
+msgid "Experience hassle-free shopping with our comprehensive customer support."
+msgstr "我们提供全面的客户支持，让您享受轻松无忧的购物体验。"
+
+msgid "Experience the seamless blend of style and functionality in our latest collection."
+msgstr "体验我们最新系列中时尚与功能的完美融合。"
+
+msgid "Expert Guidance"
+msgstr "专家指导"
+
+msgid "Expert care at your fingertips"
+msgstr "专业护理，触手可及"
+
+msgid "Explora nuestra colección de artículos deportivos en tonos negros."
+msgstr "探索我们以黑色为主色调的运动用品系列。"
+
+msgid ""
+"Explora nuestra gama de productos electrónicos, incluyendo televisores inteligentes, cámaras digitales y consolas de videojuegos.\n"
+"Actualiza tu cine en casa, captura los momentos de la vida y disfruta de entretenimiento superior con las mejores marcas."
+msgstr ""
+"探索我们丰富的电子产品系列，包括智能电视、数码相机和游戏机。\n"
+"\n"
+"升级您的家庭影院，捕捉生活精彩瞬间，尽享顶级品牌带来的卓越娱乐体验。"
+
+msgid "Explora nuestra selección de artículos de crossfit diseñados en negros elegantes y azules claros."
+msgstr "探索我们精选的采用时尚黑色和浅蓝色设计的 CrossFit 服饰。"
+
+msgid "Explore Categories"
+msgstr "探索类别"
+
+msgid "Explore More"
+msgstr "了解更多"
+
+msgid "Explore Now"
+msgstr "立即探索"
+
+msgid "Explore Technology"
+msgstr "探索科技"
+
+msgid "Explore exclusive offers and consultations with our kinesiologist."
+msgstr "探索我们运动机能学家提供的专属优惠和咨询服务。"
+
+msgid "Explore our exciting toppings"
+msgstr "探索我们令人兴奋的配料"
+
+msgid "Explore our latest collection of timeless women's shoes, inspired by vintage designs and crafted with modern comfort."
+msgstr "探索我们最新推出的经典女鞋系列，其设计灵感源自复古风格，并融合了现代舒适感。"
+
+msgid "Explore our latest collections that bring a touch of elegance and innovation."
+msgstr "探索我们最新推出的系列，感受优雅与创新的完美融合。"
+
+msgid "Explore our specialty pizza categories"
+msgstr "探索我们的特色披萨类别"
+
+msgid "Explore top-selling vitamins and supplements recommended by our pharmacists."
+msgstr "探索我们药剂师推荐的热销维生素和补充剂。"
+
+msgid "Exquisite choices"
+msgstr "精美之选"
+
+msgid "FAQs"
+msgstr "常见问题解答"
+
+msgid "FOTO Y VIDEO"
+msgstr "照片和视频"
+
+msgid "Farmacia Española"
+msgstr "西班牙药房"
+
+msgid "Farmacia Española is dedicated to offering professional pharmaceutical care and quality products to improve your daily life."
+msgstr "Farmacia Española致力于提供专业的药学服务和优质的产品，以改善您的日常生活。"
+
+msgid "Farmacia Española offers a curated selection of wellness products and professional health advice for your daily needs."
+msgstr "Farmacia Española 提供精选的健康产品和专业的健康建议，满足您的日常需求。"
+
+msgid "Farmacia Española provides exceptional care and always ensures I find the right products."
+msgstr "Farmacia Española 提供卓越的服务，总是确保我找到合适的产品。"
+
+msgid "Featured Brands"
+msgstr "特色品牌"
+
+msgid "Featured Products"
+msgstr "特色产品"
+
+msgid "Featured Showcase"
+msgstr "精选展示"
+
+msgid "Filtrar por precio"
+msgstr "按价格筛选"
+
+msgid "Find us across the city for your convenience"
+msgstr "为了方便起见，我们在市内各处均设有服务点。"
+
+msgid "Flavor Explosion"
+msgstr "风味爆炸"
+
+msgid "Flavorful Banner"
+msgstr "美味的横幅"
+
+msgid "Free Shipping"
+msgstr "免运费"
+
+msgid "Free Shipping on all orders above $50. Enjoy hassle-free shopping with us."
+msgstr "订单满50美元即可享受免运费。在我们这里享受轻松便捷的购物体验。"
+
+msgid "GO TO COLLECTION"
+msgstr "前往收藏集"
+
+msgid "Gallery"
+msgstr "画廊"
+
+msgid "Gear Up with Quiero"
+msgstr "与 Quiero 一起准备"
+
+msgid "Get In Touch"
+msgstr "联系我们"
+
+msgid "Get in Touch"
+msgstr "联系我们"
+
+msgid "Get inspired by our handpicked selections, curated just for you."
+msgstr "从我们精心挑选的商品中汲取灵感，这些商品都是为您量身定制的。"
+
+msgid "Gracias por tu orden"
+msgstr "感谢您的订购。"
+
+msgid "Handpicked Pizza Delights"
+msgstr "精选披萨美味"
+
+msgid "Handpicked selection of must-have CrossFit gear."
+msgstr "精选必备 CrossFit 装备。"
+
+msgid "Handpicked selections that embody quality and style, specially chosen for you."
+msgstr "精心挑选兼具品质与格调的商品，专为您而选。"
+
+msgid "Hasta"
+msgstr "直到"
+
+msgid "Hazlo con estilo"
+msgstr "以优雅的方式去做"
+
+msgid "Hazlo inteligente"
+msgstr "明智之举"
+
+msgid "Health insights"
+msgstr "健康资讯"
+
+msgid "Health updates"
+msgstr "健康动态"
+
+msgid "agregado al carro"
+msgstr "加入购物车"
+
+msgid "desde"
+msgstr "从"
+
+msgid "hasta"
+msgstr "直到"
+
+msgid "¡Alta satisfacción y bajo tiempo de respuesta!"
+msgstr "满意度高，响应速度快！"
+
+msgid "¡Obtén tus productos despachados completamente GRATIS al comprar sobre $50!"
+msgstr "购物满50美元即可享受免运费！"
+
+msgid "¡Síguenos!"
+msgstr "跟着我们！"
+
+msgid "¿Tienes 21 años o más?"
+msgstr "您是否年满21周岁？"
+
+msgid "¿Tienes preguntas?"
+msgstr "您有什么问题吗？"
+
+msgid "¿Tienes un código de descuento?"
+msgstr "你们有折扣码吗？"
+
+msgid "¿Ya tienes una cuenta? Puedes ingresar aquí."
+msgstr "您已有账号了吗？您可以在这里登录。"

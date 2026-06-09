@@ -1,0 +1,102 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign data_corners = component.options.corners %}
+{% if options.theme_corners_style == 'rectangular' %}
+  {% assign data_corners = false %}
+{% endif %}
+
+{% assign image_desktop = component.options.image_desktop.url %}
+{% assign image_mobile = component.options.image_mobile.url | default: image_desktop %}
+{% assign image_alt = component.options.image_mobile.alt | default: component.options.image_desktop.alt | default: options.theme_store_name | default: store.name | escape %}
+{% assign image_width_and_height = component.options.image_desktop.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+{% assign has_image_mobile = false %}
+{% if image_desktop != blank and component.options.image_mobile.url != blank %}
+  {% assign has_image_mobile = true %}
+{% endif %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --mapping-marker-color-background: {{ component.options.marker_color }};
+    --mapping-marker-color-icon: {{ component.options.marker_color | color_contrast: "#FFFFFF", "#222222" }};
+    {% assign marker_size = component.options.marker_size %}
+    {% if marker_size == 'custom' %}
+      --mapping-marker-size-desktop: {{ component.options.marker_size_desktop }}px;
+      --mapping-marker-size-mobile: {{ component.options.marker_size_mobile }}px;
+    {% else %}
+      --mapping-marker-size-desktop: var(--mapping-marker-size-{{ marker_size }}-desktop);
+      --mapping-marker-size-mobile: var(--mapping-marker-size-{{ marker_size }}-mobile);
+    {% endif %}
+    --mapping-product-align-vertical: {{ component.options.content_alignment_y_product }};
+  }
+  {% if data_spacing == false %}
+    @media screen and (max-width: {{ section_width }}) {
+      #{{ section_id }},
+      #{{ section_id }} .theme-section__container {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+      }
+    }
+  {% endif %}
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="theme-section"
+  data-spacing="{{ data_spacing }}"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row theme-section__content">
+      <div class="col-12 theme-section__column theme-section__column--no-margin">
+        <div
+          class="product-mapping"
+          data-corners="{{ data_corners }}"
+          data-markers-mobile="{{ has_image_mobile }}"
+          data-markers-style="{{ component.options.marker_corners }}"
+        >
+          {% for child in component.children %}
+            {% render 'components/product-mapping-item', product-mapping-item: child, has_image_mobile: has_image_mobile %}
+          {% endfor %}
+
+          {% if image_desktop != blank %}
+            <picture class="theme-section__picture">
+              <source media="screen and (min-width: 576px)" srcset="{{ image_desktop }}">
+              <source media="screen and (max-width: 575px)" srcset="{{ image_mobile }}">
+              <img
+                src="{{ image_desktop }}"
+                alt="{{ image_alt }}"
+                class="theme-section__image"
+                {{ image_width_and_height }}
+                loading="lazy"
+                decoding="async"
+                fetchpriority="auto"
+              >
+            </picture>
+          {% else %}
+            <div class="theme-image-placeholder theme-image-placeholder--wide"></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if options.pb_quickview == false and component.options.product_quickview %}
+  <link rel="stylesheet" href="{{ 'component-product.css' | asset }}">
+  {% render 'product_quickview' %}
+{% endif %}

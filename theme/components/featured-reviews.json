@@ -1,0 +1,424 @@
+{
+  "name": "Featured reviews",
+  "icon": "stars",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-featured-reviews/).",
+  "max_usage": 1,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "checkout__cart",
+    "checkout__checkout",
+    "customer__account",
+    "customer__login"
+  ],
+  "options": {
+    "limit": {
+      "name": "Items to display",
+      "type": "slider",
+      "default": 6,
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "unit": ""
+    },
+    "columns_desktop": {
+      "name": "Columns on desktop",
+      "type": "select",
+      "default": "3",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        }
+      ]
+    },
+    "display": {
+      "name": "Display",
+      "type": "select",
+      "default": "grid",
+      "options": [
+        {
+          "label": "Carousel",
+          "value": "carousel"
+        },
+        {
+          "label": "Grid",
+          "value": "grid"
+        }
+      ]
+    },
+    "autoplay": {
+      "name": "Autoplay",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "autoplay_speed": {
+      "name": "Autoplay speed",
+      "type": "slider",
+      "default": 4000,
+      "min": 1000,
+      "max": 6000,
+      "step": 500,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_continuous": {
+      "name": "Continuous autoplay",
+      "type": "checkbox",
+      "help": "If enabled, the autoplay transition will work with a continuous loop without stopping. Also, the carousel navigation elements will be hidden.",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_speed_mobile": {
+      "name": "Autoplay speed (mobile)",
+      "type": "slider",
+      "default": 2000,
+      "min": 1000,
+      "max": 5000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay and block.options.autoplay_continuous }}"
+    },
+    "show_arrows": {
+      "name": "Arrows",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "show_arrows_hover": {
+      "name": "Arrows on hover",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.show_arrows }}"
+    },
+    "show_dots": {
+      "name": "Dots",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "heading": {
+      "name": "Enable heading",
+      "type": "checkbox",
+      "default": true
+    },
+    "heading_subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Featured Reviews",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_description": {
+      "name": "Description",
+      "type": "text",
+      "default": "",
+      "placeholder": "Add a description to provide more information about these reviews",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link": {
+      "name": "Link",
+      "type": "link",
+      "default": null,
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "See more reviews",
+      "visible_if": "{{ block.options.heading and block.options.heading_link != blank }}"
+    },
+    "text_alignment": {
+      "name": "Alignment",
+      "type": "select",
+      "default": "start",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "image": {
+      "name": "Product image",
+      "type": "checkbox",
+      "default": true
+    },
+    "show_date": {
+      "name": "Date",
+      "type": "checkbox",
+      "default": true
+    },
+    "date": {
+      "name": "Date format",
+      "type": "select",
+      "default": "basic",
+      "options": [
+        {
+          "label": "Abbreviated (Mar 9, 2025)",
+          "value": "abbreviated_date"
+        },
+        {
+          "label": "Basic (3/9/2025)",
+          "value": "basic"
+        },
+        {
+          "label": "Date & Time (March 9, 2025 at 4:05 am)",
+          "value": "date_at_time"
+        },
+        {
+          "label": "On Date (on March 9, 2025)",
+          "value": "on_date"
+        },
+        {
+          "label": "Standard (March 9, 2025)",
+          "value": "date"
+        }
+      ],
+      "visible_if": "{{ block.options.show_date }}"
+    },
+    "show_name": {
+      "name": "Customer name",
+      "type": "checkbox",
+      "default": true
+    },
+    "name_filter": {
+      "name": "Name format",
+      "type": "select",
+      "default": "full_name",
+      "options": [
+        {
+          "label": "Full name",
+          "value": "full_name"
+        },
+        {
+          "label": "First name",
+          "value": "first_name"
+        }
+      ],
+      "visible_if": "{{ block.options.show_name }}"
+    },
+    "show_icon": {
+      "name": "Quote icon",
+      "type": "checkbox",
+      "default": true
+    },
+    "icon": {
+      "name": "Icon type",
+      "type": "select",
+      "default": "closing",
+      "options": [
+        {
+          "label": "Opening quote",
+          "value": "opening"
+        },
+        {
+          "label": "Closing quote",
+          "value": "closing"
+        }
+      ],
+      "visible_if": "{{ block.options.show_icon }}"
+    },
+    "icon_size": {
+      "name": "Icon size",
+      "type": "slider",
+      "default": 24,
+      "min": 16,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "visible_if": "{{ block.options.show_icon }}"
+    },
+    "card": {
+      "name": "Card style",
+      "type": "checkbox",
+      "default": true
+    },
+    "card_spacing": {
+      "name": "Space between",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' and block.options.card }}"
+    },
+    "card_border": {
+      "name": "Border",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.card }}"
+    },
+    "card_border_opacity": {
+      "name": "Border opacity",
+      "type": "slider",
+      "default": 10,
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "visible_if": "{{ block.options.card and block.options.card_border }}"
+    },
+    "card_shadow": {
+      "name": "Shadow on hover",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.card }}"
+    },
+    "card_bundle_color": {
+      "name": "Card content colors",
+      "type": "bundle",
+      "default": "default",
+      "pack": "color",
+      "visible_if": "{{ block.options.card }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Carousel settings",
+      "type": "heading",
+      "before": "autoplay"
+    },
+    {
+      "name": "Heading options",
+      "type": "heading",
+      "before": "heading"
+    },
+    {
+      "name": "Reviews options",
+      "type": "heading",
+      "before": "text_alignment"
+    },
+    {
+      "name": "Card options",
+      "type": "heading",
+      "before": "card_spacing"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Featured reviews",
+      "category": "Customers"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{% case header_version %}
+  {% when 'v4' %}
+    {% assign item_visibility = 'd-none d-md-flex' %}
+  {% else %}
+    {% if has_header_toolbar %}
+      {% assign item_visibility = 'd-none d-md-flex' %}
+    {% else %}
+      {% assign item_visibility = 'd-none d-lg-flex' %}
+    {% endif %}
+{% endcase %}
+
+{%- if languages.size > 1 -%}
+  <li class="header__item {{ item_visibility }}">
+    {%- render 'dropdown_language', header_items_text: header_items_text, dropdown_position: dropdown_position -%}
+  </li>
+{%- endif -%}
+
+{%- if store.currencies_codes.size > 1 -%}
+  <li class="header__item {{ item_visibility }}">
+    {%- render 'dropdown_currency', header_items_text: header_items_text, dropdown_position: dropdown_position -%}
+  </li>
+{%- endif -%}

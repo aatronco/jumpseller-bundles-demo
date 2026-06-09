@@ -1,0 +1,56 @@
+{% assign has_variants = false %}
+{% if prod.variants.size > 0 %}
+  {% assign has_variants = true %}
+{% endif %}
+
+{% capture t_add_to_wishlist_default %}{% t "Add to Wishlist" %}{% endcapture %}
+{% assign t_add_to_wishlist = options.t_add_to_wishlist | default: t_add_to_wishlist_default %}
+{% capture t_remove_from_wishlist_default %}{% t "Remove from Wishlist" %}{% endcapture %}
+{% assign t_remove_from_wishlist = options.t_remove_from_wishlist | default: t_remove_from_wishlist_default %}
+
+<product-wishlist {{ attributes }} class="product-wishlist trsn" data-display="block">
+  <script type="application/json" class="product-wishlist-json">
+    {
+      "info": {
+        "product": {
+          "id": {{ prod.id | json }},
+          "url": {{ prod.url | json }},
+          "wishlist_add_url": {{ prod.wishlist_add_url | json }},
+          "wishlist_remove_url": {{ prod.wishlist_remove_url | json }},
+          "wishlisted_product": {{ prod.wishlisted | json }},
+          "has_variants": {{ has_variants | json }}
+        }
+      }
+    }
+  </script>
+
+  <button
+    type="button"
+    onclick="location.href='{{ customer_login_url }}?target=wishlist'"
+    class="button product-wishlist__button{% if customer %} add-to-wishlist{{ prod.id }}{% endif %}"
+    title="{{ t_add_to_wishlist }}"
+    aria-label="{{ t_add_to_wishlist }}"
+    data-bs-toggle="tooltip"
+    data-bs-placement="left"
+    data-bs-title="{{ t_add_to_wishlist }}"
+    data-bs-custom-class="product-block__tooltip"
+  >
+    <div class="product-wishlist__icon trsn">
+      <i class="theme-icon ph ph-heart"></i>
+    </div>
+  </button>
+  <button
+    type="button"
+    onclick="location.href='{{ customer_login_url }}?target=wishlist'"
+    class="button product-wishlist__button product-wishlist__button--added{% if customer %} remove-from-wishlist{{ prod.id }}{% endif %} hidden"
+    aria-label="{{ t_remove_from_wishlist }}"
+    data-bs-toggle="tooltip"
+    data-bs-placement="left"
+    data-bs-title="{{ t_remove_from_wishlist }}"
+    data-bs-custom-class="product-block__tooltip"
+  >
+    <div class="product-wishlist__icon trsn">
+      <i class="ph-fill ph-heart"></i>
+    </div>
+  </button>
+</product-wishlist>

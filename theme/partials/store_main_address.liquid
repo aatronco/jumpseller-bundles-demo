@@ -1,0 +1,24 @@
+{% case address_position %}
+  {% when 'contact' %}
+    {% assign link_class = 'contact-block' %}
+  {% when 'footer' %}
+    {% assign link_class = 'footer' %}
+{% endcase %}
+
+{% assign location_address = store.location.address_with_street_number %}
+{% capture location_address_params -%}
+  {%- if store.location.complement != blank %}{{ store.location.complement }}, {% endif -%}
+  {%- if store.location.postal != blank %}{{ store.location.postal }}, {% endif -%}
+  {%- if store.location.municipality != blank %}{{ store.location.municipality }}, {% endif -%}
+  {{- store.location.city }}, {{ store.location.region }}, {{ store.location.country -}}
+{%- endcapture %}
+{% capture location_address_url -%}
+  https://maps.google.com/maps?q={{ location_address | append: ' ' | append: location_address_params | remove: store.location.complement | replace: '#', '' | url_encode -}}
+{%- endcapture %}
+
+<a href="{{ location_address_url }}" class="{{ link_class }}__link" title="{% t 'See on Google Maps' %}" target="_blank">
+  {% if address_position == 'footer' %}
+    <i class="theme-icon ph ph-map-pin footer__icon"></i>
+  {% endif %}
+  {{- store.location.formatted -}}
+</a>

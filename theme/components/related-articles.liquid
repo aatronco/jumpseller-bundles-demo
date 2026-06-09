@@ -1,0 +1,48 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign page_cat = page.category %}
+{%- assign page_cat_title = page_cat.name -%}
+
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+{% assign display_option = component.options.display %}
+
+{% assign columns_desktop = component.options.columns_desktop %}
+{% assign columns_mobile = component.options.columns_mobile %}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title | default: page_cat_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = page_cat.url %}
+{% capture heading_link_text_default %}{% t "See more posts" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+{% capture sw_content %}
+  {% for article_block in page_cat.pages limit: component.options.limit %}
+    {% unless article_block.permalink == page.permalink %}
+      {% render 'article_block', article_block: article_block, display_option: display_option, section_width: section_width, columns_mobile: columns_mobile, columns_desktop: columns_desktop, block_index: forloop.index %}
+    {% endunless %}
+  {% endfor %}
+{% endcapture %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}"{% endcapture -%}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section id="{{ section_id }}" class="container-fluid theme-section" data-bundle-color="{{ component.options.bundle_color }}" {{ component.attributes }}>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% if display_option == 'carousel' %}
+        {% render 'component_swiper', sw_layout: 'page-category-articles', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+      {% else %}
+        {{ sw_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

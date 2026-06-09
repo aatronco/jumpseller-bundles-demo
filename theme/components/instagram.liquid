@@ -1,0 +1,120 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% if social.instagram.url != blank %}
+  {% assign has_instagram = true %}
+{% else %}
+  {% assign has_instagram = false %}
+{% endif %}
+
+{% assign instagram_post_limit = component.options.limit %}
+{% assign display_option = component.options.display %}
+
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign align_mobile = options.text_alignment_heading_mobile %}
+{% assign align_desktop = options.text_alignment_heading_desktop %}
+
+{% assign feed_class = 'row theme-section__content' %}
+{% assign blocks_class = 'theme-block instagram-block ' | append: display_option | replace: 'carousel', 'swiper-slide' | replace: 'grid', '' %}
+
+{% capture sw_content %}
+  {% if social.instagram.url != blank %}
+    <instagram-feed
+      class="{% if display_option == 'carousel' %}swiper-wrapper{% else %}{{ feed_class }}{% endif %}"
+      ig-limit="{{ instagram_post_limit }}"
+      ig-class="{{ blocks_class }}"
+      ig-title="{% t 'See on Instagram' %}"
+    ></instagram-feed>
+  {% elsif request.preview_mode %}
+    {% for _ in (1..instagram_post_limit) %}
+      <div
+        class="{{ blocks_class }}"
+        data-columns="{{ instagram_post_limit }}"
+        data-spacing="{{ data_spacing }}"
+      >
+        <div class="instagram-block__anchor">
+          <div class="theme-image-placeholder theme-image-placeholder--instagram"></div>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endcapture %}
+
+{% capture subtitle %}
+  {% if component.options.title != blank %}
+    <div class="col-12 theme-section__column">
+      <div class="theme-section__subtitle">
+        <i class="theme-icon ph ph-instagram-logo"></i> <span {{ component.attributes.textfield.title }}>{{- component.options.title -}}</span>
+      </div>
+    </div>
+  {% endif %}
+{% endcapture %}
+
+{% assign handler = social.instagram.handler | prepend: '@' %}
+
+{%- assign sw_columns = 'sw-columns-desktop="6" sw-columns-mobile="3"' %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section{% if social.instagram.url == blank and request.preview_mode == false %} d-none{% endif %}"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row align-items-start text-{{ align_mobile }} text-md-{{ align_desktop }} theme-section__heading">
+      {% if social.instagram.url != blank %}
+        {{ subtitle }}
+        <div class="col-12 theme-section__column">
+          <a
+            href="{{ social.instagram.url }}"
+            class="theme-section__title theme-section__title--link"
+            title="{% t 'Follow us on' %} {{ handler -}}"
+            target="_blank"
+          >
+            {{- handler -}}
+          </a>
+        </div>
+      {% elsif request.preview_mode %}
+        {{ subtitle }}
+        <div class="col-12 theme-section__column">
+          <h3 class="theme-section__title">
+            {%- t "Connect your instagram account" -%}
+          </h3>
+        </div>
+      {% endif %}
+
+      {% render 'component_heading_underline', underline_class: 'col-12' %}
+    </div>
+
+    {% case display_option %}
+      {% when 'carousel' %}
+        <div class="{{ feed_class }}">
+          {% render 'component_swiper', sw_layout: 'instagram', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+        </div>
+      {% else %}
+        {% if has_instagram %}
+          {{ sw_content }}
+        {% else %}
+          <div class="{{ feed_class }}">
+            {{ sw_content }}
+          </div>
+        {% endif %}
+    {% endcase %}
+  </div>
+</section>

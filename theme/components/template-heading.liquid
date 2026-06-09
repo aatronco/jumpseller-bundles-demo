@@ -1,0 +1,83 @@
+{% assign t_published_on = options.t_published_on %}
+
+{% assign section_id = 'theme-section-' | append: component.id %}
+
+{% assign align_desktop = options.text_alignment_heading_desktop %}
+{% assign align_mobile = options.text_alignment_heading_mobile %}
+
+{% assign column_width = 'col-12' %}
+{% assign column_position = 'justify-content-start' %}
+
+{% if component.options.enable_width %}
+  {% case component.options.width %}
+    {% when 'large' %}
+      {% assign column_width = column_width | append: ' col-md-11 col-lg-10' %}
+    {% when 'medium' %}
+      {% assign column_width = column_width | append: ' col-md-9 col-lg-8' %}
+    {% when 'small' %}
+      {% assign column_width = column_width | append: ' col-md-7 col-lg-6' %}
+  {% endcase %}
+
+  {% assign column_position = 'justify-content-' | append: component.options.content_alignment_x %}
+{% endif %}
+
+{% capture section_date %}
+  {% assign page_date = page.date | date: format: options.article_block_date_format %}
+  <div class="theme-section__subtitle check-empty">
+    {{- ' ' | prepend: t_published_on | append: page_date -}}
+  </div>
+{% endcapture %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    --theme-overlay-opacity: {{ component.options.background_image_overlay | divided_by: 100.00 }};
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section theme-section--heading"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row align-items-start {{ column_position }} text-{{ align_mobile }} text-md-{{ align_desktop }} theme-section__heading">
+      {% if template == 'page' and component.options.show_date %}
+        <div class="{{ column_width }} theme-section__column">
+          {{ section_date }}
+        </div>
+      {% endif %}
+
+      <div class="{{ column_width }} theme-section__column">
+        <h1 class="theme-section__title check-empty">
+          {{- page.title -}}
+        </h1>
+      </div>
+
+      {% render 'component_heading_underline', underline_class: 'col-12' %}
+
+      {% if component.options.article_block_categories %}
+        <div class="{{ column_width }} theme-section__column">
+          {% render 'article_categories', categories_feed: page.categories, align_mobile: align_mobile, align_desktop: align_desktop %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if component.options.background_image %}
+    {% if page.images.size > 0 %}
+      <div class="theme-section__media">
+        <div class="theme-section__overlay"></div>
+        <img src="{{ page.images.first }}" alt="{{ page.title | escape }}" class="theme-section__image" width="auto" height="auto" loading="lazy" decoding="auto" fetchpriority="auto">
+      </div>
+    {% endif %}
+  {% endif %}
+</section>

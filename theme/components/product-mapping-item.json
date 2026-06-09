@@ -1,0 +1,70 @@
+{
+  "name": "Product",
+  "icon": "box-taped",
+  "help": "Allows to add an image in which you can position and mark products from your store.",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [],
+  "options": {
+    "permalink": {
+      "name": "Product",
+      "type": "product",
+      "help": "Choose a product from your store."
+    },
+    "position_top": {
+      "name": "Top",
+      "type": "slider",
+      "default": 20,
+      "min": 0,
+      "max": 95,
+      "step": 1,
+      "unit": "%"
+    },
+    "position_left": {
+      "name": "Left",
+      "type": "slider",
+      "default": 20,
+      "min": 0,
+      "max": 95,
+      "step": 1,
+      "unit": "%"
+    },
+    "position_top_mobile": {
+      "name": "Top",
+      "type": "slider",
+      "default": 40,
+      "min": 0,
+      "max": 95,
+      "step": 1,
+      "unit": "%",
+      "visible_if": "{{ component.options.image_mobile.url != blank }}"
+    },
+    "position_left_mobile": {
+      "name": "Left",
+      "type": "slider",
+      "default": 40,
+      "min": 0,
+      "max": 95,
+      "step": 1,
+      "unit": "%",
+      "visible_if": "{{ component.options.image_mobile.url != blank }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Marker position",
+      "type": "heading",
+      "before": "position_top"
+    },
+    {
+      "help": "Since you uploaded a image for mobile devices, these options allow you to position the markers especifically for that image.",
+      "name": "Marker position (mobile)",
+      "type": "heading",
+      "before": "position_top_mobile"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": []
+}

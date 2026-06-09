@@ -1,0 +1,45 @@
+<div class="product-options">
+  {% if prod.product_subscription_delivery_frequencies != empty %}
+    {% assign label_option = random.hex %}
+    <fieldset
+      id="{{ label_option }}_fieldset"
+      class="product-options__subscription"
+      data-optionid="{{ label_option }}"
+    >
+      <div class="product-options__title">{% t "Subscription" %}</div>
+      {% if options_display == 'select' %}
+        <select
+          id="subscription_select"
+          name="{{ label_option }}"
+          class="select prod-frequencies"
+          data-field-type="select"
+          data-optionid="period"
+        >
+          {% for frequency in prod.product_subscription_delivery_frequencies %}
+            <option value="{{ frequency.frequency_interval }}">{{ frequency.label }}</option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <div
+          class="product-options__group prod-frequencies"
+          data-field-type="radio"
+          data-optionid="period"
+        >
+          {% for frequency in prod.product_subscription_delivery_frequencies -%}
+            <label class="button product-options__selector product-options__selector--button">
+              <input
+                type="radio"
+                name="{{ label_option }}"
+                value="{{ frequency.frequency_interval }}"
+                {% if forloop.first %}
+                  checked
+                {% endif %}
+              >
+              <span>{{ frequency.label }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </fieldset>
+  {% endif %}
+</div>

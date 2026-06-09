@@ -1,0 +1,125 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign show_border = component.options.show_border %}
+
+{% assign column_width = 'col-12' %}
+{% assign column_position = 'justify-content-start' %}
+
+{% if component.options.enable_width %}
+  {% case component.options.width %}
+    {% when 'large' %}
+      {% assign column_width = column_width | append: ' col-lg-11' %}
+    {% when 'medium' %}
+      {% assign column_width = column_width | append: ' col-lg-10' %}
+    {% when 'small' %}
+      {% assign column_width = column_width | append: ' col-lg-9' %}
+  {% endcase %}
+
+  {% assign column_position = 'justify-content-' | append: component.options.content_alignment_x %}
+{% endif %}
+
+{% assign link = component.options.link %}
+{% capture link_text_default %}{% t "See offers" %}{% endcapture %}
+{% assign link_text = component.options.link_text | default: link_text_default %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-counter"
+  data-border="{{ show_border }}"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay }}{% else %}{{ options.theme_animate_delay }}{% endif %}"
+  {% endif %}
+  {{ component.attributes }}
+>
+  <div class="container theme-counter__container">
+    <div class="row {{ column_position }} theme-counter__row">
+      <div class="{{ column_width }} theme-counter__column">
+        <div class="row align-items-center text-center theme-counter__row">
+          {% if component.options.title != blank or component.options.description != blank %}
+            <div class="col-12 col-lg theme-counter__column">
+              <div class="theme-counter__title check-empty" {{ component.attributes.textfield.title }}>
+                {{- component.options.title -}}
+              </div>
+
+              <div class="theme-counter__description check-empty" {{ component.attributes.textfield.description }}>
+                {{- component.options.description | newline_to_br -}}
+              </div>
+            </div>
+            <!-- end .theme-counter__column -->
+          {% endif %}
+
+          {% if component.options.date != blank %}
+            {% assign date = component.options.date %}
+            {% assign time = component.options.time %}
+          {% else %}
+            {% assign date = 'now' | date: '%s' | plus: 604800 | date: '%Y/%m/%d' %}
+          {% endif %}
+
+          <store-counter
+            counter="{{- date -}} {% if time != blank %} {{- time | prepend: ' ' -}}{% endif %}"
+            timezone="{{ store.timezone }}"
+            counter-title="{{ component.options.counter_title }}"
+            class="col-12 col-lg theme-counter__column"
+          >
+            <div class="theme-counter__subtitle check-empty">
+              {% if show_border %}
+                <div class="theme-counter__border theme-counter__border--left"></div>
+              {% endif %}
+
+              <span {{ component.attributes.textfield.counter_title }}>
+                {{- component.options.counter_title -}}
+              </span>
+
+              {% if show_border %}
+                <div class="theme-counter__border theme-counter__border--right"></div>
+              {% endif %}
+            </div>
+
+            <div class="row align-items-center justify-content-center theme-counter__list hidden">
+              <div class="col-auto theme-counter__item">
+                0<small>{% t "hours" %}</small>
+              </div>
+              <div class="col-auto theme-counter__item">
+                0<small>{% t "minutes" %}</small>
+              </div>
+              <div class="col-auto theme-counter__item">
+                0<small>{% t "seconds" %}</small>
+              </div>
+            </div>
+          </store-counter>
+          <!-- end .theme-counter__column -->
+
+          {% if link != blank %}
+            <div class="col-12 col-lg-auto theme-counter__column">
+              <a
+                href="{{ link }}"
+                class="button button--style button--main{% if component.options.link_outline %} button--bordered{% endif %}"
+                title="{{ link_text }}"
+                {% if component.options.link_external %}
+                  target="_blank"
+                {% endif %}
+              >
+                {{- link_text -}}
+                {% if component.options.link_arrow %} <i class="ph ph-arrow-right"></i>{% endif %}
+              </a>
+            </div>
+            <!-- end .theme-counter__column -->
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <!-- end .row -->
+  </div>
+  <!-- end .theme-counter__container -->
+</section>
+<!-- end .theme-counter -->

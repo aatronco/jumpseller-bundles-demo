@@ -1,0 +1,77 @@
+{% assign data_spacing = component.options.spacing %}
+{% if options.theme_spacing == 'none' %}
+  {% assign data_spacing = false %}
+{% endif %}
+
+{% assign align_desktop = component.options.align_desktop %}
+{% assign align_mobile = component.options.align_mobile %}
+{% assign align_items_desktop = align_desktop | replace: 'text-md-', 'align-items-md-' %}
+{% assign align_items_mobile = align_mobile | replace: 'text-', 'align-items-' %}
+{% assign justify_icon_desktop = align_desktop | replace: 'text-md-', 'justify-content-md-' %}
+{% assign justify_icon_mobile = align_mobile | replace: 'text-', 'justify-content-' %}
+{% assign link = information-card.options.link %}
+{% capture link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign link_text = information-card.options.link_text | default: link_text_default %}
+{% assign link_external = information-card.options.link_external %}
+
+{% capture title %}
+  <h3 class="information-card__title theme-section__title check-empty" {{ information-card.attributes.textfield.title }}>{{ information-card.options.title }}</h3>
+{% endcapture %}
+
+{% capture button %}
+  {% if link != blank and information-card.options.link_button %}
+    <a
+      href="{{ link }}"
+      class="button button--style button--main{% if information-card.options.link_outline %} button--bordered{% endif %} theme-section__button"
+      title="{{ link_text }}"
+      {% if link_external %}
+        target="_blank"
+      {% endif %}
+    >
+      <span {{ information-card.attributes.textfield.link_text }}>
+        {{- link_text -}}
+      </span>
+      {%- if information-card.options.link_arrow %} <i class="ph ph-arrow-right"></i>{% endif %}
+    </a>
+  {% endif %}
+{% endcapture %}
+
+<div
+  class="theme-block information-card{% if display_option == 'carousel' %} swiper-slide{% endif %}"
+  data-columns-desktop="{{ columns_desktop }}"
+  data-columns-mobile="{{ columns_mobile }}"
+  data-spacing="{{ data_spacing }}"
+  data-card-border="{{ component.options.card_border }}"
+  {% if options.theme_animate %}
+    data-aos-once="{% if component.options.animate %}{{ component.options.animate_repeat }}{% else %}{{ options.theme_animate_repeat }}{% endif %}"
+    data-aos="{% if component.options.animate %}{{ component.options.animate_type }}{% else %}{{ options.theme_animate_type }}{% endif %}"
+    data-aos-delay="{% if component.options.animate %}{{ component.options.animate_delay | times: block_index }}{% else %}{{ options.theme_animate_delay | times: block_index }}{% endif %}"
+  {% endif %}
+  {{ information-card.attributes }}
+>
+  <div
+    class="{{ align_mobile }} {{ align_desktop }} information-card__container information-card__height"
+    data-border="{{ component.options.card_border }}"
+  >
+    {% render 'theme_hover_link', link: link, link_text: link_text, link_external: link_external %}
+    <div class="information-card__flipper">
+      {% if component.options.icon and information-card.options.icon != blank %}
+        <div class="information-card__icon-wrapper {{ justify_icon_desktop }} {{ justify_icon_mobile }}">
+          <div data-bundle-color="{{ component.options.card_bundle_color }}" class="information-card__icon">
+            <i class="theme-icon {{ information-card.options.icon }}"></i>
+          </div>
+        </div>
+      {% endif %}
+      <div data-bundle-color="{{ component.options.card_bundle_color }}" class="information-card__box theme-block__wrapper information-card__container--front {{ align_items_mobile }} {{ align_items_desktop }} information-card__height">
+        {{ title }}
+        <div class="information-card__description check-empty" {{ information-card.attributes.textfield.front_text }}>{{ information-card.options.front_text }}</div>
+        {{ button }}
+      </div>
+      <div data-bundle-color="{{ component.options.card_bundle_color }}" class="information-card__box theme-block__wrapper information-card__container--back {{ align_items_mobile }} {{ align_items_desktop }} information-card__height">
+        {{ title }}
+        <div class="information-card__description check-empty" {{ information-card.attributes.textfield.back_text }}>{{ information-card.options.back_text }}</div>
+        {{ button }}
+      </div>
+    </div>
+  </div>
+</div>

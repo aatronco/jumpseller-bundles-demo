@@ -1,0 +1,80 @@
+{% assign section_id = 'theme-section-' | append: component.id %}
+{% assign display_option = component.options.display %}
+
+{% assign align_desktop = options.text_alignment_heading_desktop %}
+{% assign align_mobile = options.text_alignment_heading_mobile %}
+
+{% assign columns_desktop = component.options.columns_desktop | round: 0 %}
+{% assign columns_mobile = component.options.columns_mobile | round: 0 %}
+
+{% capture sw_content %}
+  {% for page-category-block in pages.categories.all %}
+    {% render 'page_category_block', page-category-block: page-category-block, display_option: display_option, columns_mobile: columns_mobile, columns_desktop: columns_desktop, block_index: forloop.index %}
+  {% endfor %}
+{% endcapture %}
+
+{% capture cloud_content %}
+  {% assign cloud_align_desktop = 'justify-content-md-' | append: align_desktop %}
+  {% assign cloud_align_mobile = 'justify-content-' | append: align_mobile %}
+
+  <div class="category-block__cloud {{ cloud_align_mobile }} {{ cloud_align_desktop }}">
+    {% for page_cat in pages.categories.all %}
+      <a
+        href="{{- page_cat.url -}}"
+        class="button button--style button--main category-block__button"
+        title="{% t "Visit %{cat_name} articles", cat_name: page_cat.name %}"
+        {% if component.options.link_external %}
+          target="_blank"
+        {% endif %}
+      >
+        {{- page_cat.name -}}
+        {% if component.options.counter %}
+          <span class="badge category-block__badge">{{ page_cat.pages.size }}</span>
+        {% endif -%}
+      </a>
+    {% endfor %}
+  </div>
+{% endcapture %}
+
+{%- capture sw_columns %}sw-columns-desktop="{{ columns_desktop }}" sw-columns-mobile="{{ columns_mobile }}"{% endcapture -%}
+
+{% assign heading_subtitle = component.options.heading_subtitle %}
+{% assign heading_title = component.options.heading_title %}
+{% assign heading_description = component.options.heading_description %}
+{% assign heading_link = component.options.heading_link %}
+{% capture heading_link_text_default %}{% t "Read more" %}{% endcapture %}
+{% assign heading_link_text = component.options.heading_link_text | default: heading_link_text_default %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ options.theme_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+    {% if display_option != 'cloud' %}
+      --category-block-title-weight: {{ component.options.title_weight }};
+      --category-block-title-letter-spacing: {{ component.options.title_spacing }}px;
+      --category-block-title-text-transform: {% if component.options.title_uppercase %}uppercase{% else %}initial{% endif %};
+    {% endif %}
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    {% render 'component_heading', subtitle: heading_subtitle, title: heading_title, description: heading_description, link: heading_link, link_text: heading_link_text %}
+
+    <div class="row theme-section__content">
+      {% if display_option == 'carousel' %}
+        {% render 'component_swiper', sw_layout: 'categories', sw_content: sw_content, sw_columns: sw_columns, sw_autoheight: 'false' %}
+      {% elsif display_option == 'grid' %}
+        {{ sw_content }}
+      {% else %}
+        {{ cloud_content }}
+      {% endif %}
+    </div>
+  </div>
+</section>

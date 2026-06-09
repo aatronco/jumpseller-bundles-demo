@@ -1,0 +1,429 @@
+{
+  "name": "Testimonials",
+  "icon": "quotes",
+  "help": "For more information about this component and how it works, please visit [this article](/admin/landing?url=/support/component-testimonials/).",
+  "max_usage": null,
+  "required": false,
+  "tag": "div",
+  "classes": "",
+  "templates_in": [
+    "home",
+    "product",
+    "category",
+    "page",
+    "page_category",
+    "searchresults",
+    "contactpage",
+    "error",
+    "customer__login"
+  ],
+  "options": {
+    "columns_desktop": {
+      "name": "Columns on desktop",
+      "type": "select",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        }
+      ]
+    },
+    "columns_mobile": {
+      "name": "Columns on mobile",
+      "type": "select",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        }
+      ]
+    },
+    "text_alignment_desktop": {
+      "name": "Alignment (desktop)",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "text_alignment_mobile": {
+      "name": "Alignment (mobile)",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
+        }
+      ]
+    },
+    "display": {
+      "name": "Display",
+      "type": "select",
+      "default": "carousel",
+      "options": [
+        {
+          "label": "Carousel",
+          "value": "carousel"
+        },
+        {
+          "label": "Grid",
+          "value": "grid"
+        }
+      ]
+    },
+    "autoplay": {
+      "name": "Autoplay",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "autoplay_speed": {
+      "name": "Autoplay speed",
+      "type": "slider",
+      "default": 4000,
+      "min": 1000,
+      "max": 10000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_continuous": {
+      "name": "Continuous autoplay",
+      "type": "checkbox",
+      "help": "If enabled, the autoplay transition will work with a continuous loop without stopping. Also, the carousel navigation elements will be hidden.",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay }}"
+    },
+    "autoplay_speed_mobile": {
+      "name": "Autoplay speed (mobile)",
+      "type": "slider",
+      "default": 2000,
+      "min": 1000,
+      "max": 5000,
+      "step": 1000,
+      "unit": "ms",
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.autoplay and block.options.autoplay_continuous }}"
+    },
+    "show_arrows": {
+      "name": "Arrows",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "show_arrows_hover": {
+      "name": "Arrows on hover",
+      "type": "checkbox",
+      "default": false,
+      "visible_if": "{{ block.options.display == 'carousel' and block.options.show_arrows }}"
+    },
+    "show_dots": {
+      "name": "Dots",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.display == 'carousel' }}"
+    },
+    "heading": {
+      "name": "Enable heading",
+      "type": "checkbox",
+      "default": true
+    },
+    "heading_subtitle": {
+      "name": "Subtitle",
+      "type": "input",
+      "default": "",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_title": {
+      "name": "Title",
+      "type": "input",
+      "default": "Testimonials",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_description": {
+      "name": "Description",
+      "type": "text",
+      "default": "",
+      "placeholder": "Add a description for your chosen testimonials",
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link": {
+      "name": "Link",
+      "type": "link",
+      "default": null,
+      "visible_if": "{{ block.options.heading }}"
+    },
+    "heading_link_text": {
+      "name": "Link text",
+      "type": "input",
+      "default": "See more testimonies",
+      "visible_if": "{{ block.options.heading and block.options.heading_link != blank }}"
+    },
+    "icons": {
+      "name": "Quote icon",
+      "type": "checkbox",
+      "default": true
+    },
+    "avatar_image_size": {
+      "name": "Avatar size",
+      "type": "select",
+      "default": "small",
+      "options": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ]
+    },
+    "avatar_shape": {
+      "name": "Avatar shape",
+      "type": "select",
+      "default": "circle",
+      "options": [
+        {
+          "label": "Circle",
+          "value": "circle"
+        },
+        {
+          "label": "Rectangular",
+          "value": "rectangular"
+        },
+        {
+          "label": "Rounded",
+          "value": "rounded"
+        }
+      ]
+    },
+    "card": {
+      "name": "Card style",
+      "type": "checkbox",
+      "default": true
+    },
+    "card_spacing": {
+      "name": "Space between",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_spacing != 'none' and block.options.card }}"
+    },
+    "card_border": {
+      "name": "Border",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ block.options.card }}"
+    },
+    "card_border_opacity": {
+      "name": "Border opacity",
+      "type": "slider",
+      "default": 10,
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "visible_if": "{{ block.options.card and block.options.card_border }}"
+    },
+    "card_bundle_color": {
+      "name": "Card content colors",
+      "type": "bundle",
+      "default": "default",
+      "pack": "color",
+      "visible_if": "{{ block.options.card }}"
+    },
+    "margin_top": {
+      "name": "Top margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "margin_bottom": {
+      "name": "Bottom margin",
+      "type": "slider",
+      "default": 48,
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px"
+    },
+    "bundle_color": {
+      "name": "Content colors",
+      "type": "bundle",
+      "help": "Choose one of your Palettes shared between your chosen components or create an independent new one.",
+      "default": "default",
+      "pack": "color"
+    },
+    "animate": {
+      "name": "Customize options",
+      "type": "checkbox",
+      "help": "Allows to override the animation options defined at [Theme settings > Design > Animations](/general/design) for this specific component.",
+      "default": false,
+      "visible_if": "{{ options.theme_animate }}"
+    },
+    "animate_type": {
+      "name": "Type",
+      "type": "select",
+      "default": "fade-up",
+      "options": [
+        {
+          "label": "From down",
+          "value": "fade-up"
+        },
+        {
+          "label": "From up",
+          "value": "fade-down"
+        },
+        {
+          "label": "From left",
+          "value": "fade-right"
+        },
+        {
+          "label": "From right",
+          "value": "fade-left"
+        },
+        {
+          "label": "Zoom in",
+          "value": "zoom-in"
+        },
+        {
+          "label": "Zoom out",
+          "value": "zoom-out"
+        }
+      ],
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_repeat": {
+      "name": "Animate once",
+      "type": "checkbox",
+      "default": true,
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    },
+    "animate_delay": {
+      "name": "Delay",
+      "type": "slider",
+      "default": 50,
+      "min": 0,
+      "max": 300,
+      "step": 50,
+      "unit": "ms",
+      "visible_if": "{{ options.theme_animate and block.options.animate }}"
+    }
+  },
+  "presentation": [
+    {
+      "name": "Carousel settings",
+      "type": "heading",
+      "before": "autoplay"
+    },
+    {
+      "name": "Heading options",
+      "type": "heading",
+      "before": "heading"
+    },
+    {
+      "name": "Testimonies options",
+      "type": "heading",
+      "before": "icons"
+    },
+    {
+      "name": "Card options",
+      "type": "heading",
+      "before": "card_spacing"
+    },
+    {
+      "name": "Appearance",
+      "type": "heading",
+      "before": "margin_top"
+    },
+    {
+      "name": "Animations",
+      "type": "heading",
+      "before": "animate"
+    }
+  ],
+  "mode": "subcomponents",
+  "blocks": [
+    {
+      "type": "testimony",
+      "multiple": true,
+      "property": "testimonies"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "category": "Customers",
+      "children": [
+        {
+          "type": "testimony",
+          "options": {
+            "quote": "Here you can add the testimony that each customer has given about your store to increase your brand awareness."
+          }
+        },
+        {
+          "type": "testimony",
+          "options": {
+            "quote": "Here you can add the testimony that each customer has given about your store to increase your brand awareness."
+          }
+        },
+        {
+          "type": "testimony",
+          "options": {
+            "quote": "Here you can add the testimony that each customer has given about your store to increase your brand awareness."
+          }
+        },
+        {
+          "type": "testimony",
+          "options": {
+            "quote": "Here you can add the testimony that each customer has given about your store to increase your brand awareness."
+          }
+        }
+      ]
+    }
+  ]
+}

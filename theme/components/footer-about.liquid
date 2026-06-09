@@ -1,0 +1,62 @@
+{% assign section_id = 'footer-section-' | append: footer-about.id %}
+
+{% case footer-about.options.column_width %}
+  {% when 'auto' -%}
+    {%- assign column_width = 'col-12 col-lg' %}
+  {% when 'half' -%}
+    {%- assign column_width = 'col-12 col-md-6' %}
+  {% when 'full' -%}
+    {%- assign column_width = 'col-12' %}
+{% endcase %}
+
+{% assign logo_desktop = footer-about.options.logo.url | default: store.logo %}
+{% assign logo_mobile = footer-about.options.logo_mobile.url | default: logo_desktop %}
+{% assign logo_alt = footer-about.options.logo_mobile.alt | default: footer-about.options.logo.alt | default: options.theme_store_name | default: store.name | escape %}
+{% assign logo_width_and_height = footer-about.options.logo.attributes.width_and_height | default: 'width="auto" height="auto"' %}
+
+<style>
+  .footer {
+    --footer-logo-height-desktop: {{ footer-about.options.logo_height }}px;
+    --footer-logo-height-mobile: {{ footer-about.options.logo_height_mobile }}px;
+  }
+</style>
+
+<div id="{{ section_id }}" class="{{ column_width }} footer__column" {{ footer-about.attributes }}>
+  <div class="footer__content">
+    {% if logo_desktop != blank %}
+      <picture class="footer__picture">
+        <source media="screen and (min-width: 576px)" srcset="{{ logo_desktop }}">
+        <source media="screen and (max-width: 575px)" srcset="{{ logo_mobile }}">
+        <img
+          src="{{ logo_desktop }}"
+          alt="{{ logo_alt }}"
+          class="footer__logo"
+          {{ logo_width_and_height }}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
+        >
+      </picture>
+    {% else %}
+      <h3 class="theme-store-name">{{ store.name }}</h3>
+    {% endif %}
+
+    {%- unless footer-about.options.description_origin == 'none' -%}
+      <div class="footer__text check-empty" {{ footer-about.attributes.textfield.description }}>
+        {%- if footer-about.options.description_origin == 'custom' -%}
+          {{- footer-about.options.description | newline_to_br -}}
+        {%- else -%}
+          {{- store.description | newline_to_br -}}
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+
+    {% if footer-about.options.social %}
+      {% render 'store_social', position: 'footer' %}
+    {% endif %}
+  </div>
+</div>
+
+<div class="col-12 d-block d-lg-none footer__column">
+  <hr class="footer__divider">
+</div>

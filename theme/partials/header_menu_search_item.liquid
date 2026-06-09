@@ -1,0 +1,34 @@
+{% capture t_search_default %}{% t "Search" %}{% endcapture %}
+{% assign t_search = options.t_search | default: t_search_default %}
+
+{% case header_version %}
+  {% when 'v1' %}
+    {% assign button_display = 'd-lg-none' %}
+  {% when 'v3', 'v4', 'v5' %}
+    {% assign button_display = 'd-flex' %}
+  {% when 'v6' %}
+    {% assign button_display = 'd-none d-sm-flex' %}
+{% endcase %}
+
+{% if header_version == 'v2' %}
+  {% render 'header_search' %}
+{% else %}
+  <li class="header__item header__item--search">
+    <button type="button" class="button header__link header__link--search toggle-header-search {{ button_display }}" aria-label="{% t 'Search' %}">
+      {% if component.options.items_buttons %}
+        <span class="button button--small button--{{ component.options.items_buttons_type }} button--style theme-section__button header__button"><i class="theme-icon ph ph-magnifying-glass header__icon"></i></span>
+      {% else %}
+        <i class="theme-icon ph ph-magnifying-glass header__icon"></i>
+      {% endif %}
+      {% unless header_version == 'v5' %}
+        {% if header_items_text %}
+          <div class="d-none {% if header_version == 'v6' %}d-sm-block{% else %}d-md-block{% endif %} header__text">{{ t_search }}</div>
+        {% endif %}
+      {% endunless %}
+    </button>
+
+    <a role="button" class="button d-block d-lg-none header__close-mobile-search toggle-header-search"><i class="ph ph-x"></i></a>
+
+    {% render 'header_search' %}
+  </li>
+{% endif %}

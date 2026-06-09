@@ -1,0 +1,149 @@
+{% capture t_edit_my_details_default %}{% t "Edit my details" %}{% endcapture %}
+{% assign t_edit_my_details = options.t_edit_my_details | default: t_edit_my_details_default %}
+{% capture t_log_in_default %}{% t "Log in" %}{% endcapture %}
+{% assign t_log_in = options.t_log_in | default: t_log_in_default %}
+{% capture t_login_default %}{% t "Login" %}{% endcapture %}
+{% assign t_login = options.t_login | default: t_login_default %}
+{% capture t_log_out_default %}{% t "Log out" %}{% endcapture %}
+{% assign t_log_out = options.t_log_out | default: t_log_out_default %}
+{% capture t_my_account_default %}{% t "My account" %}{% endcapture %}
+{% assign t_my_account = options.t_my_account | default: t_my_account_default %}
+{% capture t_see_my_wishlist_default %}{% t "See my Wishlist" %}{% endcapture %}
+{% assign t_see_my_wishlist = options.t_see_my_wishlist | default: t_see_my_wishlist_default %}
+{% capture t_go_to_my_account_default %}{% t "Go to my account" %}{% endcapture %}
+{% assign t_go_to_my_account = options.t_go_to_my_account | default: t_go_to_my_account_default %}
+
+{% capture t_billing_address %}{% t "Add Billing Address" %}{% endcapture %}
+{% capture t_shipping_address %}{% t "Add Shipping Address" %}{% endcapture %}
+
+{% case component.options.floating_toolbar_position %}
+  {% when 'left' %}
+    {% assign dropdown_class = 'dropend' %}
+  {% when 'right' %}
+    {% assign dropdown_class = 'dropstart' %}
+{% endcase %}
+
+{%- capture button_cart_content -%}
+  <div class="header-toolbar__counter theme-cart-counter" data-products-count="{{ order.products_count }}">{{ order.products_count }}</div>
+  <div class="header-toolbar__wrapper">
+    <i class="theme-icon ph {{ options.theme_icon_cart }}"></i>
+  </div>
+{%- endcapture -%}
+
+<div class="header-toolbar header-toolbar--{{ component.options.floating_toolbar_position }}">
+  <div class="header-toolbar__item">
+    {% if has_sidebar_cart %}
+      <button
+        type="button"
+        class="button button--main header-toolbar__button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#sidebar-cart"
+        aria-controls="sidebar-cart"
+        aria-label="{% t "Open cart" %}"
+      >
+        {{- button_cart_content -}}
+      </button>
+    {% else %}
+      <a href="{{ cart.url }}" class="button button--main header-toolbar__button" title="{{ t_go_to_cart }}">
+        {{- button_cart_content -}}
+      </a>
+    {% endif %}
+  </div>
+
+  {% unless header_version == 'v2' or header_version == 'v6' %}
+    {% if component.options.search %}
+      <div class="header-toolbar__item">
+        <button
+          type="button"
+          class="button button--main header-toolbar__button toggle-header-search"
+          aria-label="{% t "Open search bar" %}"
+        >
+          <div class="header-toolbar__wrapper">
+            <i class="theme-icon ph ph-magnifying-glass"></i>
+          </div>
+        </button>
+      </div>
+    {% endif %}
+  {% endunless %}
+
+  {% if store.customers_enabled %}
+    {% assign login_class = 'button button--main header-toolbar__button' %}
+    {% if customer %}
+      {% assign login_title = t_go_to_my_account %}
+      {% assign login_text = t_my_account %}
+      {% assign login_url = customer_account_url %}
+    {% else %}
+      {% assign login_title = t_log_in %}
+      {% assign login_text = t_login %}
+      {% assign login_url = customer_login_url %}
+    {% endif %}
+
+    {% if login_behavior == 'link' %}
+      <div class="header-toolbar__item">
+        <a href="{{ login_url }}" class="{{ login_class }}" title="{{ login_title }}" aria-label="{{ login_title }}">
+          <div class="header-toolbar__wrapper">
+            <i class="theme-icon ph ph-user-circle"></i>
+          </div>
+        </a>
+      </div>
+    {% else %}
+      <div class="header-toolbar__item {{ dropdown_class }}">
+        <button
+          type="button"
+          class="{{ login_class }}"
+          data-bs-toggle="dropdown"
+          data-bs-display="static"
+          title="{{ login_text }}"
+          aria-expanded="false"
+          data-bs-target="#header-toolbar-dropdown-account"
+          aria-controls="header-toolbar-dropdown-account"
+          aria-label="{{ login_text }}"
+        >
+          <div class="header-toolbar__wrapper">
+            <i class="theme-icon ph ph-user-circle"></i>
+          </div>
+        </button>
+
+        <ul class="dropdown-menu theme-dropdown" aria-labelledby="header-toolbar-dropdown-account">
+          {% if customer %}
+            <li class="theme-dropdown__item">
+              <a href="{{ login_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_go_to_my_account | escape }}">{{ t_go_to_my_account }}</a>
+            </li>
+
+            <li class="theme-dropdown__item">
+              <a href="{{ customer.edit_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_edit_my_details | escape }}">{{ t_edit_my_details }}</a>
+            </li>
+
+            <li class="theme-dropdown__item theme-dropdown__item--wishlist">
+              <a href="{{ wishlist_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_see_my_wishlist | escape }}">{{ t_see_my_wishlist }} ({{ customer.wishlisted_products.size }})</a>
+            </li>
+
+            {% if customer.billing_address.size == 0 %}
+              <li class="theme-dropdown__item">
+                <a href="{{ customer.add_billing_address_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_billing_address }}">{{ t_billing_address }}</a>
+              </li>
+            {% endif %}
+
+            {% if customer.shipping_address.size == 0 %}
+              <li class="theme-dropdown__item">
+                <a href="{{ customer.add_shipping_address_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_shipping_address }}">{{ t_shipping_address }}</a>
+              </li>
+            {% endif %}
+
+            <li class="theme-dropdown__item">
+              <a href="{{ customer.logout_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_log_out }}">{{ t_log_out }}</a>
+            </li>
+          {% else %}
+            <li class="theme-dropdown__item">
+              <a href="{{ login_url }}" class="dropdown-item theme-dropdown__link" title="{{ t_log_in }}">{{ t_log_in }}</a>
+            </li>
+
+            <li class="theme-dropdown__item">
+              <a href="{{ customer_registration_url }}" class="dropdown-item theme-dropdown__link" title="{% t 'Create an account' %}">{% t "Create account" %}</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endif %}
+</div>

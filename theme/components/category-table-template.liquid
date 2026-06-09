@@ -1,0 +1,215 @@
+{% assign section_id    = 'theme-section-' | append: component.id %}
+{% assign section_width = component.options.width | replace: 'default', options.theme_width %}
+
+{% capture t_no_products_matched_default %}{% t "No products matched the selected filters" %}.{% endcapture %}
+{% assign t_no_products_matched = options.t_no_products_matched | default: t_no_products_matched_default %}
+
+{% capture empty_message %}
+  <div class="col-12 text-center theme-message">
+    <div class="theme-message__wrapper">
+      <h5 class="theme-message__title">{{ t_no_products_matched }}</h5>
+      <div class="theme-message__text check-empty">{{ options.t_try_removing_filters }}</div>
+    </div>
+  </div>
+{% endcapture %}
+
+{% capture filters_button %}
+  <div class="col-12 text-center d-none theme-section__column">
+    <a
+      role="button"
+      class="button button--style button--secondary button--bordered"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#sidebar-filters"
+      aria-controls="sidebar-filters"
+      aria-label="{% t 'Filters' %}"
+    >
+      <i class="theme-icon ph ph-sliders-horizontal"></i> {% t "Filters" -%}
+    </a>
+  </div>
+{% endcapture %}
+
+{% capture table_feed %}
+  {% paginate category.products by component.options.limit %}
+    {% if filters != empty and paged.total == 0 %}
+      <div class="row theme-section__content">{{ empty_message }}</div>
+    {% endif %}
+
+    {% if paged.total > 0 %}
+      <div class="category-table-wrapper">
+        <table class="category-table">
+          <thead>
+            <tr class="category-table__header-row">
+              <th class="category-table__th category-table__th--image"></th>
+              <th class="category-table__th">{% t "Brand" %}</th>
+              <th class="category-table__th">{% t "Name" %}</th>
+              <th class="category-table__th">SKU</th>
+              <th class="category-table__th">{% t "Quantity" %}</th>
+              <th class="category-table__th">{% t "Price" %}</th>
+              {% if component.options.discount1_percent > 0 %}
+                <th class="category-table__th category-table__th--discount">
+                  +{{ component.options.discount1_threshold }} uds → -{{ component.options.discount1_percent }}%
+                </th>
+              {% endif %}
+              {% if component.options.discount2_percent > 0 %}
+                <th class="category-table__th category-table__th--discount">
+                  +{{ component.options.discount2_threshold }} uds → -{{ component.options.discount2_percent }}%
+                </th>
+              {% endif %}
+              <th class="category-table__th category-table__th--action"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prod in paged.products %}
+              {% render 'category-table-row', prod: prod, component: component, options: options %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
+    {% if paged.total_pages > 1 %}
+      <div class="row theme-section__content">
+        {{ pager }}
+      </div>
+    {% endif %}
+  {% endpaginate %}
+{% endcapture %}
+
+<style>
+  #{{ section_id }} {
+    --theme-max-width: {{ section_width }};
+    --section-margin-top: {{ component.options.margin_top }}px;
+    --section-margin-bottom: {{ component.options.margin_bottom }}px;
+  }
+
+  #{{ section_id }} .category-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    /* Note: overflow-x:auto clips the hover image popover for thumbnails
+       near the right edge. This is a known CSS-only limitation. */
+  }
+
+  #{{ section_id }} .category-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  #{{ section_id }} .category-table__th,
+  #{{ section_id }} .category-table__cell {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--theme-border-color, #e5e5e5);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  #{{ section_id }} .category-table__th {
+    text-align: left;
+    font-weight: 600;
+    background: var(--theme-background-secondary, #f5f5f5);
+  }
+
+  #{{ section_id }} .category-table__cell--name {
+    white-space: normal;
+    min-width: 180px;
+  }
+
+  #{{ section_id }} .category-table__name {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #{{ section_id }} .category-table__name:hover {
+    text-decoration: underline;
+  }
+
+  #{{ section_id }} .category-table__qty-input {
+    width: 60px;
+    text-align: center;
+  }
+
+  #{{ section_id }} .category-table__cell--price {
+    text-align: right;
+  }
+
+  #{{ section_id }} .category-table__cell--action {
+    text-align: center;
+  }
+
+  #{{ section_id }} .category-table__row:hover {
+    background: var(--theme-background-hover, #f9f9f9);
+  }
+
+  /* hover de imagen — CSS puro */
+  #{{ section_id }} .category-table__thumb-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  #{{ section_id }} .category-table__thumb {
+    display: block;
+    object-fit: contain;
+  }
+
+  #{{ section_id }} .category-table__hover-image {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 70px;
+    z-index: 100;
+    background: white;
+    border: 1px solid var(--theme-border-color, #e5e5e5);
+    border-radius: var(--theme-border-radius, 4px);
+    padding: 4px;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  #{{ section_id }} .category-table__thumb-wrapper:hover .category-table__hover-image {
+    display: block;
+  }
+</style>
+
+<section
+  id="{{ section_id }}"
+  class="container-fluid theme-section theme-section--feed"
+  data-bundle-color="{{ component.options.bundle_color }}"
+  {{ component.attributes }}
+>
+  <div class="container container--adjust theme-section__container">
+    <div class="row theme-section__content">
+      {% if category.products == empty %}
+        {% render 'theme_message' %}
+      {% elsif options.filters_desktop %}
+        {{- filters_button -}}
+        <div class="col-md-4 col-lg-3 col-xl-2 d-none d-md-block theme-section__filters">
+          {% if request.preview_mode %}
+            {% render 'theme_filters' %}
+          {% endif %}
+        </div>
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10 theme-section__feed">
+          {{ table_feed }}
+        </div>
+      {% else %}
+        {{- filters_button -}}
+        <div class="col-12 theme-section__feed">
+          {{ table_feed }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% render 'sidebar_filters' %}
+
+<script>
+  function addToCartTableRow(btn) {
+    var form = btn.closest('.category-table__form');
+    var row  = btn.closest('.category-table__row');
+    var productId   = parseInt(form.dataset.productId);
+    var productName = row.querySelector('.category-table__name').textContent.trim();
+    var qtyInput    = document.querySelector('input[name="qty"][form="form-' + productId + '"]');
+    var qty         = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
+    addToCart(productId, productName, qty, {});
+  }
+</script>

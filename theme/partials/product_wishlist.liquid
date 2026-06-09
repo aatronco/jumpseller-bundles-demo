@@ -1,0 +1,69 @@
+{% capture t_add_to_wishlist_default %}{% t "Add to Wishlist" %}{% endcapture %}
+{% assign t_add_to_wishlist = options.t_add_to_wishlist | default: t_add_to_wishlist_default %}
+{% capture t_in_your_wishlist_default %}{% t "In you Wishlist" %}{% endcapture %}
+{% assign t_in_your_wishlist = options.t_in_your_wishlist | default: t_in_your_wishlist_default %}
+{% capture t_remove_from_wishlist_default %}{% t "Remove from Wishlist" %}{% endcapture %}
+{% assign t_remove_from_wishlist = options.t_remove_from_wishlist | default: t_remove_from_wishlist_default %}
+
+<product-wishlist
+  id="{{ wishlist_id }}"
+  {{ attributes }}
+  class="product-wishlist trsn"
+  data-display="form"
+>
+  <script type="application/json" class="product-wishlist-json">
+    {
+      "info": {
+        "product": {
+          "id": {{ prod.id | json }},
+          "first_variant_id": {{ prod.variants.first.id | json }},
+          "wishlist_add_url": {{ prod.wishlist_add_url | json }},
+          "wishlist_remove_url": {{ prod.wishlist_remove_url | json }},
+          {% if prod.variants.size == 0 %}
+            "wishlisted_product": {{ prod.wishlisted | json }}
+          {% else %}
+            "variants": [{% for variant in prod.variants %}
+              {
+                "variant_id": {{ variant.id | json }},
+                "wishlisted": {{ variant.wishlisted | json }}
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}]
+          {% endif %}
+        }
+      }
+    }
+  </script>
+
+  <button
+    type="button"
+    onclick="location.href='{{ customer_login_url }}?target=wishlist'"
+    class="button product-wishlist__button{% if customer %} add-to-wishlist{{ prod.id }}{% endif %}"
+    aria-label="{{ t_add_to_wishlist }}"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    data-bs-title="{{ t_add_to_wishlist }}"
+    data-bs-custom-class="product-block__tooltip"
+  >
+    <div class="product-wishlist__icon trsn">
+      <i class="theme-icon ph ph-heart"></i>
+    </div>
+
+    <span class="product-withlist__text">{{ t_add_to_wishlist }}</span>
+  </button>
+  <button
+    type="button"
+    onclick="location.href='{{ customer_login_url }}?target=wishlist'"
+    class="button product-wishlist__button product-wishlist__button--added{% if customer %} remove-from-wishlist{{ prod.id }}{% endif %} hidden"
+    aria-label="{{ t_remove_from_wishlist }}"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    data-bs-title="{{ t_remove_from_wishlist }}"
+    data-bs-custom-class="product-block__tooltip"
+  >
+    <div class="product-wishlist__icon trsn">
+      <i class="ph-fill ph-heart"></i>
+    </div>
+
+    <span class="product-withlist__text">{{ t_in_your_wishlist }}</span>
+  </button>
+</product-wishlist>

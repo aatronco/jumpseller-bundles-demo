@@ -1,0 +1,71 @@
+{% assign modal_id = 'subscription-modal-' | append: customer_subscription.id %}
+
+<div
+  id="{{ modal_id }}"
+  class="modal fade theme-modal"
+  tabindex="-1"
+  aria-labelledby="{{ modal_id }}-title"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable theme-modal__dialog" data-bundle-color="default">
+    <div class="modal-content theme-modal__content">
+      <div class="modal-header theme-modal__header">
+        <h6 class="modal-title theme-modal__title" id="{{ modal_id }}-title">
+          #{{ customer_subscription.id }}
+          {{ customer_subscription.product.name -}}
+        </h6>
+
+        <button type="button" class="button theme-modal__close" data-bs-dismiss="modal" aria-label="{% t 'Close' %}">
+          <i class="ph ph-x-circle"></i>
+        </button>
+      </div>
+      <!-- end .theme-modal__header -->
+
+      <div class="modal-body theme-modal__body">
+        <div class="theme-modal__group">
+          <span class="theme-modal__subtitle theme-modal__text--large">{% t "Subscription details" %}</span>
+          <div class="theme-modal__text">
+            <b>{% t "Status" %}</b><br>
+            <span data-label="{{ customer_subscription.status }}">
+              {{- customer_subscription.status | capitalize -}}
+            </span>
+          </div>
+
+          <div class="theme-modal__text">
+            <b>{% t "Period" %}</b><br>
+            <span data-label="{{ customer_subscription.period_label }}">{{ customer_subscription.period_label }}</span>
+          </div>
+
+          <div class="theme-modal__text">
+            <b>{% t "Creation Date" %}</b><br>
+            {{ customer_subscription.created_at }}
+          </div>
+          {% if customer_subscription.next_order_date != blank %}
+            <div class="theme-modal__text">
+              <b>{% t "Renewal date" %}</b><br>
+              {{ customer_subscription.next_order_date }}
+            </div>
+          {% endif %}
+        </div>
+        <hr class="theme-modal__divider">
+        <div class="row theme-modal__group">
+          <span class="theme-modal__subtitle theme-modal__text--large">{% t "Product details" %}</span>
+          {% render 'store_product', prod: customer_subscription, prod_type: 'subscription', prod_display: 'grid' %}
+        </div>
+      </div>
+      {% if customer_subscription.status == 'active' %}
+        <div class="modal-footer theme-modal__footer">
+          <a
+            href="{{ customer_subscription.cancel_redirect_url }}"
+            class="button button--style button--main button--full button--flex theme-modal__button"
+            target="_blank"
+            title="{% t 'Cancel subscription' %}"
+          >
+            <i class="theme-icon ph ph-x-circle"></i> {% t "Cancel subscription" -%}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+    <!-- end .theme-modal__body -->
+  </div>
+</div>
