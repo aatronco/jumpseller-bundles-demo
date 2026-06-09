@@ -47,5 +47,14 @@
     }
   }
 
-  return { parseBundleComponents, normalizePermalink, sumPrices, formatPrice };
+  // Parse a displayed integer-currency price string into a number.
+  // Assumes a no-decimals currency (CLP) where dots/spaces are thousands separators:
+  // "$7.500" -> 7500. Returns 0 for blank/unparseable input.
+  function parsePrice(text) {
+    if (!text || typeof text !== "string") return 0;
+    const digits = text.replace(/[^\d]/g, "");
+    return digits ? parseInt(digits, 10) : 0;
+  }
+
+  return { parseBundleComponents, normalizePermalink, sumPrices, formatPrice, parsePrice };
 });

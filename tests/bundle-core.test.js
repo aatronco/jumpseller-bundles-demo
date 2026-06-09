@@ -46,3 +46,15 @@ test("formatPrice: CLP-style formatting", () => {
     "$19.970"
   );
 });
+
+test("parsePrice: CLP text → integer", () => {
+  assert.equal(BundleCore.parsePrice("$7.500"), 7500);
+  assert.equal(BundleCore.parsePrice("$1.234.567"), 1234567);
+  assert.equal(BundleCore.parsePrice("2000"), 2000);
+  assert.equal(BundleCore.parsePrice(""), 0);
+  assert.equal(BundleCore.parsePrice(null), 0);
+});
+
+test("parsePrice/formatPrice round-trip (CLP)", () => {
+  assert.equal(BundleCore.formatPrice(BundleCore.parsePrice("$7.500"), {}), "$7.500");
+});

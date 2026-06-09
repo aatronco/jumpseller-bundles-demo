@@ -4,10 +4,11 @@
  *
  * Idempotent. It:
  *   0. Validates API creds (GET /store/info.json).
- *   1. Ensures custom fields `bundle_components` (human) + `bundle_components_json` (compiled).
+ *   1. Ensures the single custom field `bundle_components` (comma-separated permalinks).
  *   2. Finds the component products by permalink (must already exist in the store).
  *   3. Finds-or-creates the virtual pack product (price 0, stock unlimited).
- *   4. Compiles the components into `bundle_components_json` and sets BOTH fields on the pack.
+ *   4. Sets `bundle_components` on the pack = the component permalinks (the ONLY source of
+ *      truth; component ids + prices are resolved live at runtime by assets/bundles.js).
  *   5. Writes scripts/demo-fixtures.json for the e2e tests.
  *
  * Creds from env: JUMPSELLER_LOGIN + JUMPSELLER_AUTH_TOKEN (falls back to JUMPSELLER_AUTH).
@@ -117,10 +118,9 @@ async function main() {
   }
   console.log(`✓ Auth OK — store: ${info.json.store?.name} (${info.json.store?.currency})`);
 
-  // 1. custom fields
+  // 1. custom field (single source of truth — permalinks; everything else resolved live)
   const cfHuman = await ensureCustomField("bundle_components");
-  const cfJson = await ensureCustomField("bundle_components_json");
-  console.log(`✓ custom fields: bundle_components=${cfHuman}, bundle_components_json=${cfJson}`);
+  console.log(`✓ custom field: bundle_components=${cfHuman}`);
 
   // 2. components
   const components = [];
@@ -157,12 +157,10 @@ async function main() {
     console.log(`✓ pack exists ${pack.permalink} (id=${pack.id})`);
   }
 
-  // 4. set fields
+  // 4. set the field value (comma-separated permalinks, optional ?variant_id:<id>)
   const humanValue = components.map((c) => c.permalink).join(",");
-  const jsonValue = JSON.stringify(components);
   await setField(pack.id, cfHuman, humanValue);
-  await setField(pack.id, cfJson, jsonValue);
-  console.log(`✓ set bundle fields on pack (sum = $${components.reduce((a, c) => a + c.price, 0)})`);
+  console.log(`✓ set bundle_components on pack = "${humanValue}"`);
 
   // 5. fixtures
   const fixtures = {
