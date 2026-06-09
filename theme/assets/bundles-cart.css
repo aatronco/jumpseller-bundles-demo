@@ -1,0 +1,54 @@
+/* bundles-cart.css — visual grouping for a pack and its components on the cart page.
+   Pure presentation; the grouping DOM (.jb-pack > .jb-pack__anchor + .jb-pack__component)
+   is built by bundles.js. */
+
+.jb-pack {
+  position: relative;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  background: var(--color-surface, rgba(127, 127, 127, 0.05));
+}
+
+/* "PACK" badge floating on the top-left corner of the box */
+.jb-pack::before {
+  content: "PACK";
+  position: absolute;
+  top: -0.6rem;
+  left: 0.9rem;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  background: var(--color-main, #c0392b);
+  color: #fff;
+  line-height: 1.4;
+}
+
+/* the anchor (virtual $0 product) reads as the pack header */
+.jb-pack__anchor {
+  font-weight: 600;
+}
+
+/* components nested under the anchor: indented, with a ↳ marker and a connecting guide line */
+.jb-pack__component {
+  position: relative;
+  margin-left: 1.75rem;
+}
+.jb-pack__component::before {
+  content: "\21B3"; /* ↳ */
+  position: absolute;
+  left: -1.25rem;
+  top: 1.25rem;
+  opacity: 0.5;
+  font-size: 1rem;
+}
+
+/* a subtle separator between the pack header and its first component */
+.jb-pack__anchor {
+  border-bottom: 1px dashed var(--color-border, #e5e5e5);
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.25rem;
+}
