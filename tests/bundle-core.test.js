@@ -33,3 +33,16 @@ test("normalizePermalink: empty / null → ''", () => {
   assert.equal(BundleCore.normalizePermalink(""), "");
   assert.equal(BundleCore.normalizePermalink(null), "");
 });
+
+test("sumPrices: sums numbers, ignores non-numeric", () => {
+  assert.equal(BundleCore.sumPrices([9990, 5990, 3990]), 19970);
+  assert.equal(BundleCore.sumPrices([]), 0);
+  assert.equal(BundleCore.sumPrices([100, null, "x", 50]), 150);
+});
+
+test("formatPrice: CLP-style formatting", () => {
+  assert.equal(
+    BundleCore.formatPrice(19970, { locale: "es-CL", currency: "CLP" }),
+    "$19.970"
+  );
+});

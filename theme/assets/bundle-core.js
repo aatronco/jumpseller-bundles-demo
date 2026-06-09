@@ -29,5 +29,23 @@
     return parts.length ? parts[parts.length - 1] : "";
   }
 
-  return { parseBundleComponents, normalizePermalink };
+  function sumPrices(values) {
+    if (!Array.isArray(values)) return 0;
+    return values.reduce((acc, v) => (typeof v === "number" && !isNaN(v) ? acc + v : acc), 0);
+  }
+
+  function formatPrice(value, opts) {
+    const { locale = "es-CL", currency = "CLP" } = opts || {};
+    try {
+      return new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency,
+        maximumFractionDigits: currency === "CLP" ? 0 : 2,
+      }).format(value);
+    } catch (e) {
+      return String(value);
+    }
+  }
+
+  return { parseBundleComponents, normalizePermalink, sumPrices, formatPrice };
 });
