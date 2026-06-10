@@ -260,8 +260,8 @@
         return lineInfo[pl];
       }
 
-      // Removing/breaking a pack subtracts ONLY this pack's allocations (shared lines keep the
-      // other packs' + loose portions), then removes its $0 anchor.
+      // "Eliminar pack" (on the anchor): subtracts ALL this pack's allocations (shared lines keep
+      // the other packs' + loose portions), then removes its $0 anchor.
       function makeRemovePackHandler(pack) {
         return function (e) {
           e.preventDefault();
@@ -272,6 +272,21 @@
             var li = lineInfo[c.permalink];
             if (li) pairs.push([li.lineId, li.lineQty - (pack.alloc[c.permalink] || 0)]);
           });
+          pairs.push([pack.anchorLineId, 0]);
+          setLineQtys(pairs);
+        };
+      }
+
+      // Deleting ONE component BREAKS the pack: remove only that component's allocation for this
+      // pack + the $0 anchor; clear membership so the REMAINING components stay as loose lines.
+      function makeBreakPackHandler(pack, permalink) {
+        return function (e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          var s = readStore(); delete s[pack.anchorPl]; writeStore(s);
+          var pairs = [];
+          var li = lineInfo[permalink];
+          if (li) pairs.push([li.lineId, li.lineQty - (pack.alloc[permalink] || 0)]);
           pairs.push([pack.anchorLineId, 0]);
           setLineQtys(pairs);
         };
@@ -317,8 +332,9 @@
 
           var cdel = rowEl.querySelector(".store-product__delete");
           if (cdel) {
-            if (isOriginal) replaceClickHandler(cdel, makeRemovePackHandler(pack));
-            else cdel.addEventListener("click", makeRemovePackHandler(pack));
+            var breakHandler = makeBreakPackHandler(pack, c.permalink);
+            if (isOriginal) replaceClickHandler(cdel, breakHandler);
+            else cdel.addEventListener("click", breakHandler);
           }
         });
 
