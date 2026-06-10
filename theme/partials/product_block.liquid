@@ -297,4 +297,7 @@
     {% endif %}
     <!-- end .product-block__content -->
   </div>
+  {%- if pb_bundle_raw != blank -%}
+    <script type="application/json" class="jb-pack-data">{% render 'bundle_data', bundle_raw: pb_bundle_raw %}</script>
+  {%- endif -%}
 </article>

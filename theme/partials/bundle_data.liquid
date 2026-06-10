@@ -1,0 +1,37 @@
+{%- comment -%}
+  Resolves `bundle_raw` (a comma-separated list of `permalink[?qty:N][?variant_id:ID]`) into a
+  JSON array of components, looking each product up SERVER-SIDE via `products.product[permalink]`
+  (no client fetch). Each element: {id, permalink, qty, variant_id, price} where `price` is the
+  effective (discounted) UNIT price — variant price if a variant_id is given, else the product's.
+  Used by product_bundle.liquid (product page) and product_block.liquid (listings/cross-sell).
+{%- endcomment -%}
+[
+{%- assign segs = bundle_raw | split: ',' -%}
+{%- assign first = true -%}
+{%- for seg0 in segs -%}
+  {%- assign seg = seg0 | strip -%}
+  {%- unless seg == blank -%}
+    {%- assign permalink = seg | split: '?' | first | strip -%}
+    {%- assign qty = 1 -%}
+    {%- if seg contains 'qty:' -%}
+      {%- assign qty = seg | split: 'qty:' | last | split: '&' | first | split: '?' | first | strip | plus: 0 -%}
+    {%- endif -%}
+    {%- assign variant_id = '' -%}
+    {%- if seg contains 'variant_id:' -%}
+      {%- assign variant_id = seg | split: 'variant_id:' | last | split: '&' | first | split: '?' | first | strip -%}
+    {%- endif -%}
+    {%- assign p = products.product[permalink] -%}
+    {%- if p -%}
+      {%- assign unit = p.price | minus: p.discount -%}
+      {%- if variant_id != '' -%}
+        {%- for v in p.variants -%}
+          {%- assign vid = v.id | append: '' -%}
+          {%- if vid == variant_id -%}{%- assign unit = v.price | minus: v.discount -%}{%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+      {%- unless first -%},{%- endunless -%}{%- assign first = false -%}
+      {"id":{{ p.id | json }},"permalink":{{ permalink | json }},"qty":{{ qty }},"variant_id":{% if variant_id != '' %}{{ variant_id | json }}{% else %}null{% endif %},"price":{{ unit | json }}}
+    {%- endif -%}
+  {%- endunless -%}
+{%- endfor -%}
+]

@@ -1,9 +1,7 @@
 {%- comment -%}
-  Bundle/pack marker for the product page. Renders a <product-bundle> element carrying the
-  pack's id/url/name plus the RAW `bundle_components` value (comma-separated permalinks,
-  optional `?variant_id:`). The single source of truth is the `bundle_components` custom
-  field — nothing is precomputed/cached. assets/bundles.js resolves the component product
-  ids at runtime and reads live prices from the cart, so price/stock changes never go stale.
+  Bundle/pack marker for the product page. Renders a <product-bundle> element carrying the pack's
+  id/url/name plus its components RESOLVED SERVER-SIDE in Liquid (id, qty, variant_id, discounted
+  unit price) via the bundle_data partial — no client-side fetching. assets/bundles.js consumes it.
 {%- endcomment -%}
 {%- assign bundle_raw = '' -%}
 {%- for field in prod.product_fields -%}
@@ -16,7 +14,7 @@
 {%- if bundle_raw != blank -%}
   <product-bundle class="product-bundle" data-pack-url="{{ prod.url }}">
     <script type="application/json" class="product-bundle-json">
-      {"pack":{"id":{{ prod.id | json }},"url":{{ prod.url | json }},"name":{{ prod.name | json }}},"components_raw":{{ bundle_raw | json }}}
+      {"pack":{"id":{{ prod.id | json }},"url":{{ prod.url | json }},"name":{{ prod.name | json }}},"components":{% render 'bundle_data', bundle_raw: bundle_raw %}}
     </script>
   </product-bundle>
 {%- endif -%}

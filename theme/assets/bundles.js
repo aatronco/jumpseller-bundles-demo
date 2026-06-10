@@ -34,46 +34,12 @@
       components: components.map(function (c) {
         return {
           permalink: BundleCore.normalizePermalink(c.permalink),
-          variantId: c.variantId || null,
+          variantId: c.variantId || c.variant_id || null,
           qty: c.qty && c.qty > 0 ? c.qty : 1,
         };
       }),
     };
     writeStore(store);
-  }
-
-  // ---------- runtime permalink -> {id, price} resolution ----------
-  var resolveCache = {};
-  function resolveComponent(permalink) {
-    if (permalink in resolveCache) return Promise.resolve(resolveCache[permalink]);
-    return fetch("/" + permalink, { credentials: "same-origin" })
-      .then(function (r) { return r.text(); })
-      .then(function (html) {
-        var doc = new DOMParser().parseFromString(html, "text/html");
-        // product id: data-productid on .product-json (its content is the variants array,
-        // empty for simple products, so we only read the attribute here).
-        var idEl = doc.querySelector(".product-json");
-        var id = idEl && idEl.dataset && idEl.dataset.productid ? parseInt(idEl.dataset.productid, 10) : null;
-        if (!id) throw new Error("No pude resolver el producto: " + permalink);
-        // effective unit price WITH product-level discount applied: read the storefront's own
-        // discounted price (price_with_discount_formatted), which already reflects any product
-        // sale/discount. Fallback to price - discount, then to price. (Cart-level promotions
-        // are NOT product prices and intentionally don't appear here.)
-        var price = 0;
-        var priceEl = doc.querySelector(".product-price-json");
-        if (priceEl) {
-          try {
-            var info0 = JSON.parse(priceEl.textContent).info.product;
-            price = BundleCore.parsePrice(info0.price_with_discount_formatted);
-            if (!price && typeof info0.price === "number") {
-              price = info0.price - (typeof info0.discount === "number" ? info0.discount : 0);
-            }
-          } catch (_) { /* leave price 0 */ }
-        }
-        var info = { id: id, price: price };
-        resolveCache[permalink] = info;
-        return info;
-      });
   }
 
   function toastError(message) {
@@ -120,36 +86,19 @@
     try { cfg = JSON.parse(node.textContent); } catch (e) { return; }
     if (!cfg || !cfg.pack) return;
 
-    var parsed = BundleCore.parseBundleComponents(cfg.components_raw);
-    if (!parsed.length) return;
+    if (!Array.isArray(cfg.components) || !cfg.components.length) return;
 
-    // Resolve all components once (ids + live prices), then both display the sum and wire add.
-    var resolvedPromise = Promise.all(parsed.map(function (c) { return resolveComponent(c.permalink); }));
+    // Components are resolved SERVER-SIDE in Liquid (id, qty, variant_id, discounted unit price)
+    // — no client fetch. Expose the contract for inspection; this is the shape the native backend
+    // would provide (see docs/contrato-json-para-disenadores.md).
+    var components = cfg.components;
+    window.JBBundles.bundle = { pack: cfg.pack, components: components };
 
-    // Show the summed pack price on the product page (replace the $0 anchor price),
-    // and expose the resolved contract JSON for inspection (window.JBBundles.bundle).
-    // This is the SAME shape the native backend will provide later (see
-    // docs/contrato-json-para-disenadores.md) — today we resolve it client-side.
-    resolvedPromise
-      .then(function (infos) {
-        window.JBBundles.bundle = {
-          pack: cfg.pack,
-          components: infos.map(function (info, i) {
-            return {
-              id: info.id,
-              permalink: parsed[i].permalink,
-              price: info.price,
-              qty: parsed[i].qty,
-              variant_id: parsed[i].variantId,
-            };
-          }),
-        };
-        var total = BundleCore.sumPrices(infos.map(function (info, i) { return info.price * parsed[i].qty; }));
-        document.querySelectorAll(".product-page__price").forEach(function (el) {
-          el.textContent = BundleCore.formatPrice(total, {});
-        });
-      })
-      .catch(function () { /* leave the original price if resolution fails */ });
+    // summed pack price (discounted unit × qty) on the product page
+    var total = BundleCore.sumPrices(components.map(function (c) { return c.price * (c.qty || 1); }));
+    document.querySelectorAll(".product-page__price").forEach(function (el) {
+      el.textContent = BundleCore.formatPrice(total, {});
+    });
 
     var addBtn = document.querySelector("button#add-to-cart");
     if (!addBtn) return;
@@ -159,34 +108,22 @@
         // Preempt the theme's own add-to-cart handler for this (pack) product.
         e.preventDefault();
         e.stopImmediatePropagation();
-
         var cartArea = document.querySelector("cart-area");
         if (cartArea && cartArea.setIsLoading) cartArea.setIsLoading(true);
-
-        resolvedPromise
-          .then(function (infos) {
-            // NOTE: parsed[i].variantId is parsed but NOT wired into the add (v1 components are
-            // simple/no-variant). Customer/admin variant selection is a documented wish for the
-            // native version (docs/wishlist-para-ingenieros.md #4).
-            var products = [[cfg.pack.id, 1]].concat(
-              infos.map(function (info, i) { return [info.id, parsed[i].qty]; })
-            );
-            Jumpseller.addMultipleProductsToCart(products, {
-              callback: function (data) {
-                if (cartArea && cartArea.setIsLoading) cartArea.setIsLoading(false);
-                if (data && data.status && data.status !== 200) {
-                  toastError((data.responseJSON && data.responseJSON.message) || "");
-                  return;
-                }
-                saveMembership(cfg.pack, parsed);
-                openCartDrawer();
-              },
-            });
-          })
-          .catch(function (err) {
+        var products = [[cfg.pack.id, 1]].concat(
+          components.map(function (c) { return [c.id, c.qty || 1]; })
+        );
+        Jumpseller.addMultipleProductsToCart(products, {
+          callback: function (data) {
             if (cartArea && cartArea.setIsLoading) cartArea.setIsLoading(false);
-            toastError(String(err && err.message ? err.message : err));
-          });
+            if (data && data.status && data.status !== 200) {
+              toastError((data.responseJSON && data.responseJSON.message) || "");
+              return;
+            }
+            saveMembership(cfg.pack, components);
+            openCartDrawer();
+          },
+        });
       },
       true // capture phase: runs before the theme's bubble-phase jQuery handler
     );
@@ -466,8 +403,10 @@
     var blocks = document.querySelectorAll("article.product-block[data-bundle-components]");
     Array.prototype.forEach.call(blocks, function (block) {
       if (block.dataset.jbBlockDone === "1") return;
-      var parsed = BundleCore.parseBundleComponents(block.getAttribute("data-bundle-components"));
-      if (!parsed.length) return;
+      var dataEl = block.querySelector(".jb-pack-data");
+      var components;
+      try { components = JSON.parse(dataEl.textContent); } catch (e) { return; }
+      if (!Array.isArray(components) || !components.length) return;
       block.dataset.jbBlockDone = "1";
       var packId = parseInt(block.getAttribute("data-product-id"), 10);
 
@@ -480,16 +419,12 @@
         gallery.appendChild(badge);
       }
 
-      // summed live price on the card
-      Promise.all(parsed.map(function (c) { return resolveComponent(c.permalink); }))
-        .then(function (infos) {
-          var total = BundleCore.sumPrices(infos.map(function (info, i) { return info.price * parsed[i].qty; }));
-          var priceEl =
-            block.querySelector(".product-block__price--new") ||
-            block.querySelector(".product-block__price:not(.product-block__price--old):not(.product-block__price--text):not(.product-block__price--tax-label)");
-          if (priceEl) priceEl.textContent = BundleCore.formatPrice(total, {});
-        })
-        .catch(function () {});
+      // summed price (server-resolved discounted unit × qty) on the card — no fetch
+      var total = BundleCore.sumPrices(components.map(function (c) { return c.price * (c.qty || 1); }));
+      var priceEl =
+        block.querySelector(".product-block__price--new") ||
+        block.querySelector(".product-block__price:not(.product-block__price--old):not(.product-block__price--text):not(.product-block__price--tax-label)");
+      if (priceEl) priceEl.textContent = BundleCore.formatPrice(total, {});
 
       // intercept the block's add-to-cart (inline onclick) → batch-add components
       var addBtn = block.querySelector(".product-block__button--add-to-cart");
@@ -500,28 +435,24 @@
           function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            Promise.all(parsed.map(function (c) { return resolveComponent(c.permalink); }))
-              .then(function (infos) {
-                var products = [[packId, 1]].concat(
-                  infos.map(function (info, i) { return [info.id, parsed[i].qty]; })
+            var products = [[packId, 1]].concat(
+              components.map(function (c) { return [c.id, c.qty || 1]; })
+            );
+            Jumpseller.addMultipleProductsToCart(products, {
+              callback: function (data) {
+                if (data && data.status && data.status !== 200) {
+                  toastError((data.responseJSON && data.responseJSON.message) || "");
+                  return;
+                }
+                var anchor = block.querySelector(".product-block__anchor");
+                var nameEl = block.querySelector(".product-block__name");
+                saveMembership(
+                  { id: packId, url: anchor ? anchor.getAttribute("href") : "", name: nameEl ? nameEl.textContent.trim() : "Pack" },
+                  components
                 );
-                Jumpseller.addMultipleProductsToCart(products, {
-                  callback: function (data) {
-                    if (data && data.status && data.status !== 200) {
-                      toastError((data.responseJSON && data.responseJSON.message) || "");
-                      return;
-                    }
-                    var anchor = block.querySelector(".product-block__anchor");
-                    var nameEl = block.querySelector(".product-block__name");
-                    saveMembership(
-                      { id: packId, url: anchor ? anchor.getAttribute("href") : "", name: nameEl ? nameEl.textContent.trim() : "Pack" },
-                      parsed
-                    );
-                    openCartDrawer();
-                  },
-                });
-              })
-              .catch(function (err) { toastError(String(err && err.message ? err.message : err)); });
+                openCartDrawer();
+              },
+            });
           },
           true
         );
@@ -558,7 +489,6 @@
     writeStore: writeStore,
     saveMembership: saveMembership,
     groupCart: groupCart,
-    resolveComponent: resolveComponent,
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
