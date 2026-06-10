@@ -63,18 +63,27 @@ empezar a diseñar **ya**, sin esperar la arquitectura, la base de datos ni el b
 
 ## 3. Qué pintas tú contra ese JSON
 
-Dos superficies, con sus "ganchos" (clases) estables para estilar:
+Tres superficies, con sus "ganchos" (clases) estables para estilar:
 
 **Página de producto** — el elemento `<product-bundle>` lleva el JSON; se muestra el precio total
 del pack (suma de componentes) donde iría el precio normal (`.product-page__price`).
 
+**Listado / tarjeta de producto** (categoría, búsqueda, "También te puede interesar") — la tarjeta
+del pack recibe un badge `.jb-pack-badge` ("PACK"), muestra el **precio sumado** (no el $0), y su
+botón "Agregar" añade **todos los componentes** al carro.
+
 **Carro** — el pack se renderiza con esta estructura fija (estilízala 100% con CSS):
 
 ```
-.jb-pack                ← caja del pack (lleva el badge "PACK")
-  .jb-pack__anchor      ← cabecera: nombre del pack + precio total
-  .jb-pack__component   ← cada componente, anidado (marca "↳")
+.jb-pack                       ← caja del pack (lleva el badge "PACK")
+  .jb-pack__anchor             ← cabecera: nombre del pack + precio total
+  .jb-pack__component          ← cada componente del pack, anidado (marca "↳")
+.store-product[data-jb-loose]  ← (fuera de la caja) unidad del mismo producto comprada suelta
 ```
+
+> La fila `[data-jb-loose]` aparece **solo** cuando un componente se compra también suelto: Jumpseller
+> fusiona la línea, y el tema la separa visualmente (la porción del pack queda dentro, el extra queda
+> en esta fila aparte). Es cosmético — la línea sigue fusionada en el servidor (ver wishlist #5).
 
 - **Cambios de aspecto** (colores, bordes, tipografía, espaciado, badge, mobile) → **solo CSS**
   (`theme/assets/bundles-cart.css`). Terreno 100% del diseño.

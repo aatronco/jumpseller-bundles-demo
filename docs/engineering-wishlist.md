@@ -73,11 +73,12 @@ the grouping)*
 └──────────────────────────────────────────────────────────┘
 ```
 
-**⚠️ Surface NOT handled by the demo yet — product block (listings / cross-sell)** *(see wish #9)*
-A pack shown as a product card in a category page, search, or the "You might also like" cross-sell
-should look and behave like the target below, but **today it's broken**: the card shows the anchor's
-**$0** and its "Add to cart" adds only the $0 anchor (no components), because the demo only
-intercepts the product page's `#add-to-cart`.
+**Product block (listings / cross-sell) — ✓ handled by the demo**
+A pack shown as a product card (category page, search, "You might also like" cross-sell) gets a
+**PACK** badge, shows the **summed live price** (not the $0 anchor), and its "Add" **batch-adds** the
+components — implemented in `bundles.js` (`initProductBlocks`), marked in Liquid via
+`product_block.liquid` (`data-bundle-components`). A native `pack` product type (#3) would do this
+without the per-card runtime resolution.
 ```
 ┌─ Category / "You might also like" ──────────────────────┐
 │   ┌────────┐    ┌────────┐    ┌──────────┐ PACK ← badge │
@@ -86,7 +87,7 @@ intercepts the product page's `#add-to-cart`.
 │   Harina        Mantequilla   Pack Queque Casero        │
 │   $2,000        $3,500        $7,600   ̶$̶9̶,̶5̶0̶0̶            │
 │   [  Add  ]     [  Add  ]     [ Add pack ] ← batch-adds  │
-│                                  TARGET (not today)      │
+│                                  ✓ live in the demo       │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -111,14 +112,23 @@ When the pack is added to the cart, `assets/bundles.js`:
 The product page shows the **summed pack price** (instead of the $0 anchor), reading each
 component's `price_with_discount_formatted` so product-level discounts are reflected.
 
+**Product cards (listings / cross-sell):** a pack card gets a **PACK** badge, the summed price, and
+an "Add" that batch-adds the components (`bundles.js` `initProductBlocks`; marked in Liquid via
+`data-bundle-components`).
+
+**Cart split:** if a component is also bought standalone (so Jumpseller merges it into one line),
+the merged line is split visually into the pack portion + a separate **loose row** (cosmetic — the
+line stays merged server-side; see limits and #5).
+
 **Known demo limits (to solve in the native version):**
 - Membership lives in `localStorage` → **per-device**, lost if the browser is cleared.
 - Permalink→id resolution is client-side (N requests on add).
-- If a component is also bought **standalone**, Jumpseller merges both into a single line per
-  variant → grouping and atomic removal become ambiguous. The demo assumes components dedicated
-  to the pack.
-- Grouping is visual only on the **cart page** (checkout is a non-editable React SPA); inventory
-  and totals are still correct because components are real line items.
+- If a component is also bought **standalone**, Jumpseller merges both into a single cart line. The
+  demo **splits it visually** (pack portion in the group + a separate loose row), but it's cosmetic
+  — the line stays merged server-side (one line at checkout). See #5.
+- The full grouped cart view is on the **cart page**; product cards (listings/cross-sell) get the
+  PACK badge + summed price + batch-add. Checkout is a non-editable React SPA, so it shows the raw
+  component lines — but inventory and totals are still correct (components are real line items).
 
 ---
 
@@ -212,8 +222,9 @@ theme benefits without installing anything.
 |---|---|
 | `theme/partials/product_bundle.liquid` | Emits `<product-bundle>` + JSON (pack id/url/name + raw `bundle_components`) when the product has the field. |
 | `theme/assets/bundle-core.js` | Pure functions (UMD, tested): `parseBundleComponents`, `normalizePermalink`, `sumPrices`, `formatPrice`, `parsePrice`. |
-| `theme/assets/bundles.js` | Browser glue: intercepts add-to-cart, resolves ids/prices, batch-add, groups the cart, live sum, atomic remove / break pack. Exposes the resolved contract as `window.JBBundles.bundle`. |
-| `theme/assets/bundles-cart.css` | Visual grouping (`.jb-pack` box, "PACK" badge, indented components). |
+| `theme/assets/bundles.js` | Browser glue: intercepts add-to-cart (product page + product blocks), resolves ids/prices, batch-add, groups the cart, live sum, splits merged component lines (pack portion + loose row), atomic remove / break pack, opens the mini-cart drawer. Exposes the resolved contract as `window.JBBundles.bundle`. |
+| `theme/assets/bundles-cart.css` | Visual grouping (`.jb-pack` box, "PACK" badge, indented components) + product-card `.jb-pack-badge`. |
+| `theme/partials/product_block.liquid` | Adds `data-bundle-components` to pack product cards (listings/cross-sell) so `bundles.js` can badge them, show the summed price, and batch-add. |
 | `theme/components/product-form.liquid` | Includes `{% render 'product_bundle' %}` at the end of the form. |
 | `theme/components/product-fields.liquid` | Hides `bundle_components` from the customer-facing details. |
 | `theme/templates/layout.liquid` | Loads `bundle-core.js` + `bundles.js` after `theme.js`. |
