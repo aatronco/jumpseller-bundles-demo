@@ -46,7 +46,7 @@ Esto es lo que **cambia por detrás** — y que al diseño **no le afecta**:
 
 | | Quién arma el JSON | Cómo |
 |---|---|---|
-| **HOY (demo)** | El tema | Un custom field `bundle_components` guarda los permalinks (`harina-1kg?qty:2,…`). El tema lo lee y un script resuelve cada permalink a su producto (id, precio, imagen). |
+| **HOY (demo)** | El tema | Un custom field `bundle_components` guarda los permalinks (`harina-1kg?qty:2,…`). El tema los resuelve **en Liquid** (`products.product[permalink]` → id, precio con descuento) — server-side, sin fetch. |
 | **MAÑANA (nativo)** | El equipo de dev | Un objeto Liquid nativo, ej. `{{ product.bundle.products }}` (o un tipo de producto `pack`). El backend entrega el JSON ya armado. |
 
 En ambos casos, el resultado que llega al tema es **el mismo JSON de la sección 1**. Por eso puedes

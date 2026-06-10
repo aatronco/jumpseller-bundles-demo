@@ -99,22 +99,23 @@ without the per-card runtime resolution.
 `bundle_components` = comma-separated permalinks, optional `permalink?qty:N` / `permalink?variant_id:<id>`.
 E.g.: `harina-1kg?qty:2,huevo-deshidratado-equivalente-a-5-huevos,mantequilla-250-g`.
 
-When the pack is added to the cart, `assets/bundles.js`:
-1. resolves each permalink → `product_id` at runtime (fetching the product's HTML and reading
-   `.product-json[data-productid]`, because **Liquid can't look up an arbitrary product by
-   permalink** — see wish #1);
+Components are resolved **server-side in Liquid** — `partials/bundle_data.liquid` looks each one up
+with `products.product[permalink]` (giving `.id`, `.price`, `.variants`), so every `<product-bundle>`
+and pack product card carries its components already resolved (id, qty, variant_id, discounted unit
+price). No client fetch. When the pack is added, `assets/bundles.js`:
+1. reads those resolved components;
 2. adds the $0 anchor + the components via `Jumpseller.addMultipleProductsToCart(...)`;
 3. stores ONLY stable references (permalinks + qty) in `localStorage`, never prices;
 4. on the cart page, groups the lines under the anchor, **sums the real cart-line prices**
    (with promotions applied, always current), locks component quantities, and wires "Remove pack"
    (atomic) and "remove a component → break the pack".
 
-The product page shows the **summed pack price** (instead of the $0 anchor), reading each
-component's `price_with_discount_formatted` so product-level discounts are reflected.
+The product page shows the **summed pack price** (instead of the $0 anchor) = Σ (discounted unit ×
+qty), from the Liquid-resolved component prices.
 
 **Product cards (listings / cross-sell):** a pack card gets a **PACK** badge, the summed price, and
-an "Add" that batch-adds the components (`bundles.js` `initProductBlocks`; marked in Liquid via
-`data-bundle-components`).
+an "Add" that batch-adds the components (`bundles.js` `initProductBlocks`, reading the Liquid-resolved
+`.jb-pack-data` script on the card).
 
 **Cart split:** if a component is also bought standalone (so Jumpseller merges it into one line),
 the merged line is split visually into the pack portion + a separate **loose row** (cosmetic — the
@@ -122,7 +123,9 @@ line stays merged server-side; see limits and #5).
 
 **Known demo limits (to solve in the native version):**
 - Membership lives in `localStorage` → **per-device**, lost if the browser is cleared.
-- Permalink→id resolution is client-side (N requests on add).
+- Component resolution is **server-side in Liquid** (`products.product[permalink]`) — instant, no
+  client fetch. (An earlier version fetched each product's HTML client-side; it caused 504s on
+  listings with several packs and was removed.)
 - If a component is also bought **standalone**, Jumpseller merges both into a single cart line. The
   demo **splits it visually** (pack portion in the group + a separate loose row), but it's cosmetic
   — the line stays merged server-side (one line at checkout). See #5.
@@ -135,13 +138,14 @@ line stays merged server-side; see limits and #5).
 
 ## Wishes for the native version
 
-### 1. Backend component resolution + Liquid objects
-Today we resolve permalinks→product in JS because **Liquid exposes no way** to get an arbitrary
-product by permalink (only `product` on the product page and `collection.products`).
-**Wish:** have the platform store the pack relationship server-side and expose, in Liquid, the
-already-resolved components (id, name, image, **live price with promotions**, stock) and the
-**groups inside the cart's `order.products`**. This removes the resolution JS and the
-`localStorage`, and makes grouping **device-independent**.
+### 1. Native pack relationship + grouped `order.products`
+Component resolution turned out to be **already possible**: Liquid resolves a product by permalink
+via `products.product[permalink]` (`.id`, `.price`, `.variants`), so the demo resolves components
+**server-side** (no client fetch). What's still missing is the **relationship and the cart grouping**:
+today the pack→components link lives in a custom field, and which cart lines form a pack lives in
+`localStorage` (per-device). **Wish:** store the pack relationship server-side and expose the
+**groups inside the cart's `order.products`** in Liquid, so grouping is device-independent and
+doesn't rely on `localStorage` or DOM manipulation.
 
 > ⚠️ **Lesson from the demo (don't cache prices):** an early version stored compiled
 > name/price/image in a custom field. **Wrong:** if a component's price changes, the cache goes
@@ -227,9 +231,10 @@ theme benefits without installing anything.
 
 | File | Role |
 |---|---|
-| `theme/partials/product_bundle.liquid` | Emits `<product-bundle>` + JSON (pack id/url/name + raw `bundle_components`) when the product has the field. |
+| `theme/partials/bundle_data.liquid` | Resolves `bundle_components` server-side via `products.product[permalink]` → JSON array of `{id, permalink, qty, variant_id, price}` (discounted unit). Used by both the product page and product cards. |
+| `theme/partials/product_bundle.liquid` | Emits `<product-bundle>` + JSON (pack id/url/name + resolved `components` from `bundle_data`) when the product has the field. |
 | `theme/assets/bundle-core.js` | Pure functions (UMD, tested): `parseBundleComponents`, `normalizePermalink`, `sumPrices`, `formatPrice`, `parsePrice`. |
-| `theme/assets/bundles.js` | Browser glue: intercepts add-to-cart (product page + product blocks), resolves ids/prices, batch-add, groups the cart, live sum, splits merged component lines (pack portion + loose row), atomic remove / break pack, opens the mini-cart drawer. Exposes the resolved contract as `window.JBBundles.bundle`. |
+| `theme/assets/bundles.js` | Browser glue: consumes the Liquid-resolved components, intercepts add-to-cart (product page + product blocks), batch-add, groups the cart, live sum, multi-pack allocation + splits merged component lines (pack portion + loose row), atomic remove / break pack, opens the mini-cart drawer. Exposes the resolved contract as `window.JBBundles.bundle`. |
 | `theme/assets/bundles-cart.css` | Visual grouping (`.jb-pack` box, "PACK" badge, indented components) + product-card `.jb-pack-badge`. |
 | `theme/partials/product_block.liquid` | Adds `data-bundle-components` to pack product cards (listings/cross-sell) so `bundles.js` can badge them, show the summed price, and batch-add. |
 | `theme/components/product-form.liquid` | Includes `{% render 'product_bundle' %}` at the end of the form. |
