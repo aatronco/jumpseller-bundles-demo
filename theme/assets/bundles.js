@@ -249,6 +249,32 @@
     }
     next();
   }
+  // Set specific line items to specific quantities (qty 0 removes), then refresh once.
+  function setLineQtys(pairs) {
+    var remaining = pairs.slice();
+    function next() {
+      if (!remaining.length) {
+        if (typeof refreshCartDisplay === "function") refreshCartDisplay();
+        return;
+      }
+      var pair = remaining.shift();
+      Jumpseller.updateCart(pair[0], pair[1], { callback: function () { next(); } });
+    }
+    next();
+  }
+  function rowUnitPrice(row) {
+    var el = rowPriceEl(row);
+    return el ? BundleCore.parsePrice(el.textContent) : 0;
+  }
+  // Cosmetically set a row's displayed quantity (stepper input + the "N ✕" qty badge).
+  function setRowQtyDisplay(row, n) {
+    var input = row.querySelector(".store-product__input");
+    if (input) { input.value = n; input.setAttribute("data-current", String(n)); }
+    var badge = row.querySelector(".store-product__price--qty");
+    if (badge && badge.firstChild && badge.firstChild.nodeType === 3) {
+      badge.firstChild.textContent = " " + n + " ";
+    }
+  }
   function replaceClickHandler(el, handler) {
     // Drop the theme's existing (jQuery) click handler by cloning, then bind ours.
     var fresh = el.cloneNode(true);
@@ -284,30 +310,63 @@
       wrapper.appendChild(anchorRow);
 
       var prices = [];
-      var groupLineIds = [rowLineId(anchorRow)];
+      var anchorLineId = rowLineId(anchorRow);
+      // N = number of complete packs = the anchor line's quantity (each "add pack" adds 1 anchor
+      // unit). Each component contributes N × its per-pack qty to the pack(s); the rest is loose.
+      var N = rowQty(anchorRow);
+      var packComponents = []; // { lineId, looseQty }
 
       entry.components.forEach(function (c) {
         (byPermalink[c.permalink] || []).forEach(function (cr) {
-          // Skip rows already claimed by another pack's wrapper, so two packs sharing a
-          // component permalink don't steal each other's rows (appendChild moves nodes).
-          // Known demo limitation: the shared component then shows under whichever pack
-          // groups first — see docs/wishlist-para-ingenieros.md #5.
+          // Skip rows already claimed by another pack's wrapper.
           if (cr.closest(".jb-pack")) return;
+
+          var lineId = rowLineId(cr);
+          var unit = rowUnitPrice(cr);
+          var lineQty = rowQty(cr);
+          var packQty = Math.min(N * (c.qty || 1), lineQty); // units belonging to the pack(s)
+          var looseQty = lineQty - packQty;                  // extra units bought outside
+
+          // In-pack portion: show packQty, locked.
           cr.classList.add("jb-pack__component");
+          setRowQtyDisplay(cr, packQty);
           lockRowQuantity(cr);
           wrapper.appendChild(cr);
-          prices.push(rowLineTotal(cr)); // LIVE price × qty from the cart line
-          groupLineIds.push(rowLineId(cr));
+          prices.push(packQty * unit);
+          packComponents.push({ lineId: lineId, looseQty: looseQty });
 
+          // In-pack component delete → break the pack (remove its pack portion + anchor).
           var cdel = cr.querySelector(".store-product__delete");
           if (cdel) {
             replaceClickHandler(cdel, function (e) {
-              // break the pack: remove this component + the $0 anchor; leave the rest loose.
               e.preventDefault();
               e.stopImmediatePropagation();
               var s = readStore(); delete s[anchorPl]; writeStore(s);
-              removeLines([rowLineId(cr), rowLineId(anchorRow)]);
+              setLineQtys([[lineId, looseQty], [anchorLineId, 0]]);
             });
+          }
+
+          // Loose portion: same product bought outside the pack. Jumpseller MERGES it into one
+          // cart line, so we can only render it as a separate row visually (server-side it stays
+          // one merged line). Removing it just lowers the line qty back to the pack portion.
+          // A real separate line needs native pack support — see docs/engineering-wishlist.md #5.
+          if (looseQty > 0) {
+            var loose = cr.cloneNode(true);
+            loose.classList.remove("jb-pack__component");
+            loose.dataset.jbLoose = "1";
+            setRowQtyDisplay(loose, looseQty);
+            lockRowQuantity(loose); // qty editing not wired on the clone; remove-only (demo)
+            wrapper.parentNode.insertBefore(loose, wrapper.nextSibling);
+            (function (cloneLineId, keepQty) {
+              var ldel = loose.querySelector(".store-product__delete");
+              if (ldel) {
+                ldel.addEventListener("click", function (e) {
+                  e.preventDefault();
+                  e.stopImmediatePropagation();
+                  setLineQtys([[cloneLineId, keepQty]]); // drop loose units, keep the pack portion
+                });
+              }
+            })(lineId, packQty);
           }
         });
       });
@@ -315,8 +374,10 @@
       var priceEl = rowPriceEl(anchorRow);
       if (priceEl) priceEl.textContent = BundleCore.formatPrice(BundleCore.sumPrices(prices), {});
 
+      // anchor qty: hidden for a single pack; shown (locked) as ×N when there are several
       var qtyWrap = anchorRow.querySelector(".store-product__quantity");
-      if (qtyWrap) qtyWrap.style.display = "none";
+      if (N > 1) { setRowQtyDisplay(anchorRow, N); lockRowQuantity(anchorRow); }
+      else if (qtyWrap) { qtyWrap.style.display = "none"; }
 
       var del = anchorRow.querySelector(".store-product__delete");
       if (del) {
@@ -325,7 +386,10 @@
           e.preventDefault();
           e.stopImmediatePropagation();
           var s = readStore(); delete s[anchorPl]; writeStore(s);
-          removeLines(groupLineIds);
+          // remove each component's pack portion (keep any loose remainder), then the anchor
+          var pairs = packComponents.map(function (pc) { return [pc.lineId, pc.looseQty]; });
+          pairs.push([anchorLineId, 0]);
+          setLineQtys(pairs);
         });
       }
 
