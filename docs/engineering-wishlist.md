@@ -152,9 +152,18 @@ In v1 variants are admin-only (the parser already understands `?variant_id:`). *
 customer choose each component's variant on the storefront (e.g. size, color).
 
 ### 5. Resolve the "component also bought standalone" case
-Today Jumpseller merges identical lines by variant. **Wish:** have server-side membership
-distinguish "this unit belongs to a pack" from "this unit is standalone", so grouping and removal
-are unambiguous.
+Today Jumpseller merges identical product+variant into **one cart line**. So buying a pack
+(Harina ×2) plus a standalone Harina ×1 collapses into a single line of qty 3 with one `line_id`.
+
+**Demo workaround (cosmetic):** `bundles.js` splits that merged line on the cart page — it renders
+the pack portion (N complete packs × per-pack qty) inside the pack group and the remainder as a
+separate "loose" row. Removing the loose row lowers the line qty to the pack portion; "Remove pack"
+keeps any loose remainder. **But it's display-only** — server-side it's still one merged line
+(at checkout it shows as a single line of qty 3).
+
+**Wish:** server-side membership that distinguishes "this unit belongs to a pack" from "this unit is
+standalone", so they are genuinely separate cart lines (not a cosmetic split), and grouping/removal
+are unambiguous end to end (cart → checkout → order).
 
 ### 6. Pack discount → A NATIVE PACK PROMOTION IS NEEDED
 The bundle saving (e.g. **20% off the components when the pack is in the cart**) must be a
