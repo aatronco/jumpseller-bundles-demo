@@ -162,19 +162,25 @@ $0 anchor would no longer be a hack.
 In v1 variants are admin-only (the parser already understands `?variant_id:`). **Wish:** let the
 customer choose each component's variant on the storefront (e.g. size, color).
 
-### 5. Resolve the "component also bought standalone" case
-Today Jumpseller merges identical product+variant into **one cart line**. So buying a pack
-(Harina ×2) plus a standalone Harina ×1 collapses into a single line of qty 3 with one `line_id`.
+### 5. Improve the cart line model: pack membership + no forced merge — THE core request
+Today Jumpseller merges identical product+variant into **one cart line**. So a pack (Harina ×2) +
+a standalone Harina ×1 collapse into one line of qty 3 with a single `line_id`. Worse, with **two
+packs that share a component** — e.g. "Pack Queque Casero" needs Harina ×2 and "Pack 5 Harinas"
+needs Harina ×5 — all 7 Harinas merge into **one** line, even though they belong to different packs.
 
-**Demo workaround (cosmetic):** `bundles.js` splits that merged line on the cart page — it renders
-the pack portion (N complete packs × per-pack qty) inside the pack group and the remainder as a
-separate "loose" row. Removing the loose row lowers the line qty to the pack portion; "Remove pack"
-keeps any loose remainder. **But it's display-only** — server-side it's still one merged line
-(at checkout it shows as a single line of qty 3).
+The correct behavior the merchant expects: count the packs, give each its share of every component,
+and whatever is left over is a separate loose line — across cart, checkout and order.
 
-**Wish:** server-side membership that distinguishes "this unit belongs to a pack" from "this unit is
-standalone", so they are genuinely separate cart lines (not a cosmetic split), and grouping/removal
-are unambiguous end to end (cart → checkout → order).
+**Demo workaround (cosmetic):** `bundles.js` does exactly that allocation on the cart page (count
+packs → give each its share → leftover stays loose) and renders the portions by **cloning the row**
+(pack A shows Harina ×2, pack B shows Harina ×5, extras show as a loose row). Removing/breaking a
+pack subtracts only its allocation. **But it's display-only** — server-side it stays one merged
+line, so at checkout the split disappears (one line of qty 7).
+
+**Wish (the single most important backend change for packs):** cart line items should carry **pack
+membership** and **not be force-merged** when they belong to a pack — so each pack's components are
+genuinely separate lines (real allocation across multiple packs + leftovers) **end to end (cart →
+checkout → order)**, instead of the cosmetic clone hack the demo uses.
 
 ### 6. Pack discount → A NATIVE PACK PROMOTION IS NEEDED
 The bundle saving (e.g. **20% off the components when the pack is in the cart**) must be a

@@ -292,105 +292,136 @@
     });
 
     var mutated = false;
+
+    // Packs present in the cart (their $0 anchor line is in the cart), in DOM order.
+    var packs = [];
     Object.keys(store).forEach(function (anchorPl) {
-      var entry = store[anchorPl];
       var anchorRows = byPermalink[anchorPl];
       if (!anchorRows || !anchorRows.length) { delete store[anchorPl]; mutated = true; return; }
       var anchorRow = anchorRows[0];
       if (anchorRow.dataset.jbGrouped === "1") return;
+      packs.push({
+        anchorPl: anchorPl,
+        anchorRow: anchorRow,
+        anchorLineId: rowLineId(anchorRow),
+        N: rowQty(anchorRow), // number of whole packs of this kind (anchor line qty)
+        components: store[anchorPl].components,
+      });
+    });
 
-      var wrapper = document.createElement("div");
-      wrapper.className = "jb-pack";
-      anchorRow.parentNode.insertBefore(wrapper, anchorRow);
-      anchorRow.classList.add("jb-pack__anchor");
-      wrapper.appendChild(anchorRow);
+    if (packs.length) {
+      // One shared cart line per component permalink (Jumpseller merges identical products into a
+      // single line). We allocate its units across the packs that need it; the rest stays loose.
+      var lineInfo = {};
+      function lineFor(pl) {
+        if (!(pl in lineInfo)) {
+          var row = (byPermalink[pl] || [])[0] || null;
+          lineInfo[pl] = row
+            ? { lineId: rowLineId(row), lineQty: rowQty(row), unit: rowUnitPrice(row), row: row, remaining: rowQty(row), used: false }
+            : null;
+        }
+        return lineInfo[pl];
+      }
 
-      var prices = [];
-      var anchorLineId = rowLineId(anchorRow);
-      // N = number of complete packs = the anchor line's quantity (each "add pack" adds 1 anchor
-      // unit). Each component contributes N × its per-pack qty to the pack(s); the rest is loose.
-      var N = rowQty(anchorRow);
-      var packComponents = []; // { lineId, looseQty }
+      // Removing/breaking a pack subtracts ONLY this pack's allocations (shared lines keep the
+      // other packs' + loose portions), then removes its $0 anchor.
+      function makeRemovePackHandler(pack) {
+        return function (e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          var s = readStore(); delete s[pack.anchorPl]; writeStore(s);
+          var pairs = [];
+          pack.components.forEach(function (c) {
+            var li = lineInfo[c.permalink];
+            if (li) pairs.push([li.lineId, li.lineQty - (pack.alloc[c.permalink] || 0)]);
+          });
+          pairs.push([pack.anchorLineId, 0]);
+          setLineQtys(pairs);
+        };
+      }
 
-      entry.components.forEach(function (c) {
-        (byPermalink[c.permalink] || []).forEach(function (cr) {
-          // Skip rows already claimed by another pack's wrapper.
-          if (cr.closest(".jb-pack")) return;
-
-          var lineId = rowLineId(cr);
-          var unit = rowUnitPrice(cr);
-          var lineQty = rowQty(cr);
-          var packQty = Math.min(N * (c.qty || 1), lineQty); // units belonging to the pack(s)
-          var looseQty = lineQty - packQty;                  // extra units bought outside
-
-          // In-pack portion: show packQty, locked.
-          cr.classList.add("jb-pack__component");
-          setRowQtyDisplay(cr, packQty);
-          lockRowQuantity(cr);
-          wrapper.appendChild(cr);
-          prices.push(packQty * unit);
-          packComponents.push({ lineId: lineId, looseQty: looseQty });
-
-          // In-pack component delete → break the pack (remove its pack portion + anchor).
-          var cdel = cr.querySelector(".store-product__delete");
-          if (cdel) {
-            replaceClickHandler(cdel, function (e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              var s = readStore(); delete s[anchorPl]; writeStore(s);
-              setLineQtys([[lineId, looseQty], [anchorLineId, 0]]);
-            });
-          }
-
-          // Loose portion: same product bought outside the pack. Jumpseller MERGES it into one
-          // cart line, so we can only render it as a separate row visually (server-side it stays
-          // one merged line). Removing it just lowers the line qty back to the pack portion.
-          // A real separate line needs native pack support — see docs/engineering-wishlist.md #5.
-          if (looseQty > 0) {
-            var loose = cr.cloneNode(true);
-            loose.classList.remove("jb-pack__component");
-            loose.dataset.jbLoose = "1";
-            setRowQtyDisplay(loose, looseQty);
-            lockRowQuantity(loose); // qty editing not wired on the clone; remove-only (demo)
-            wrapper.parentNode.insertBefore(loose, wrapper.nextSibling);
-            (function (cloneLineId, keepQty) {
-              var ldel = loose.querySelector(".store-product__delete");
-              if (ldel) {
-                ldel.addEventListener("click", function (e) {
-                  e.preventDefault();
-                  e.stopImmediatePropagation();
-                  setLineQtys([[cloneLineId, keepQty]]); // drop loose units, keep the pack portion
-                });
-              }
-            })(lineId, packQty);
-          }
+      // ALLOCATE: count packs first, give each its share of every component; leftover = loose.
+      packs.forEach(function (pack) {
+        pack.alloc = {};
+        pack.components.forEach(function (c) {
+          var li = lineFor(c.permalink);
+          if (!li) { pack.alloc[c.permalink] = 0; return; }
+          var give = Math.min(pack.N * (c.qty || 1), li.remaining);
+          li.remaining -= give;
+          pack.alloc[c.permalink] = give;
         });
       });
 
-      var priceEl = rowPriceEl(anchorRow);
-      if (priceEl) priceEl.textContent = BundleCore.formatPrice(BundleCore.sumPrices(prices), {});
+      // RENDER each pack as its own .jb-pack group (two packs → two separate groups).
+      var lastWrapper = null;
+      packs.forEach(function (pack) {
+        var wrapper = document.createElement("div");
+        wrapper.className = "jb-pack";
+        pack.anchorRow.parentNode.insertBefore(wrapper, pack.anchorRow);
+        pack.anchorRow.classList.add("jb-pack__anchor");
+        wrapper.appendChild(pack.anchorRow);
+        lastWrapper = wrapper;
 
-      // anchor qty: hidden for a single pack; shown (locked) as ×N when there are several
-      var qtyWrap = anchorRow.querySelector(".store-product__quantity");
-      if (N > 1) { setRowQtyDisplay(anchorRow, N); lockRowQuantity(anchorRow); }
-      else if (qtyWrap) { qtyWrap.style.display = "none"; }
+        var prices = [];
+        pack.components.forEach(function (c) {
+          var li = lineFor(c.permalink);
+          if (!li) return;
+          var qty = pack.alloc[c.permalink];
+          if (qty <= 0) return;
+          // first pack to use a shared line reuses the real row; the others clone it
+          var rowEl, isOriginal;
+          if (!li.used) { rowEl = li.row; li.used = true; isOriginal = true; }
+          else { rowEl = li.row.cloneNode(true); isOriginal = false; }
+          rowEl.classList.add("jb-pack__component");
+          setRowQtyDisplay(rowEl, qty);
+          lockRowQuantity(rowEl);
+          wrapper.appendChild(rowEl);
+          prices.push(qty * li.unit);
 
-      var del = anchorRow.querySelector(".store-product__delete");
-      if (del) {
-        del.textContent = (window.I18N && I18N.remove_pack) || "Eliminar pack";
-        replaceClickHandler(del, function (e) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          var s = readStore(); delete s[anchorPl]; writeStore(s);
-          // remove each component's pack portion (keep any loose remainder), then the anchor
-          var pairs = packComponents.map(function (pc) { return [pc.lineId, pc.looseQty]; });
-          pairs.push([anchorLineId, 0]);
-          setLineQtys(pairs);
+          var cdel = rowEl.querySelector(".store-product__delete");
+          if (cdel) {
+            if (isOriginal) replaceClickHandler(cdel, makeRemovePackHandler(pack));
+            else cdel.addEventListener("click", makeRemovePackHandler(pack));
+          }
         });
-      }
 
-      anchorRow.dataset.jbGrouped = "1";
-    });
+        var priceEl = rowPriceEl(pack.anchorRow);
+        if (priceEl) priceEl.textContent = BundleCore.formatPrice(BundleCore.sumPrices(prices), {});
+
+        var qtyWrap = pack.anchorRow.querySelector(".store-product__quantity");
+        if (pack.N > 1) { setRowQtyDisplay(pack.anchorRow, pack.N); lockRowQuantity(pack.anchorRow); }
+        else if (qtyWrap) { qtyWrap.style.display = "none"; }
+
+        var del = pack.anchorRow.querySelector(".store-product__delete");
+        if (del) {
+          del.textContent = (window.I18N && I18N.remove_pack) || "Eliminar pack";
+          replaceClickHandler(del, makeRemovePackHandler(pack));
+        }
+
+        pack.anchorRow.dataset.jbGrouped = "1";
+      });
+
+      // LOOSE rows for leftover units (a shared product bought beyond all packs' needs).
+      Object.keys(lineInfo).forEach(function (pl) {
+        var li = lineInfo[pl];
+        if (!li || li.remaining <= 0) return;
+        var loose = li.row.cloneNode(true);
+        loose.classList.remove("jb-pack__component");
+        loose.dataset.jbLoose = "1";
+        setRowQtyDisplay(loose, li.remaining);
+        lockRowQuantity(loose);
+        if (lastWrapper) lastWrapper.parentNode.insertBefore(loose, lastWrapper.nextSibling);
+        else cartArea.appendChild(loose);
+        (function (lineId, keepQty) {
+          var ldel = loose.querySelector(".store-product__delete");
+          if (ldel) ldel.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            setLineQtys([[lineId, keepQty]]); // drop the loose units, keep what the packs use
+          });
+        })(li.lineId, li.lineQty - li.remaining);
+      });
+    }
 
     // The $0 pack anchor is a phantom line — exclude it from the displayed item count so the
     // cart counts the real component units, not anchor + components. Recomputed from the DOM
