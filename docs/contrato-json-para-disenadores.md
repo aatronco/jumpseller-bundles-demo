@@ -72,7 +72,8 @@ del pack (suma de componentes) donde iría el precio normal (`.product-page__pri
 del pack recibe un badge `.jb-pack-badge` ("PACK"), muestra el **precio sumado** (no el $0), y su
 botón "Agregar" añade **todos los componentes** al carro.
 
-**Carro** — el pack se renderiza con esta estructura fija (estilízala 100% con CSS):
+**Carro y mini-cart** (página `/cart` y el drawer del header) — el pack se renderiza con esta
+estructura fija en ambos (estilízala 100% con CSS):
 
 ```
 .jb-pack                       ← caja del pack (lleva el badge "PACK")

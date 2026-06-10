@@ -126,9 +126,10 @@ line stays merged server-side; see limits and #5).
 - If a component is also bought **standalone**, Jumpseller merges both into a single cart line. The
   demo **splits it visually** (pack portion in the group + a separate loose row), but it's cosmetic
   — the line stays merged server-side (one line at checkout). See #5.
-- The full grouped cart view is on the **cart page**; product cards (listings/cross-sell) get the
-  PACK badge + summed price + batch-add. Checkout is a non-editable React SPA, so it shows the raw
-  component lines — but inventory and totals are still correct (components are real line items).
+- Grouping applies on the **cart page** AND the **mini-cart drawer** (`#sidebar-cart`); product
+  cards (listings/cross-sell) get the PACK badge + summed price + batch-add. Checkout is a
+  non-editable React SPA, so it shows the raw component lines — but inventory and totals are still
+  correct (components are real line items).
 
 ---
 
