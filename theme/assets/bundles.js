@@ -106,14 +106,10 @@
     }
   }
 
-  // The cart PAGE's own <cart-area> — never the mini-cart drawer inside #sidebar-cart.
-  // Grouping must not run on the drawer; it would break its order summary layout.
+  // The active <cart-area> — the cart page's on /cart, otherwise the mini-cart drawer's.
+  // (The theme renders only one at a time.) We group whichever is present.
   function mainCartArea() {
-    var areas = document.querySelectorAll("cart-area");
-    for (var i = 0; i < areas.length; i++) {
-      if (!areas[i].closest("#sidebar-cart")) return areas[i];
-    }
-    return null;
+    return document.querySelector("cart-area");
   }
 
   // ---------- Product page: show summed price + intercept add-to-cart ----------
@@ -502,8 +498,24 @@
     });
   }
 
+  // The theme calls refreshCartDisplay() after every cart change and swaps the <cart-area> node
+  // (orphaning any MutationObserver). Wrap it so grouping is re-applied after each refresh — this
+  // is what keeps the MINI-CART DRAWER grouped (it re-renders on open/add/remove).
+  function patchRefreshCartDisplay() {
+    if (typeof window.refreshCartDisplay !== "function" || window.refreshCartDisplay.__jbWrapped) return;
+    var orig = window.refreshCartDisplay;
+    window.refreshCartDisplay = function () {
+      var r = orig.apply(this, arguments);
+      if (r && typeof r.then === "function") return r.then(function (v) { groupCart(); return v; });
+      groupCart();
+      return r;
+    };
+    window.refreshCartDisplay.__jbWrapped = true;
+  }
+
   // ---------- bootstrap ----------
   function init() {
+    patchRefreshCartDisplay();
     initProductBundle();
     initProductBlocks();
     groupCart();
